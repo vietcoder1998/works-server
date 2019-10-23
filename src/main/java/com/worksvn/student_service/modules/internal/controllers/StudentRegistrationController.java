@@ -19,12 +19,12 @@ import javax.validation.Valid;
 @AuthorizationRequired
 @PreAuthorize("#oauth2.hasScope('INTERNAL_SERVICE')")
 @Api(description = "Đăng ký tài khoản sinh viên")
-@RequestMapping("/api/students/registration")
+@RequestMapping("/api/internal/students/registration")
 public class StudentRegistrationController extends BaseRESTController {
     @Autowired
     private StudentRegistrationService studentRegistrationService;
 
-    @ApiOperation(value = "Đăng ký mới một tài khoản sinh viên")
+    @ApiOperation(value = "Đăng ký tài khoản sinh viên")
     @Responses(value = {
             @Response(responseValue = ResponseValue.STUDENT_EXISTS)
     })

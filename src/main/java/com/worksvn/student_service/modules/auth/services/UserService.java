@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    private ISRestCommunicator isRestCommunicator;
+    private ISRestCommunicator restCommunicator;
 
     public String registerNewUserByUsername(String username, String password) throws Exception {
         String userID;
-        ISRestCommunicator.ExchangeResult<UserIDDto> result = isRestCommunicator
+        ISRestCommunicator.ExchangeResult<UserIDDto> result = restCommunicator
                 .exchange(CommonAPIs.AUTH_registerNewUserByUsername(username, password));
         if (result.isSuccess()) {
             userID = result.getConvertedBody().getData().getUserID();

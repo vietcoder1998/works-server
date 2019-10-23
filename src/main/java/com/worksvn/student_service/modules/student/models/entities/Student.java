@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,8 +20,6 @@ import java.util.List;
 @Setter
 public class Student {
     @Id
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @GeneratedValue(generator = "uuid")
     @Column(name = "id")
     private String id;
     @Column(name = "school_id")

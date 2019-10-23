@@ -1,11 +1,11 @@
 package com.worksvn.student_service.configs.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.worksvn.student_service.base.models.BaseResponseBody;
-import com.worksvn.student_service.constants.ResponseValue;
-import com.worksvn.student_service.exceptions.auth.AuthorizationException;
-import com.worksvn.student_service.modules.auth.models.dtos.AuthorizedUser;
-import com.worksvn.student_service.modules.auth.services.IAuthorization;
+import com.worksvn.common.base.models.BaseResponseBody;
+import com.worksvn.common.constants.ResponseValue;
+import com.worksvn.common.exceptions.auth.AuthorizationException;
+import com.worksvn.common.modules.auth.core.CustomUserDetail;
+import com.worksvn.common.modules.auth.core.IAuthorization;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
-    private IAuthorization authorization;
+    private com.worksvn.common.modules.auth.core.IAuthorization authorization;
 
     public JWTAuthorizationFilter(IAuthorization authorization) {
         this.authorization = authorization;
@@ -30,17 +30,17 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
 
         Authentication authentication = null;
-        AuthorizedUser authorizedUser = null;
+        CustomUserDetail userDetail = null;
         try {
             authentication = SecurityContextHolder.getContext().getAuthentication();
-            authorizedUser = (AuthorizedUser) authentication.getPrincipal();
+            userDetail = (CustomUserDetail) authentication.getPrincipal();
         } catch (Exception ignore) {
         }
 
-        if (authentication != null && authorizedUser != null) {
+        if (authentication != null && userDetail != null) {
             try {
                 authorization.authorizeUser(method, uri,
-                        authorizedUser, authentication.getAuthorities());
+                        userDetail, authentication.getAuthorities());
                 filterChain.doFilter(request, response);
             } catch (AuthorizationException e) {
                 responseErrorMessage(response, e.getResponseValue());

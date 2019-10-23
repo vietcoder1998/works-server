@@ -1,1 +1,4 @@
 rootProject.name = 'worksvn-student-service'
+
+include(':common')
+project(':common').projectDir = new File(settingsDir, '../worksvn-common')

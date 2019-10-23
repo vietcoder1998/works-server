@@ -24,9 +24,7 @@ import java.util.Map;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackages = {
-                ApplicationConstants.BASE_PACKAGE_NAME + ".modules.candidate.repositories",
-                ApplicationConstants.BASE_PACKAGE_NAME + ".modules.employer.repositories",
-                ApplicationConstants.BASE_PACKAGE_NAME + ".modules.common.repositories"
+                ApplicationConstants.BASE_PACKAGE_NAME + ".modules.student.repositories"
         }
 )
 public class PrimaryDataSourceConfig {
@@ -50,9 +48,7 @@ public class PrimaryDataSourceConfig {
         properties.put("hibernate.hbm2ddl.auto", hibernateDDLAuto);
         return builder.dataSource(dataSource)
                 .packages(new String[] {
-                        ApplicationConstants.BASE_PACKAGE_NAME + ".modules.candidate.models.entities",
-                        ApplicationConstants.BASE_PACKAGE_NAME + ".modules.employer.models.entities",
-                        ApplicationConstants.BASE_PACKAGE_NAME + ".modules.common.models.entities"
+                        ApplicationConstants.BASE_PACKAGE_NAME + ".modules.student.models.entities"
                 })
                 .persistenceUnit("primary")
                 .properties(properties)

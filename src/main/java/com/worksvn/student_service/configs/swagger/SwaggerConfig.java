@@ -1,12 +1,8 @@
 package com.worksvn.student_service.configs.swagger;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.worksvn.student_service.components.base.JSONProcessor;
-import com.worksvn.student_service.components.swagger.CustomSwaggerResponseMessageReader;
-import com.worksvn.student_service.components.swagger.CustomSwaggerResponseModelProvider;
-import com.worksvn.student_service.components.swagger.SwaggerApiGroupBuilder;
+import com.worksvn.common.components.core.JSONProcessor;
+import com.worksvn.common.components.swagger.SwaggerApiGroupBuilder;
 import com.worksvn.student_service.constants.ApplicationConstants;
-import com.worksvn.student_service.utils.base.PackageScannerUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,11 +10,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.*;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger.readers.operation.SwaggerOperationModelsProvider;
-import springfox.documentation.swagger.readers.operation.SwaggerResponseMessageReader;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.PostConstruct;
@@ -30,13 +23,12 @@ import java.util.*;
 public class SwaggerConfig {
     @Value("${application.swagger.info.path}")
     private String swaggerInfoPath;
-    @Value("${application.application.modules-package.name:modules}")
+    @Value("${application.modules-package.name:modules}")
     private String rootModulePackageName;
-
-    @Value("${server.port:8080}")
-    private int serverPort;
     @Value("${application.swagger.excluded-modules}")
     private Set<String> swaggerExcludedModules;
+    @Value("${application.modules-package.modules}")
+    private Set<String> allModules;
 
     @Autowired
     private JSONProcessor jsonProcessor;
@@ -56,23 +48,11 @@ public class SwaggerConfig {
                 apiInfo.get("contactEmail"));
     }
 
-    @Bean
-    public SwaggerResponseMessageReader swaggerResponseMessageReader(TypeNameExtractor typeNameExtractor,
-                                                                     TypeResolver typeResolver) {
-        return new CustomSwaggerResponseMessageReader(typeNameExtractor, typeResolver);
-    }
-
-    @Bean
-    public SwaggerOperationModelsProvider swaggerOperationModelsProvider(TypeResolver typeResolver) {
-        return new CustomSwaggerResponseModelProvider(typeResolver);
-    }
-
     @PostConstruct
     public void init() {
         ConfigurableBeanFactory configurableBeanFactory = (ConfigurableBeanFactory) beanFactory;
         String modulesPackageName = ApplicationConstants.BASE_PACKAGE_NAME + "." + rootModulePackageName;
-        List<String> moduleNames = PackageScannerUtils.listAllSubPackages(modulesPackageName);
-        for (String moduleName : moduleNames) {
+        for (String moduleName : allModules) {
             if (!swaggerExcludedModules.contains(moduleName)) {
                 Docket moduleApiGroup = swaggerApiGroupBuilder.newSwaggerApiGroup(moduleName, modulesPackageName + "." + moduleName + ".controllers");
                 configurableBeanFactory.registerSingleton("swaggerApiGroup" + moduleName, moduleApiGroup);

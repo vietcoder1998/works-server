@@ -1,8 +1,8 @@
 package com.worksvn.student_service.events_handle;
 
-import com.worksvn.student_service.annotations.event.EventHandler;
+import com.worksvn.common.annotations.event.EventHandler;
+import com.worksvn.common.utils.core.ClassScannerUtils;
 import com.worksvn.student_service.constants.ApplicationConstants;
-import com.worksvn.student_service.utils.base.ClassScannerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -23,27 +23,30 @@ import java.util.Set;
 public class ContextRefreshEventHandler implements ApplicationListener<ContextRefreshedEvent> {
     private static final Logger logger = LoggerFactory.getLogger(ContextRefreshEventHandler.class);
 
+    private boolean completed;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        logger.info("[START] APPLICATION CONTEXT REFRESHED EVENT");
-        try {
-            String scannedPackage = ApplicationConstants.BASE_PACKAGE_NAME + ".events_handle";
-            Set<Class<? extends Annotation>> includedAnnotations = new HashSet<>();
-            includedAnnotations.add(EventHandler.class);
-            List<Class<?>> eventHandlerClassFounds = ClassScannerUtils
-                    .scanAnnotatedClasses(scannedPackage, includedAnnotations, null,
-                            clazz -> {
-                                EventHandler eventHandler = clazz.getDeclaredAnnotation(EventHandler.class);
-                                return eventHandler.event().equals(ApplicationEvent.ON_APPLICATION_STARTED_UP);
-                            },
-                            (clazz1, clazz2) -> {
-                                int order1 = clazz1.getDeclaredAnnotation(EventHandler.class).order();
-                                int order2 = clazz2.getDeclaredAnnotation(EventHandler.class).order();
-                                return Integer.compare(order1, order2);
-                            });
+        if (!completed) {
+            completed = true;
+            logger.info("[START] APPLICATION STARTED UP");
+            try {
+                String scannedPackage = ApplicationConstants.BASE_PACKAGE_NAME + ".events_handle";
+                Set<Class<? extends Annotation>> includedAnnotations = new HashSet<>();
+                includedAnnotations.add(EventHandler.class);
+                List<Class<?>> eventHandlerClassFounds = ClassScannerUtils
+                        .scanAnnotatedClasses(scannedPackage, includedAnnotations, null,
+                                clazz -> {
+                                    EventHandler eventHandler = clazz.getDeclaredAnnotation(EventHandler.class);
+                                    return eventHandler.event().equals(ApplicationEvent.ON_APPLICATION_STARTED_UP);
+                                },
+                                (clazz1, clazz2) -> {
+                                    int order1 = clazz1.getDeclaredAnnotation(EventHandler.class).order();
+                                    int order2 = clazz2.getDeclaredAnnotation(EventHandler.class).order();
+                                    return Integer.compare(order1, order2);
+                                });
 
-            for (Class<?> eventHandlerClass : eventHandlerClassFounds) {
-                try {
+                for (Class<?> eventHandlerClass : eventHandlerClassFounds) {
                     if (ApplicationEventHandle.class.isAssignableFrom(eventHandlerClass)) {
                         ApplicationEventHandle applicationEventHandle;
                         try {
@@ -59,15 +62,13 @@ public class ContextRefreshEventHandler implements ApplicationListener<ContextRe
                                 " is annotated with @EventHandler must implement " + ApplicationEventHandle.class.getName());
 
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+                unregisterListener(event.getApplicationContext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                logger.info("[END] APPLICATION STARTED UP");
             }
-            unregisterListener(event.getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            logger.info("[END] APPLICATION CONTEXT REFRESHED EVENT");
         }
     }
 

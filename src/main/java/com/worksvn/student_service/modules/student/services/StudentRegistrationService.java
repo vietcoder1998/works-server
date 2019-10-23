@@ -2,7 +2,6 @@ package com.worksvn.student_service.modules.student.services;
 
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
-import com.worksvn.common.modules.auth.responses.UserIDDto;
 import com.worksvn.common.modules.student.requests.NewStudentRegistrationDto;
 import com.worksvn.student_service.modules.auth.services.UserService;
 import com.worksvn.student_service.modules.school.services.SchoolService;
@@ -22,7 +21,7 @@ public class StudentRegistrationService {
     private StudentRepository studentRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public UserIDDto registerNewStudent(String schoolID, NewStudentRegistrationDto registrationDto) throws Exception {
+    public void registerNewStudent(String schoolID, NewStudentRegistrationDto registrationDto) throws Exception {
         String schoolShortName = schoolService.getSchoolShortName(schoolID);
         String username = schoolShortName + registrationDto.getUsername();
         String userID = userService.registerNewUserByUsername(username, registrationDto.getPassword());
@@ -30,6 +29,5 @@ public class StudentRegistrationService {
             throw new ResponseException(ResponseValue.STUDENT_EXISTS);
         }
         studentRepository.save(new Student(userID, schoolID, registrationDto));
-        return new UserIDDto(userID, registrationDto.getUsername(), true);
     }
 }

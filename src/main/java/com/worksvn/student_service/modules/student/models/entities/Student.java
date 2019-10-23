@@ -85,5 +85,7 @@ public class Student {
         this.schoolID = schoolID;
         this.firstName = registrationDto.getFirstName();
         this.lastName = registrationDto.getLastName();
+        this.email = registrationDto.getEmail();
+        this.phone = registrationDto.getPhone();
     }
 }

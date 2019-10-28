@@ -5,6 +5,8 @@ import com.worksvn.common.base.models.*;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ISResponseException;
 import com.worksvn.common.exceptions.ResponseException;
+import com.worksvn.common.modules.common.responses.UploadSizeDto;
+import org.apache.tomcat.util.http.fileupload.FileUploadBase;
 import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -16,10 +18,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -50,6 +50,22 @@ public class GlobalControllerExceptionHandler {
     @ResponseBody
     public BaseResponse onResponseError(ResponseException e) {
         return new BaseResponse<>(e.getHttpStatus(), e.getBody());
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseBody
+    public BaseResponse onMaxUploadSizeExceededError(MaxUploadSizeExceededException e) {
+        Throwable throwable = e.getCause();
+        UploadSizeDto body = new UploadSizeDto(-1, -1);
+        if (throwable instanceof IllegalStateException) {
+            throwable = throwable.getCause();
+            if (throwable instanceof FileUploadBase.SizeLimitExceededException) {
+                FileUploadBase.SizeLimitExceededException exp = (FileUploadBase.SizeLimitExceededException) throwable;
+                body.setMaxBytes(exp.getPermittedSize());
+                body.setUploadBytes(exp.getActualSize());
+            }
+        }
+        return new BaseResponse<>(ResponseValue.MAX_UPLOAD_SIZE_EXCEEDED, body);
     }
 
     @ExceptionHandler(AccessDeniedException.class)

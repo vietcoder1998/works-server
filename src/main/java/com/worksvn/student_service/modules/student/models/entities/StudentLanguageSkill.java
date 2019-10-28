@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "student_language_skill")
@@ -16,8 +17,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class StudentLanguageSkill {
-    public static final String ID = "id";
-    public static final String CANDIDATE = "candidate";
+    public static final String CREATED_DATE = "createdDate";
 
     @Id
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -32,12 +32,14 @@ public class StudentLanguageSkill {
     @Column(name = "language_id")
     private int languageID;
 
-    @JoinColumn(name = "level")
+    @Column(name = "level")
     private String level;
-    @JoinColumn(name = "certificate")
+    @Column(name = "certificate")
     private String certificate;
-    @JoinColumn(name = "score")
+    @Column(name = "score")
     private Double score;
+    @Column(name = "created_date")
+    private Date createdDate = new Date();
 
     public StudentLanguageSkill(Student student,
                                 NewStudentLanguageSkillDto newLanguageSkillDto) {

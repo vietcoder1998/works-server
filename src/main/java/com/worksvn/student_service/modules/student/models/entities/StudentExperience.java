@@ -17,7 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class StudentExperience {
-    public static final String CANDIDATE = "candidate";
+    public static final String STUDENT = "student";
     public static final String STARTED_DATE = "startedDate";
     public static final String FINISHED_DATE = "finishedDate";
 
@@ -41,6 +41,8 @@ public class StudentExperience {
     private Date finishedDate;
     @Column(name = "description")
     private String description;
+    @Column(name = "created_date")
+    private Date createdDate = new Date();
 
     public StudentExperience(Student student, NewStudentExperienceDto newEducation) {
         this.student = student;
@@ -55,7 +57,7 @@ public class StudentExperience {
             this.startedDate = new Date(newEducation.getStartedDate());
         }
         if (newEducation.getFinishedDate() > 0) {
-            this.startedDate = new Date(newEducation.getFinishedDate());
+            this.finishedDate = new Date(newEducation.getFinishedDate());
         }
     }
 }

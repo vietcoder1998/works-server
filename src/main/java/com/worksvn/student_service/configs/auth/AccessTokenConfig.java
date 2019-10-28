@@ -20,6 +20,10 @@ public class AccessTokenConfig {
     private String clientID;
     @Value("${application.internal-service.authentication.oauth2.secret}")
     private String clientSecret;
+    @Value("${application.oauth2.server.fixed.enable:false}")
+    private boolean enableFixedOAuth2Server;
+    @Value("${application.oauth2.server.fixed.host}")
+    private String fixedOAuth2ServerHost;
 
     @Bean
     JwtAccessTokenConverter jwtAccessTokenConverter() {
@@ -41,12 +45,18 @@ public class AccessTokenConfig {
 
     @Bean
     ResourceServerTokenServices resourceServerTokenServices(JwtAccessTokenConverter jwtAccessTokenConverter,
+                                                            RestTemplate restTemplate,
                                                             RestTemplate serviceDiscoveryRestTemplate) {
         RemoteTokenServices remoteTokenServices = new RemoteTokenServices();
         remoteTokenServices.setClientId(clientID);
         remoteTokenServices.setClientSecret(clientSecret);
+        if (enableFixedOAuth2Server) {
+            ISHost.AUTH_SERVICE.update(fixedOAuth2ServerHost, false);
+            remoteTokenServices.setRestTemplate(restTemplate);
+        } else {
+            remoteTokenServices.setRestTemplate(serviceDiscoveryRestTemplate);
+        }
         remoteTokenServices.setCheckTokenEndpointUrl(ISHost.AUTH_SERVICE.getValue() + "oauth/check_token");
-        remoteTokenServices.setRestTemplate(serviceDiscoveryRestTemplate);
         remoteTokenServices.setAccessTokenConverter(jwtAccessTokenConverter);
         return remoteTokenServices;
     }

@@ -1,6 +1,8 @@
 package com.worksvn.student_service.modules.student.models.entities;
 
 import com.worksvn.common.modules.common.enums.Gender;
+import com.worksvn.common.modules.common.responses.RegionAddress;
+import com.worksvn.common.modules.student.requests.NewStudentInfoDto;
 import com.worksvn.common.modules.student.requests.NewStudentRegistrationDto;
 import lombok.Data;
 import lombok.Getter;
@@ -8,9 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "student")
@@ -19,6 +19,9 @@ import java.util.List;
 @Getter
 @Setter
 public class Student {
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
+
     @Id
     @Column(name = "id")
     private String id;
@@ -27,7 +30,7 @@ public class Student {
     @Column(name = "major_id")
     private int majorID;
     @Column(name = "region_id")
-    private String regionID;
+    private Integer regionID;
     @Column(name = "student_code")
     private String studentCode;
     @Column(name = "first_name")
@@ -58,27 +61,15 @@ public class Student {
     @Column(name = "identity_card_back_image_url")
     private String identityCardBackImageUrl;
     @Column(name = "is_profile_verified")
-    private boolean isProfileVerified = false;
+    private Boolean isProfileVerified = false;
     @Column(name = "is_looking_for_job")
-    private boolean isLookingForJob = true;
+    private Boolean isLookingForJob = true;
     @Column(name = "lat")
     private Double lat;
     @Column(name = "lon")
     private Double lon;
-    @Column(name = "lon")
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "student")
-    private List<StudentSkill> skills = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "student")
-    @OrderBy("startedDate DESC")
-    private List<StudentExperience> experiences = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "student")
-    private List<StudentLanguageSkill> languageSkills = new ArrayList<>();
-
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "student")
-    private StudentUnlocked unlocked;
+    @Column(name = "created_date")
+    private Date createdDate = new Date();
 
     public Student(String id, String schoolID, NewStudentRegistrationDto registrationDto) {
         this.id = id;
@@ -87,5 +78,42 @@ public class Student {
         this.lastName = registrationDto.getLastName();
         this.email = registrationDto.getEmail();
         this.phone = registrationDto.getPhone();
+    }
+
+    public void update(NewStudentInfoDto updateInfo,
+                       RegionAddress regionAddress) {
+        this.firstName = updateInfo.getFirstName();
+        this.lastName = updateInfo.getLastName();
+        this.gender = Gender.valueOf(updateInfo.getGender());
+        this.email = updateInfo.getEmail();
+        this.phone = updateInfo.getPhone();
+        if (updateInfo.getBirthday() > 0) {
+            this.birthday = new Date(updateInfo.getBirthday());
+        }
+        this.identityCard = updateInfo.getIdentityCard();
+        if (regionAddress != null) {
+            this.lat = regionAddress.getLat();
+            this.lon = regionAddress.getLon();
+            this.address = regionAddress.getAddress();
+            if (regionAddress.getRegion() != null) {
+                this.regionID = regionAddress.getRegion().getId();
+            }
+        }
+    }
+
+    public boolean getIsProfileVerified() {
+        return isProfileVerified;
+    }
+
+    public void setIsProfileVerified(boolean isProfileVerified) {
+        this.isProfileVerified = isProfileVerified;
+    }
+
+    public boolean getIsLookingForJob() {
+        return isLookingForJob;
+    }
+
+    public void setIsLookingForJob(boolean isLookingForJob) {
+        this.isLookingForJob = isLookingForJob;
     }
 }

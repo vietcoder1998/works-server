@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worksvn.common.components.communication.*;
 import com.worksvn.common.components.core.JSONProcessor;
 import com.worksvn.common.components.swagger.*;
+import com.worksvn.common.services.file_storage.FileStorageService;
 import com.worksvn.common.services.firebase.firestore.FirestoreListener;
 import com.worksvn.common.services.firebase.firestore.FirestoreService;
+import com.worksvn.common.services.internal_service.DistributedDataService;
 import com.worksvn.common.services.notification.NotificationListener;
 import com.worksvn.common.services.notification.NotificationService;
 import com.worksvn.common.services.notification.UserNotificationService;
@@ -16,6 +18,7 @@ import com.worksvn.common.utils.jpa.JPAQueryExecutor;
 import com.worksvn.student_service.constants.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -88,8 +91,9 @@ public class CommonBeansConfig {
     }
 
     @Bean
-    public RestCommunicator restCommunicator(RestTemplate restTemplate) {
-        return new RestCommunicator(restTemplate);
+    public RestCommunicator restCommunicator(RestTemplate restTemplate,
+                                             RestTemplate serviceDiscoveryRestTemplate) {
+        return new RestCommunicator(restTemplate, serviceDiscoveryRestTemplate);
     }
 
     @LoadBalanced
@@ -113,9 +117,10 @@ public class CommonBeansConfig {
     }
 
     @Bean
-    public ISRestCommunicator isRestCommunicator(RestTemplate serviceDiscoveryRestTemplate,
+    public ISRestCommunicator isRestCommunicator(RestTemplate restTemplate,
+                                                 RestTemplate serviceDiscoveryRestTemplate,
                                                  InMemoryTokenStorage inMemoryTokenStorage) {
-        return new ISRestCommunicator(serviceDiscoveryRestTemplate, inMemoryTokenStorage, maxRetryOnError);
+        return new ISRestCommunicator(restTemplate, serviceDiscoveryRestTemplate, inMemoryTokenStorage, maxRetryOnError);
     }
 
     @Bean
@@ -127,6 +132,13 @@ public class CommonBeansConfig {
         acquireNewTokenService.setRestCommunicator(isRestCommunicator);
         isRestCommunicator.setAcquireNewTokenService(acquireNewTokenService);
         return acquireNewTokenService;
+    }
+
+    // INTERNAL ========================================================================================================
+
+    @Bean
+    public DistributedDataService distributedDataService(ApplicationContext context) {
+        return new DistributedDataService(context);
     }
 
     // JPA =============================================================================================================
@@ -195,5 +207,12 @@ public class CommonBeansConfig {
     @Bean
     public FirestoreListener firestoreListener() {
         return new FirestoreListener();
+    }
+
+    // FILE STORAGE ====================================================================================================
+
+    @Bean
+    public FileStorageService fileStorageService() {
+        return new FileStorageService();
     }
 }

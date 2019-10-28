@@ -99,6 +99,8 @@ public class Student {
                 this.regionID = regionAddress.getRegion().getId();
             }
         }
+        this.studentCode = updateInfo.getStudentCode();
+        this.majorID = updateInfo.getMajorID();
     }
 
     public boolean getIsProfileVerified() {

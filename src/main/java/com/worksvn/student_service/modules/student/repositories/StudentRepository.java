@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 public interface StudentRepository extends JpaRepository<Student, String> {
 
     Student findFirstById(String id);
@@ -24,7 +22,8 @@ public interface StudentRepository extends JpaRepository<Student, String> {
             "s.birthday, s.avatarUrl, s.coverUrl, s.description, s.identityCard," +
             "sar.attitudeRating, sar.skillRating, sar.jobAccomplishmentRating, sar.ratingCount," +
             "s.regionID, s.lat, s.lon," +
-            "s.identityCardFrontImageUrl, s.identityCardBackImageUrl) " +
+            "s.identityCardFrontImageUrl, s.identityCardBackImageUrl," +
+            "s.studentCode, s.majorID) " +
             "from Student s " +
             "left join StudentAverageRating sar on sar.studentID = s.id " +
             "where s.id = ?1")

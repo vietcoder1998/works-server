@@ -18,6 +18,7 @@ import com.worksvn.common.utils.core.FileChecker;
 import com.worksvn.common.utils.jpa.JPAQueryBuilder;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
 import com.worksvn.student_service.constants.NumberConstants;
+import com.worksvn.student_service.modules.common.services.MajorService;
 import com.worksvn.student_service.modules.services.geocoding.LocationService;
 import com.worksvn.student_service.modules.student.models.entities.*;
 import com.worksvn.student_service.modules.student.repositories.StudentAverageRatingRepository;
@@ -39,12 +40,12 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
-    private StudentAverageRatingRepository studentAverageRatingRepository;
-    @Autowired
     private JPAQueryExecutor queryExecutor;
 
     @Autowired
     private DistributedDataService distributedDataService;
+    @Autowired
+    private StudentAverageRatingService studentAverageRatingService;
     @Autowired
     private StudentSkillService studentSkillService;
     @Autowired
@@ -57,6 +58,8 @@ public class StudentService {
     private LocationService locationService;
     @Autowired
     private FileStorageService fileStorageService;
+    @Autowired
+    private MajorService majorService;
 
     @Value("${application.firebase.file-storage.student-dir.name:students/}")
     private String studentStorageDirectory;
@@ -163,7 +166,7 @@ public class StudentService {
             s = getSchoolStudent(id, schoolID);
         }
 
-        StudentAverageRatingDto car = studentAverageRatingRepository.getStudentAverageRatingDto(id);
+        StudentAverageRatingDto car = studentAverageRatingService.getStudentAverageRatingDto(id);
 
         List<SkillDto> sks = studentSkillService.getStudentSkillDtos(id);
 
@@ -179,18 +182,22 @@ public class StudentService {
 
         Boolean unlocked = null;
         if (employerID != null) {
-            studentUnlockService.checkStudentUnlockedByEmployer(id, employerID);
-            unlocked = true;
+            unlocked = studentUnlockService.checkStudentUnlockedByEmployer(id, employerID);
         }
 
-        return new StudentProfileDto(s.getId(), s.getFirstName(), s.getLastName(), s.getGender(),
+        StudentProfileDto profileDto = new StudentProfileDto(s.getId(), s.getFirstName(), s.getLastName(), s.getGender(),
                 s.getEmail(), s.getPhone(), s.getAddress(), s.getBirthday(),
                 s.getAvatarUrl(), s.getCoverUrl(), s.getDescription(),
                 s.getIdentityCard(), car,
                 s.getRegionID(), s.getLat(), s.getLon(),
                 s.getIdentityCardFrontImageUrl(), s.getIdentityCardBackImageUrl(),
                 s.getIsProfileVerified(), s.getIsLookingForJob(), unlocked,
-                sks, lks, exps);
+                sks, lks, exps,
+                s.getStudentCode(), s.getMajorID());
+
+        distributedDataService.complete(profileDto, null);
+
+        return profileDto;
     }
 
     public StudentInfoDto getStudentInfo(String studentID) throws Exception {
@@ -214,6 +221,9 @@ public class StudentService {
     //    @Transactional(rollbackFor = Exception.class)
     public void updateStudentInfo(String studentID, NewStudentInfoDto updateInfo) throws Exception {
         Student student = getStudent(studentID);
+
+        // check major exist
+        majorService.getMajorDto(updateInfo.getMajorID());
 
         RegionAddress regionAddress = null;
         if (updateInfo.getLat() != null && updateInfo.getLon() != null) {

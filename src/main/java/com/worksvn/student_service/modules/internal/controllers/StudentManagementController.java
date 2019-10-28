@@ -8,6 +8,7 @@ import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.student.requests.StudentFilterDto;
 import com.worksvn.common.modules.student.responses.StudentPreview;
+import com.worksvn.common.modules.student.responses.StudentProfileDto;
 import com.worksvn.student_service.base.controllers.BaseRESTController;
 import com.worksvn.student_service.modules.student.models.entities.Student;
 import com.worksvn.student_service.modules.student.services.StudentService;
@@ -40,22 +41,25 @@ public class StudentManagementController extends BaseRESTController {
         return studentService.getStudentPreviews(sortBy, sortType, pageIndex, pageSize, filterDto);
     }
 
-//    @ApiOperation(value = "Xem hồ sơ đầy đủ")
-//    @Responses({
-//    })
-//    @GetMapping("/{id}/profile")
-//    public StudentProfileDto getProfile(@PathVariable("id") String studentID,
-//                                        @RequestParam(value = "employerID", required = false) String employerID)
-//            throws ResponseException {
-//        return studentService.getStudentProfile(studentID, employerID);
-//    }
-//
-//    @ApiOperation(value = "Kiểm tra tài khoản tồn tại")
-//    @Responses({
-//            @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND),
-//    })
-//    @GetMapping("/{id}/exists")
-//    public boolean checkStudentExists(@PathVariable("id") String studentID) throws ResponseException {
-//        return studentService.checkStudentExists(studentID);
-//    }
+    @ApiOperation(value = "Xem hồ sơ đầy đủ")
+    @Responses({
+            @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND),
+            @Response(responseValue = ResponseValue.SCHOOL_STUDENT_NOT_FOUND),
+            @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND),
+    })
+    @GetMapping("/{id}/profile")
+    public StudentProfileDto getProfile(@PathVariable("id") String studentID,
+                                        @RequestParam(value = "schoolID", required = false) String schoolID,
+                                        @RequestParam(value = "employerID", required = false) String employerID) throws Exception {
+        return studentService.getStudentProfile(studentID, schoolID, employerID);
+    }
+
+    @ApiOperation(value = "Kiểm tra tài khoản tồn tại")
+    @Responses({
+            @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND),
+    })
+    @GetMapping("/{id}/exists")
+    public void checkStudentExists(@PathVariable("id") String studentID) throws ResponseException {
+        studentService.checkStudentExist(studentID);
+    }
 }

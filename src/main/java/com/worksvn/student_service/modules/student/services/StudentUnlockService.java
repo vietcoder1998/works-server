@@ -11,9 +11,7 @@ public class StudentUnlockService {
     @Autowired
     private StudentUnlockedRepository studentUnlockedRepository;
 
-    public void checkStudentUnlockedByEmployer(String studentID, String employerID) throws ResponseException {
-        if (!studentUnlockedRepository.existsByStudent_IdAndEmployerID(studentID, employerID)) {
-            throw new ResponseException(ResponseValue.STUDENT_NOT_UNLOCKED);
-        }
+    public boolean checkStudentUnlockedByEmployer(String studentID, String employerID) throws ResponseException {
+        return studentUnlockedRepository.existsByStudent_IdAndEmployerID(studentID, employerID);
     }
 }

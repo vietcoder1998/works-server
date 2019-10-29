@@ -25,15 +25,9 @@ public class StudentUnlocked {
     @Column(name = "employer_id")
     private String employerID;
     @Column(name = "created_date")
-    private Date createdDate;
-
-    @PrePersist
-    void onPrePersist() {
-        this.createdDate = new Date();
-    }
+    private Date createdDate = new Date();
 
     public StudentUnlocked(Student student, String employerID) {
-        this();
         this.student = student;
         this.employerID = employerID;
     }

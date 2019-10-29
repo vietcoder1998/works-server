@@ -102,4 +102,17 @@ public class APIs {
         api.addParam("id", schoolID);
         return api;
     }
+
+    // EMPLOYER SERVICE ================================================================================================
+
+    public static ISApi<Object, Boolean> EMPLOYER_checkEmployerExists(String employerID) {
+        ISApi<Object, Boolean> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.GET, "api/internal/employers/{id}/exists",
+                null,
+                new TypeReference<Boolean>() {
+                },
+                true);
+        api.addParam("id", employerID);
+        return api;
+    }
 }

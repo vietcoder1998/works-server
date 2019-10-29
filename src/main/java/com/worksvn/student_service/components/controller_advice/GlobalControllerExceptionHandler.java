@@ -5,7 +5,7 @@ import com.worksvn.common.base.models.*;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ISResponseException;
 import com.worksvn.common.exceptions.ResponseException;
-import com.worksvn.common.modules.common.responses.UploadSizeDto;
+import com.worksvn.common.base.models.UploadSizeDto;
 import org.apache.tomcat.util.http.fileupload.FileUploadBase;
 import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -83,7 +83,11 @@ public class GlobalControllerExceptionHandler {
     @ResponseBody
     public BaseResponse onInternalServerError(Exception e) {
         e.printStackTrace();
-        return new BaseResponse(ResponseValue.UNEXPECTED_ERROR_OCCURRED);
+        if (activeProfile.equalsIgnoreCase("dev")) {
+            return new BaseResponse<>(ResponseValue.UNEXPECTED_ERROR_OCCURRED, new MessageDto(e.toString()));
+        } else {
+            return new BaseResponse(ResponseValue.UNEXPECTED_ERROR_OCCURRED);
+        }
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

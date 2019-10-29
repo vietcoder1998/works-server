@@ -103,6 +103,9 @@ public class StudentService {
                         queryBuilder.newCondition().condition("sar.studentID", "=", "s.id"));
 
         boolean groupByID = false;
+        if (filterDto.getSchoolID() != null && !filterDto.getSchoolID().isEmpty()) {
+            whereCondition.and().paramCondition("s.schoolID", "=", filterDto.getSchoolID());
+        }
         if (filterDto.getRegionID() != null) {
             whereCondition.and().paramCondition("r.id", "=", filterDto.getRegionID());
         }

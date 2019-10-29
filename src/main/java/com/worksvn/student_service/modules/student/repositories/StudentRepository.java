@@ -17,6 +17,9 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 
     boolean existsByIdAndSchoolID(String id, String schoolID);
 
+    @Query("select s.schoolID from Student s where s.id = ?1")
+    String getSchoolID(String id);
+
     @Query("select new com.worksvn.common.modules.student.responses.StudentInfoDto" +
             "(s.id, s.firstName, s.lastName, s.gender, s.email, s.phone, s.address," +
             "s.birthday, s.avatarUrl, s.coverUrl, s.description, s.identityCard," +

@@ -63,8 +63,8 @@ public class APIs {
     }
 
     public static ISApi<Object, PageDto<SkillDto>> PUBLIC_querySkills(Set<Integer> ids,
-                                                                     List<String> sortBy, List<String> sortType,
-                                                                     int pageIndex, int pageSize) {
+                                                                      List<String> sortBy, List<String> sortType,
+                                                                      int pageIndex, int pageSize) {
         ISApi<Object, PageDto<SkillDto>> api = new ISApi<>(ISHost.PUBLIC_SERVICE,
                 HttpMethod.POST, "api/internal/skills/query" +
                 "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
@@ -100,6 +100,44 @@ public class APIs {
                 },
                 true);
         api.addParam("id", schoolID);
+        return api;
+    }
+
+    public static ISApi<Object, PageDto<BranchDto>> SCHOOL_getSchoolBranches(String schoolID,
+                                                                             List<String> sortBy, List<String> sortType,
+                                                                             int pageIndex, int pageSize) {
+        ISApi<Object, PageDto<BranchDto>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.GET, "api/internal/schools/{id}/education/branches" +
+                "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                null,
+                new TypeReference<PageDto<BranchDto>>() {
+                },
+                true);
+        api.addParam("id", schoolID);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+
+    public static ISApi<Object, PageDto<MajorDto>> SCHOOL_getSchoolMajors(String schoolID, Integer branchID,
+                                                                          List<String> sortBy, List<String> sortType,
+                                                                          int pageIndex, int pageSize) {
+        ISApi<Object, PageDto<MajorDto>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.GET, "api/internal/schools/{id}/education/majors" +
+                "?branchID={branchID}&sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                null,
+                new TypeReference<PageDto<MajorDto>>() {
+                },
+                true);
+        api.addParam("id", schoolID);
+        api.addParam("branchID", branchID);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
         return api;
     }
 

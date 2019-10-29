@@ -21,7 +21,6 @@ import com.worksvn.student_service.constants.NumberConstants;
 import com.worksvn.student_service.modules.common.services.MajorService;
 import com.worksvn.student_service.modules.services.geocoding.LocationService;
 import com.worksvn.student_service.modules.student.models.entities.*;
-import com.worksvn.student_service.modules.student.repositories.StudentAverageRatingRepository;
 import com.worksvn.student_service.modules.student.repositories.StudentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -359,5 +358,13 @@ public class StudentService {
             throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
         }
         return student;
+    }
+
+    public String getStudentSchoolID(String studentID) throws ResponseException {
+        String schoolID = studentRepository.getSchoolID(studentID);
+        if (schoolID == null) {
+            throw new ResponseException(ResponseValue.STUDENT_SCHOOL_NOT_FOUND);
+        }
+        return schoolID;
     }
 }

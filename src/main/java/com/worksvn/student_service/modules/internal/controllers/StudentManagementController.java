@@ -62,13 +62,4 @@ public class StudentManagementController extends BaseRESTController {
     public void checkStudentExists(@PathVariable("id") String studentID) throws ResponseException {
         studentService.checkStudentExist(studentID);
     }
-
-    @ApiOperation(value = "Kiểm tra tài khoản sinh viên tồn tại")
-    @Responses({
-            @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND),
-    })
-    @GetMapping("/{id}/exists")
-    public void checkCandidateExists(@PathVariable("id") String studentID) throws ResponseException {
-        studentService.checkStudentExists(studentID);
-    }
 }

@@ -60,13 +60,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private IAuthorization authorization;
 
     @Bean
-    public AuthenticationManager authenticationManager(ResourceServerTokenServices resourceServerTokenServices) {
-        OAuth2AuthenticationManager authenticationManager = new OAuth2AuthenticationManager();
-        authenticationManager.setTokenServices(resourceServerTokenServices);
-        return authenticationManager;
-    }
-
-    @Bean
     public AccessDeniedHandler customAccessDeniedHandler() {
         return (request, response, accessDeniedException) -> {
             logger.error("customAccessDeniedHandler", accessDeniedException);

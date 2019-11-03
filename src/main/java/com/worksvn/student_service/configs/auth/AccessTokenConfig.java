@@ -5,9 +5,11 @@ import com.worksvn.common.modules.auth.core.CustomUserDetail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationManager;
 import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.web.client.RestTemplate;
@@ -59,5 +61,12 @@ public class AccessTokenConfig {
         remoteTokenServices.setCheckTokenEndpointUrl(ISHost.AUTH_SERVICE.getValue() + "oauth/check_token");
         remoteTokenServices.setAccessTokenConverter(jwtAccessTokenConverter);
         return remoteTokenServices;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(ResourceServerTokenServices resourceServerTokenServices) {
+        OAuth2AuthenticationManager authenticationManager = new OAuth2AuthenticationManager();
+        authenticationManager.setTokenServices(resourceServerTokenServices);
+        return authenticationManager;
     }
 }

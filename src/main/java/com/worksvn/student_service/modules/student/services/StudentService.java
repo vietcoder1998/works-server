@@ -367,4 +367,10 @@ public class StudentService {
         }
         return schoolID;
     }
+
+    public void checkStudentExists(String studentID) throws ResponseException {
+        if (!studentRepository.existsById(studentID)) {
+            throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
+        }
+    }
 }

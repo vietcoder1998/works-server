@@ -28,6 +28,7 @@ public class StudentRegistrationService {
         if (studentRepository.existsById(userID)) {
             throw new ResponseException(ResponseValue.STUDENT_EXISTS);
         }
+
         studentRepository.save(new Student(userID, schoolID, registrationDto));
     }
 }

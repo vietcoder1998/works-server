@@ -17,9 +17,9 @@ public class SkillService extends BaseSkillService {
     private ISRestCommunicator restCommunicator;
 
     @Override
-    public PageDto<SkillDto> getSkillDtos(Set<Integer> ids,
-                                          List<String> sortBy, List<String> sortType,
-                                          int pageIndex, int pageSize) throws Exception {
+    public PageDto<SkillDto> querySkillDtos(List<String> sortBy, List<String> sortType,
+                                            Integer pageIndex, Integer pageSize,
+                                            Set<Integer> ids) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs.PUBLIC_querySkills(ids, sortBy, sortType, pageIndex, pageSize));
     }
 }

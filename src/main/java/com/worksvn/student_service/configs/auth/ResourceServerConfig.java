@@ -16,9 +16,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -75,20 +77,29 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Bean
     public AuthenticationEntryPoint customAuthenticationEntryPoint() {
         return (request, response, authException) -> {
-            com.worksvn.common.constants.ResponseValue responseValue = null;
-            String message = authException.getMessage();
-            if (message.contains("Full authentication is required to access this resource")) {
-                responseValue = com.worksvn.common.constants.ResponseValue.AUTHENTICATION_REQUIRED;
-            } else if (message.contains("Access token expired")) {
-                responseValue = com.worksvn.common.constants.ResponseValue.EXPIRED_TOKEN;
-            } else if (message.contains("Cannot convert access token to JSON")) {
-                responseValue = com.worksvn.common.constants.ResponseValue.INVALID_TOKEN;
-            } else if (message.contains("Invalid token does not contain resource id")) {
-                responseValue = com.worksvn.common.constants.ResponseValue.CANNOT_ACCESS_THIS_RESOURCE_SERVER;
-            } else {
+            ResponseValue responseValue = null;
+            if (authException instanceof InsufficientAuthenticationException) {
+                if (authException.getMessage().equals("Full authentication is required to access this resource")) {
+                    responseValue = ResponseValue.AUTHENTICATION_REQUIRED;
+                } else {
+                    Throwable cause = authException.getCause();
+                    if (cause instanceof InvalidTokenException) {
+                        InvalidTokenException invalidTokenException = (InvalidTokenException) cause;
+                        switch (invalidTokenException.getOAuth2ErrorCode()) {
+                            case "invalid_token": {
+                                responseValue = ResponseValue.INVALID_TOKEN;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (responseValue == null) {
                 logger.error("customAuthenticationEntryPoint", authException);
                 responseValue = ResponseValue.UNEXPECTED_ERROR_OCCURRED;
             }
+
             String responseBodyJson = JacksonObjectMapper.getInstance()
                     .writeValueAsString(new BaseResponseBody<>(responseValue, null));
             response.setContentType("application/json;charset=UTF-8");

@@ -4,11 +4,7 @@ import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.constants.StringConstants;
 import com.worksvn.common.exceptions.ResponseException;
-import com.worksvn.common.modules.candidate.responses.IdentityCardImageDto;
-import com.worksvn.common.modules.common.responses.AvatarUrlDto;
-import com.worksvn.common.modules.common.responses.RegionAddress;
-import com.worksvn.common.modules.common.responses.SkillDto;
-import com.worksvn.common.modules.employer.responses.CoverUrlDto;
+import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.student.requests.NewStudentInfoDto;
 import com.worksvn.common.modules.student.requests.StudentFilterDto;
 import com.worksvn.common.modules.student.responses.*;
@@ -93,7 +89,7 @@ public class StudentService {
                 "s.birthday", "s.avatarUrl",
                 "s.email", "s.phone", "s.gender",
                 "s.regionID", "s.address", "s.lat", "s.lon",
-                "s.isProfileVerified", "s.isLookingForJob",
+                "s.profileVerified", "s.lookingForJob",
                 "sar.attitudeRating", "sar.skillRating",
                 "sar.jobAccomplishmentRating", "sar.ratingCount",
                 unlockedID, "s.schoolID", "s.majorID", "s.studentCode")
@@ -117,11 +113,11 @@ public class StudentService {
         if (filterDto.getGender() != null) {
             whereCondition.and().paramCondition("s.gender", "=", filterDto.getGender());
         }
-        if (filterDto.getIsLookingForJob() != null) {
-            whereCondition.and().paramCondition("s.isLookingForJob", "=", filterDto.getIsLookingForJob());
+        if (filterDto.getLookingForJob() != null) {
+            whereCondition.and().paramCondition("s.lookingForJob", "=", filterDto.getLookingForJob());
         }
-        if (filterDto.getIsProfileVerified() != null) {
-            whereCondition.and().paramCondition("s.isProfileVerified", "=", filterDto.getIsProfileVerified());
+        if (filterDto.getProfileVerified() != null) {
+            whereCondition.and().paramCondition("s.profileVerified", "=", filterDto.getProfileVerified());
         }
         Integer startYear = filterDto.getBirthYearStart();
         Integer endYear = filterDto.getBirthYearEnd();
@@ -193,7 +189,7 @@ public class StudentService {
                 s.getIdentityCard(), car,
                 s.getRegionID(), s.getLat(), s.getLon(),
                 s.getIdentityCardFrontImageUrl(), s.getIdentityCardBackImageUrl(),
-                s.getIsProfileVerified(), s.getIsLookingForJob(), unlocked,
+                s.getProfileVerified(), s.getLookingForJob(), unlocked,
                 sks, lks, exps,
                 s.getStudentCode(), s.getMajorID());
 
@@ -322,9 +318,9 @@ public class StudentService {
         return url;
     }
 
-    public void updateStudentLookingForJob(String studentID, boolean isLookingForJob) throws ResponseException {
+    public void updateStudentLookingForJob(String studentID, boolean lookingForJob) throws ResponseException {
         checkStudentExist(studentID);
-        studentRepository.updateStudentLookingForJob(studentID, isLookingForJob);
+        studentRepository.updateStudentLookingForJob(studentID, lookingForJob);
     }
 
     public void updateStudentDescription(String studentID, String description) throws ResponseException {

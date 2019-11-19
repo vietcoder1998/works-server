@@ -5,9 +5,9 @@ import com.worksvn.common.annotations.swagger.Response;
 import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
-import com.worksvn.common.modules.candidate.responses.IdentityCardImageDto;
 import com.worksvn.common.modules.common.responses.AvatarUrlDto;
-import com.worksvn.common.modules.employer.responses.CoverUrlDto;
+import com.worksvn.common.modules.common.responses.CoverUrlDto;
+import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
 import com.worksvn.common.modules.student.requests.NewStudentInfoDto;
 import com.worksvn.common.modules.student.responses.StudentInfoDto;
 import com.worksvn.common.modules.student.responses.StudentNavigationDto;
@@ -113,8 +113,8 @@ public class StudentProfileController extends BaseRESTController {
     @Responses({
             @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND)
     })
-    @PutMapping("/isLookingForJob/{state}")
-    public void updateCandidateIsLookingForJob(@PathVariable("state") boolean state) throws ResponseException {
+    @PutMapping("/lookingForJob/{state}")
+    public void updateCandidateLookingForJob(@PathVariable("state") boolean state) throws ResponseException {
         String studentID = getAuthorizedUser().getId();
         studentService.updateStudentLookingForJob(studentID, state);
     }

@@ -21,7 +21,7 @@ public class StudentSkillService {
         Set<Integer> studentSkillIDs = studentSkillRepository.getStudentSkillIDs(studentID);
         List<SkillDto> result;
         if (studentSkillIDs != null && studentSkillIDs.size() > 0) {
-            return skillService.getSkillDtos(studentSkillIDs, null, null, 0, 0)
+            return skillService.querySkillDtos(null, null, null, null, studentSkillIDs)
                     .getItems();
         } else {
             result = new ArrayList<>();

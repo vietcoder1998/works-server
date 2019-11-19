@@ -1,6 +1,6 @@
 package com.worksvn.student_service.modules.student.repositories;
 
-import com.worksvn.common.modules.candidate.responses.IdentityCardImageDto;
+import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
 import com.worksvn.common.modules.student.responses.StudentInfoDto;
 import com.worksvn.common.modules.student.responses.StudentNavigationDto;
 import com.worksvn.student_service.modules.student.models.entities.Student;
@@ -55,7 +55,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     @Query("update Student s set s.coverUrl = ?2 where s.id = ?1")
     void updateStudentCover(String studentID, String coverUrl);
 
-    @Query("select new com.worksvn.common.modules.candidate.responses.IdentityCardImageDto" +
+    @Query("select new  com.worksvn.common.modules.common.responses.IdentityCardImageDto" +
             "(s.identityCardFrontImageUrl, s.identityCardBackImageUrl) " +
             "from Student s " +
             "where s.id = ?1")
@@ -70,8 +70,8 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 
     @Modifying
     @Transactional
-    @Query("update Student s set s.isLookingForJob = ?2 where s.id = ?1")
-    void updateStudentLookingForJob(String studentID, boolean isLookingForJob);
+    @Query("update Student s set s.lookingForJob = ?2 where s.id = ?1")
+    void updateStudentLookingForJob(String studentID, boolean lookingForJob);
 
     @Modifying
     @Transactional

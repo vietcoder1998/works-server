@@ -61,9 +61,9 @@ public class Student {
     @Column(name = "identity_card_back_image_url")
     private String identityCardBackImageUrl;
     @Column(name = "is_profile_verified")
-    private Boolean isProfileVerified = false;
+    private Boolean profileVerified = false;
     @Column(name = "is_looking_for_job")
-    private Boolean isLookingForJob = true;
+    private Boolean lookingForJob = true;
     @Column(name = "lat")
     private Double lat;
     @Column(name = "lon")
@@ -101,21 +101,5 @@ public class Student {
         }
         this.studentCode = updateInfo.getStudentCode();
         this.majorID = updateInfo.getMajorID();
-    }
-
-    public boolean getIsProfileVerified() {
-        return isProfileVerified;
-    }
-
-    public void setIsProfileVerified(boolean isProfileVerified) {
-        this.isProfileVerified = isProfileVerified;
-    }
-
-    public boolean getIsLookingForJob() {
-        return isLookingForJob;
-    }
-
-    public void setIsLookingForJob(boolean isLookingForJob) {
-        this.isLookingForJob = isLookingForJob;
     }
 }

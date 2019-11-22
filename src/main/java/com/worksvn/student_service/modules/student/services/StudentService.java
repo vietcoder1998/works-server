@@ -102,7 +102,7 @@ public class StudentService {
             whereCondition.and().paramCondition("s.schoolID", "=", filterDto.getSchoolID());
         }
         if (filterDto.getRegionID() != null) {
-            whereCondition.and().paramCondition("r.id", "=", filterDto.getRegionID());
+            whereCondition.and().paramCondition("s.regionID", "=", filterDto.getRegionID());
         }
         if (filterDto.getEmail() != null && !filterDto.getEmail().isEmpty()) {
             whereCondition.and().paramCondition("s.email", "=", filterDto.getEmail());
@@ -139,7 +139,7 @@ public class StudentService {
         if (filterDto.getMajorIDs() != null && !filterDto.getMajorIDs().isEmpty()) {
             whereCondition.and().paramCondition("s.majorID", "IN", filterDto.getMajorIDs());
         }
-        if (filterDto.getIds() != null) {
+        if (filterDto.getIds() != null && !filterDto.getIds().isEmpty() ) {
             whereCondition.and().paramCondition("s.id", "IN", filterDto.getIds());
         }
 

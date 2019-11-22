@@ -89,7 +89,7 @@ public class StudentService {
                 "s.birthday", "s.avatarUrl",
                 "s.email", "s.phone", "s.gender",
                 "s.regionID", "s.address", "s.lat", "s.lon",
-                "s.profileVerified", "s.lookingForJob",
+                "s.profileVerified", "s.lookingForJob", "s.completePercent",
                 "sar.attitudeRating", "sar.skillRating",
                 "sar.jobAccomplishmentRating", "sar.ratingCount",
                 unlockedID, "s.schoolID", "s.majorID", "s.studentCode")
@@ -183,15 +183,15 @@ public class StudentService {
             unlocked = studentUnlockService.checkStudentUnlockedByEmployer(id, employerID);
         }
 
-        StudentProfileDto profileDto = new StudentProfileDto(s.getId(), s.getFirstName(), s.getLastName(), s.getGender(),
-                s.getEmail(), s.getPhone(), s.getAddress(), s.getBirthday(),
-                s.getAvatarUrl(), s.getCoverUrl(), s.getDescription(),
-                s.getIdentityCard(), car,
-                s.getRegionID(), s.getLat(), s.getLon(),
+        StudentProfileDto profileDto = new StudentProfileDto(s.getId(), s.getFirstName(), s.getLastName(),
+                s.getBirthday(), s.getAvatarUrl(),
+                s.getEmail(), s.getPhone(), s.getGender(),
+                s.getRegionID(), s.getAddress(), s.getLat(), s.getLon(),
+                s.getProfileVerified(), s.getLookingForJob(), s.getCompletePercent(),
+                car, unlocked, s.getSchoolID(), s.getMajorID(), s.getStudentCode(),
+                s.getCoverUrl(), s.getDescription(), s.getIdentityCard(),
                 s.getIdentityCardFrontImageUrl(), s.getIdentityCardBackImageUrl(),
-                s.getProfileVerified(), s.getLookingForJob(), unlocked,
-                sks, lks, exps,
-                s.getStudentCode(), s.getMajorID());
+                sks, lks, exps);
 
         distributedDataService.complete(profileDto, null);
 

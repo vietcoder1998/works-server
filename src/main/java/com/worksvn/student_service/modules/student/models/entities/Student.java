@@ -70,6 +70,8 @@ public class Student {
     private Double lon;
     @Column(name = "created_date")
     private Date createdDate = new Date();
+    @Column(name = "complete_percent")
+    private int completePercent;
 
     public Student(String id, String schoolID, NewStudentRegistrationDto registrationDto) {
         this.id = id;
@@ -78,6 +80,7 @@ public class Student {
         this.lastName = registrationDto.getLastName();
         this.email = registrationDto.getEmail();
         this.phone = registrationDto.getPhone();
+        calculateCompletePercent();
     }
 
     public void update(NewStudentInfoDto updateInfo,
@@ -101,5 +104,20 @@ public class Student {
         }
         this.studentCode = updateInfo.getStudentCode();
         this.majorID = updateInfo.getMajorID();
+        calculateCompletePercent();
+    }
+
+    public void calculateCompletePercent() {
+        int totalCompletedField = (firstName == null ? 0 : 1) +
+                (lastName == null ? 0 : 1) +
+                (email == null ? 0 : 1) +
+                (gender == null ? 0 : 1) +
+                (identityCard == null ? 0 : 1) +
+                (phone == null ? 0 : 1) +
+                ((lat == null || lon == null) ? 0 : 1) +
+                (birthday == null ? 0 : 1) +
+                (avatarUrl == null ? 0 : 1) +
+                (description == null ? 0 : 1);
+        this.completePercent = (int) Math.round(totalCompletedField / 10.0 * 100.0);
     }
 }

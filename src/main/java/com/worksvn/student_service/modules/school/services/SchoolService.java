@@ -2,7 +2,7 @@ package com.worksvn.student_service.modules.school.services;
 
 import com.worksvn.common.components.communication.ISRestCommunicator;
 import com.worksvn.common.modules.school.responses.SimpleSchoolPreview;
-import com.worksvn.common.modules.school.services.ISchoolService;
+import com.worksvn.common.modules.school.services.BaseSchoolService;
 import com.worksvn.student_service.components.communication.APIs;
 import com.worksvn.student_service.constants.CacheValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SchoolService implements ISchoolService {
+public class SchoolService extends BaseSchoolService {
     @Autowired
     private ISRestCommunicator restCommunicator;
 

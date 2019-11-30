@@ -12,6 +12,7 @@ import com.worksvn.common.modules.admin.requests.VisibleAnnouncementFilterDto;
 import com.worksvn.common.modules.admin.responses.AnnouncementCommentDto;
 import com.worksvn.common.modules.admin.responses.AnnouncementDto;
 import com.worksvn.common.modules.admin.responses.AnnouncementPreview;
+import com.worksvn.common.modules.admin.responses.AnnouncementTypeDto;
 import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.school.responses.SchoolShortNameDto;
 import com.worksvn.common.modules.school.responses.SimpleSchoolPreview;
@@ -218,6 +219,26 @@ public class APIs {
                 },
                 true);
         api.addParam("id", id);
+        api.addParam("target", target);
+        return api;
+    }
+
+    // ANNOUNCEMENT TYPE ===============================================================================================
+
+    public static ISApi<Object, PageDto<AnnouncementTypeDto>> ADMIN_getAnnouncementTypes(List<String> sortBy, List<String> sortType,
+                                                                                         int pageIndex, int pageSize,
+                                                                                         AnnouncementTarget target) {
+        ISApi<Object, PageDto<AnnouncementTypeDto>> api = new ISApi<>(ISHost.ADMIN_SERVICE,
+                HttpMethod.GET, "api/internal/admins/announcementTypes" +
+                "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}&target={target}",
+                null,
+                new TypeReference<PageDto<AnnouncementTypeDto>>() {
+                },
+                true);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
         api.addParam("target", target);
         return api;
     }

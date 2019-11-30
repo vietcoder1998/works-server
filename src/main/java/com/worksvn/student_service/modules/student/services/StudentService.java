@@ -217,6 +217,22 @@ public class StudentService {
         return studentNavigationDto;
     }
 
+    public UserSimpleInfo getSimpleInfo(String studentID) throws ResponseException {
+        UserSimpleInfo info = studentRepository.getSimpleInfo(studentID);
+        if (info == null) {
+            throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
+        }
+        return info;
+    }
+
+    public LatLon getLatLon(String studentID) {
+        return studentRepository.getLatLon(studentID);
+    }
+
+    public StudentQueryActiveJobInfo getQueryActiveJobInfo(String studentID) {
+        return studentRepository.getQueryActiveJobInfo(studentID);
+    }
+
     //    @Transactional(rollbackFor = Exception.class)
     public void updateStudentInfo(String studentID, NewStudentInfoDto updateInfo) throws Exception {
         Student student = getStudent(studentID);
@@ -369,13 +385,5 @@ public class StudentService {
         if (!studentRepository.existsById(studentID)) {
             throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
         }
-    }
-
-    public UserSimpleInfo getSimpleInfo(String id) throws ResponseException {
-        UserSimpleInfo info = studentRepository.getSimpleInfo(id);
-        if (info == null) {
-            throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
-        }
-        return info;
     }
 }

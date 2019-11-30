@@ -1,9 +1,11 @@
 package com.worksvn.student_service.modules.student.repositories;
 
 import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
+import com.worksvn.common.modules.common.responses.LatLon;
 import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
 import com.worksvn.common.modules.student.responses.StudentInfoDto;
 import com.worksvn.common.modules.student.responses.StudentNavigationDto;
+import com.worksvn.common.modules.student.responses.StudentQueryActiveJobInfo;
 import com.worksvn.student_service.modules.student.models.entities.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -45,6 +47,17 @@ public interface StudentRepository extends JpaRepository<Student, String> {
             "from Student s " +
             "where s.id = ?1")
     UserSimpleInfo getSimpleInfo(String id);
+
+    @Query("select new com.worksvn.common.modules.common.responses.LatLon" +
+            "(s.lat, s.lon)" +
+            "from Student s " +
+            "where s.id = ?1")
+    LatLon getLatLon(String id);
+
+    @Query("select new com.worksvn.common.modules.student.responses.StudentQueryActiveJobInfo" +
+            "(s.schoolID, s.majorID, s.lat, s.lon) " +
+            "from Student s where s.id = ?1")
+    StudentQueryActiveJobInfo getQueryActiveJobInfo(String id);
 
     @Query("select s.avatarUrl from Student s where s.id = ?1")
     String getStudentAvatarUrl(String studentID);

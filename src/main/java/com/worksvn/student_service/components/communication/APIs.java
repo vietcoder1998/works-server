@@ -4,8 +4,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.components.communication.ISApi;
 import com.worksvn.common.components.communication.ISHost;
+import com.worksvn.common.modules.admin.enums.AnnouncementCommentTarget;
 import com.worksvn.common.modules.admin.enums.AnnouncementTarget;
+import com.worksvn.common.modules.admin.requests.AnnouncementCommentFilter;
+import com.worksvn.common.modules.admin.requests.NewAnnouncementCommentDto;
 import com.worksvn.common.modules.admin.requests.VisibleAnnouncementFilterDto;
+import com.worksvn.common.modules.admin.responses.AnnouncementCommentDto;
 import com.worksvn.common.modules.admin.responses.AnnouncementDto;
 import com.worksvn.common.modules.admin.responses.AnnouncementPreview;
 import com.worksvn.common.modules.common.responses.*;
@@ -215,6 +219,96 @@ public class APIs {
                 true);
         api.addParam("id", id);
         api.addParam("target", target);
+        return api;
+    }
+
+    // ANNOUNCEMENT COMMENT ============================================================================================
+
+    public static ISApi<AnnouncementCommentFilter, PageDto<AnnouncementCommentDto>> ADMIN_getAnnouncementComments(
+            String announcementID, AnnouncementTarget target,
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize,
+            AnnouncementCommentFilter filter) {
+        ISApi<AnnouncementCommentFilter, PageDto<AnnouncementCommentDto>> api = new ISApi<>(ISHost.ADMIN_SERVICE,
+                HttpMethod.POST, "api/internal/admins/announcements/{id}/comments/query" +
+                "?target={target}" +
+                "&sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                filter,
+                new TypeReference<PageDto<AnnouncementCommentDto>>() {
+                },
+                true);
+        api.addParam("id", announcementID);
+        api.addParam("target", target);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+    public static ISApi<Object, AnnouncementCommentDto> ADMIN_getAnnouncementComment(
+            String announcementID, int commentID, AnnouncementTarget target) {
+        ISApi<Object, AnnouncementCommentDto> api = new ISApi<>(ISHost.ADMIN_SERVICE,
+                HttpMethod.GET, "api/internal/admins/announcements/{aid}/comments/{cid}" +
+                "?target={target}",
+                null,
+                new TypeReference<AnnouncementCommentDto>() {
+                },
+                true);
+        api.addParam("aid", announcementID);
+        api.addParam("cid", commentID);
+        api.addParam("target", target);
+        return api;
+    }
+
+    public static ISApi<Object, AnnouncementCommentDto> ADMIN_getUserAnnouncementComment(
+            String announcementID, AnnouncementTarget target,
+            String userID, AnnouncementCommentTarget commentTarget) {
+        ISApi<Object, AnnouncementCommentDto> api = new ISApi<>(ISHost.ADMIN_SERVICE,
+                HttpMethod.GET, "api/internal/admins/announcements/{aid}/comments" +
+                "?target={target}&userID={userID}&commentTarget={commentTarget}",
+                null,
+                new TypeReference<AnnouncementCommentDto>() {
+                },
+                true);
+        api.addParam("aid", announcementID);
+        api.addParam("target", target);
+        api.addParam("userID", userID);
+        api.addParam("commentTarget", commentTarget);
+        return api;
+    }
+
+    public static ISApi<NewAnnouncementCommentDto, Object> ADMIN_createNewAnnouncementComment(
+            String announcementID, AnnouncementTarget target,
+            NewAnnouncementCommentDto newComment) {
+        ISApi<NewAnnouncementCommentDto, Object> api = new ISApi<>(ISHost.ADMIN_SERVICE,
+                HttpMethod.POST, "api/internal/admins/announcements/{id}/comments" +
+                "?target={target}",
+                newComment,
+                new TypeReference<Object>() {
+                },
+                true);
+        api.addParam("id", announcementID);
+        api.addParam("target", target);
+        return api;
+    }
+
+    public static ISApi<Set<Integer>, Object> ADMIN_deleteAnnouncementComments(
+            String announcementID, AnnouncementTarget target,
+            String userID, AnnouncementCommentTarget userType,
+            Set<Integer> ids) {
+        ISApi<Set<Integer>, Object> api = new ISApi<>(ISHost.ADMIN_SERVICE,
+                HttpMethod.DELETE, "api/internal/admins/announcements/{id}/comments" +
+                "?target={target}" +
+                "&userID={userID}&userType={userType}",
+                ids,
+                new TypeReference<Object>() {
+                },
+                true);
+        api.addParam("id", announcementID);
+        api.addParam("target", target);
+        api.addParam("userID", userID);
+        api.addParam("userType", userType);
         return api;
     }
 }

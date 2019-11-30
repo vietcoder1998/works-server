@@ -5,6 +5,7 @@ import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.constants.StringConstants;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.common.responses.*;
+import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
 import com.worksvn.common.modules.student.requests.NewStudentInfoDto;
 import com.worksvn.common.modules.student.requests.StudentFilterDto;
 import com.worksvn.common.modules.student.responses.*;
@@ -368,5 +369,13 @@ public class StudentService {
         if (!studentRepository.existsById(studentID)) {
             throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
         }
+    }
+
+    public UserSimpleInfo getSimpleInfo(String id) throws ResponseException {
+        UserSimpleInfo info = studentRepository.getSimpleInfo(id);
+        if (info == null) {
+            throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
+        }
+        return info;
     }
 }

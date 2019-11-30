@@ -1,6 +1,7 @@
 package com.worksvn.student_service.modules.student.repositories;
 
 import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
+import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
 import com.worksvn.common.modules.student.responses.StudentInfoDto;
 import com.worksvn.common.modules.student.responses.StudentNavigationDto;
 import com.worksvn.student_service.modules.student.models.entities.Student;
@@ -38,6 +39,12 @@ public interface StudentRepository extends JpaRepository<Student, String> {
             "from Student s " +
             "where s.id = ?1")
     StudentNavigationDto getStudentNavigationDto(String studentID);
+
+    @Query("select new com.worksvn.common.modules.employer.responses.UserSimpleInfo" +
+            "(s.id, s.firstName, s.lastName,s.avatarUrl, s.gender) " +
+            "from Student s " +
+            "where s.id = ?1")
+    UserSimpleInfo getSimpleInfo(String id);
 
     @Query("select s.avatarUrl from Student s where s.id = ?1")
     String getStudentAvatarUrl(String studentID);

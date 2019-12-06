@@ -297,20 +297,34 @@ public class StudentService {
         checkStudentExist(studentID);
         IdentityCardImageDto cardImageDto = studentRepository.getStudentIdentityCardUrls(studentID);
 
+        boolean newFront = true;
         String newFrontUrl = uploadImageFile(frontImage, studentStorageDirectory + studentID,
                 StringConstants.ID_CARD_FRONT_IMAGE_NAME + "_" + new Date().getTime());
+        if (newFrontUrl == null) {
+            newFront = false;
+            newFrontUrl = cardImageDto.getIdentityCardFrontImageUrl();
+        }
 
+        boolean newBack = true;
         String newBackUrl = uploadImageFile(backImage, studentStorageDirectory + studentID,
                 StringConstants.ID_CARD_BACK_IMAGE_NAME + "_" + new Date().getTime());
-
+        if (newBackUrl == null) {
+            newBack = false;
+            newBackUrl = cardImageDto.getIdentityCardBackImageUrl();
+        }
 
         studentRepository.updateStudentIdentityCardUrls(studentID, newFrontUrl, newBackUrl);
 
         try {
-            fileStorageService.newBatch()
-                    .deleteFileByUrl(cardImageDto.getIdentityCardFrontImageUrl())
-                    .deleteFileByUrl(cardImageDto.getIdentityCardBackImageUrl())
-                    .submit();
+            FileStorageService.FileStorageBatch batch = fileStorageService.newBatch();
+            if (newFront && cardImageDto.getIdentityCardFrontImageUrl() != null) {
+                batch.deleteFileByUrl(cardImageDto.getIdentityCardFrontImageUrl());
+            }
+
+            if (newBack && cardImageDto.getIdentityCardBackImageUrl() != null) {
+                batch.deleteFileByUrl(cardImageDto.getIdentityCardBackImageUrl());
+            }
+            batch.submit();
         } catch (Exception e) {
             logger.error("[File Storage Service] Delete file(s) failed: [" +
                     cardImageDto.getIdentityCardFrontImageUrl() + "," +

@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @AuthorizationRequired
@@ -61,5 +62,13 @@ public class StudentManagementController extends BaseRESTController {
     @GetMapping("/{id}/exists")
     public void checkStudentExists(@PathVariable("id") String studentID) throws ResponseException {
         studentService.checkStudentExist(studentID);
+    }
+
+    @ApiOperation(value = "Xóa danh sách")
+    @Responses({
+    })
+    @DeleteMapping()
+    public void deleteList(@RequestBody Set<String> userIDs) {
+        studentService.deleteList(userIDs);
     }
 }

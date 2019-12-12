@@ -400,4 +400,10 @@ public class StudentService {
             throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
         }
     }
+
+    public void deleteList(Set<String> userIDs) {
+        if (userIDs != null && !userIDs.isEmpty()) {
+            studentRepository.deleteList(userIDs);
+        }
+    }
 }

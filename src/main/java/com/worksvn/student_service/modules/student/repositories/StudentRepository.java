@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 public interface StudentRepository extends JpaRepository<Student, String> {
 
     Student findFirstById(String id);
@@ -97,4 +99,9 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     @Transactional
     @Query("update Student s set s.description = ?2 where s.id = ?1")
     void updateStudentDescription(String studentID, String description);
+
+    @Modifying
+    @Transactional
+    @Query("delete from Student s where s.id in ?1")
+    void deleteList(Set<String> userIDs);
 }

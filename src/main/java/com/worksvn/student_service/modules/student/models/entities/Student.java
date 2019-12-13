@@ -68,10 +68,10 @@ public class Student {
     private Double lat;
     @Column(name = "lon")
     private Double lon;
-    @Column(name = "created_date")
-    private Date createdDate = new Date();
     @Column(name = "complete_percent")
     private int completePercent;
+    @Column(name = "created_date")
+    private Date createdDate = new Date();
 
     public Student(String id, String schoolID, NewStudentRegistrationDto registrationDto) {
         this.id = id;

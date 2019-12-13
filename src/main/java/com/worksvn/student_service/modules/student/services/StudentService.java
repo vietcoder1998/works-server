@@ -11,6 +11,7 @@ import com.worksvn.common.modules.student.requests.StudentFilterDto;
 import com.worksvn.common.modules.student.responses.*;
 import com.worksvn.common.services.file_storage.FileStorageService;
 import com.worksvn.common.services.internal_service.DistributedDataService;
+import com.worksvn.common.utils.core.DateTimeUtils;
 import com.worksvn.common.utils.core.FileChecker;
 import com.worksvn.common.utils.jpa.JPAQueryBuilder;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
@@ -62,9 +63,9 @@ public class StudentService {
 
     public PageDto<StudentPreview> getStudentPreviews(List<String> sortType, List<String> sortBy,
                                                       int pageIndex, int pageSize,
-                                                      StudentFilterDto filterDto) throws Exception {
-        if (filterDto == null) {
-            filterDto = new StudentFilterDto();
+                                                      StudentFilterDto filter) throws Exception {
+        if (filter == null) {
+            filter = new StudentFilterDto();
         }
 
         JPAQueryBuilder<StudentPreview> queryBuilder = new JPAQueryBuilder<>();
@@ -72,16 +73,16 @@ public class StudentService {
         JPAQueryBuilder<StudentPreview>.Condition whereCondition = queryBuilder.newCondition();
 
         String unlockedID = "0";
-        if (filterDto.getEmployerID() != null) {
+        if (filter.getEmployerID() != null) {
             queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentUnlocked.class, "su",
                     queryBuilder.newCondition()
                             .condition("su.student.id", "=", "s.id")
                             .and()
-                            .paramCondition("su.employerID", "=", filterDto.getEmployerID()));
+                            .paramCondition("su.employerID", "=", filter.getEmployerID()));
             unlockedID = "su.id";
 
-            if (filterDto.getUnlocked() != null) {
-                whereCondition.and().nullCondition("su.id", !filterDto.getUnlocked());
+            if (filter.getUnlocked() != null) {
+                whereCondition.and().nullCondition("su.id", !filter.getUnlocked());
             }
         }
 
@@ -93,35 +94,35 @@ public class StudentService {
                 "s.profileVerified", "s.lookingForJob", "s.completePercent",
                 "sar.attitudeRating", "sar.skillRating",
                 "sar.jobAccomplishmentRating", "sar.ratingCount",
-                unlockedID, "s.schoolID", "s.majorID", "s.studentCode")
+                unlockedID, "s.schoolID", "s.majorID", "s.studentCode", "s.createdDate")
                 .from(Student.class, "s")
                 .joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentAverageRating.class, "sar",
                         queryBuilder.newCondition().condition("sar.studentID", "=", "s.id"));
 
         boolean groupByID = false;
-        if (filterDto.getSchoolID() != null && !filterDto.getSchoolID().isEmpty()) {
-            whereCondition.and().paramCondition("s.schoolID", "=", filterDto.getSchoolID());
+        if (filter.getSchoolID() != null && !filter.getSchoolID().isEmpty()) {
+            whereCondition.and().paramCondition("s.schoolID", "=", filter.getSchoolID());
         }
-        if (filterDto.getRegionID() != null) {
-            whereCondition.and().paramCondition("s.regionID", "=", filterDto.getRegionID());
+        if (filter.getRegionID() != null) {
+            whereCondition.and().paramCondition("s.regionID", "=", filter.getRegionID());
         }
-        if (filterDto.getEmail() != null && !filterDto.getEmail().isEmpty()) {
-            whereCondition.and().paramCondition("s.email", "=", filterDto.getEmail());
+        if (filter.getEmail() != null && !filter.getEmail().isEmpty()) {
+            whereCondition.and().paramCondition("s.email", "=", filter.getEmail());
         }
-        if (filterDto.getPhone() != null && !filterDto.getPhone().isEmpty()) {
-            whereCondition.and().paramCondition("s.phone", "=", filterDto.getPhone());
+        if (filter.getPhone() != null && !filter.getPhone().isEmpty()) {
+            whereCondition.and().paramCondition("s.phone", "=", filter.getPhone());
         }
-        if (filterDto.getGender() != null) {
-            whereCondition.and().paramCondition("s.gender", "=", filterDto.getGender());
+        if (filter.getGender() != null) {
+            whereCondition.and().paramCondition("s.gender", "=", filter.getGender());
         }
-        if (filterDto.getLookingForJob() != null) {
-            whereCondition.and().paramCondition("s.lookingForJob", "=", filterDto.getLookingForJob());
+        if (filter.getLookingForJob() != null) {
+            whereCondition.and().paramCondition("s.lookingForJob", "=", filter.getLookingForJob());
         }
-        if (filterDto.getProfileVerified() != null) {
-            whereCondition.and().paramCondition("s.profileVerified", "=", filterDto.getProfileVerified());
+        if (filter.getProfileVerified() != null) {
+            whereCondition.and().paramCondition("s.profileVerified", "=", filter.getProfileVerified());
         }
-        Integer startYear = filterDto.getBirthYearStart();
-        Integer endYear = filterDto.getBirthYearEnd();
+        Integer startYear = filter.getBirthYearStart();
+        Integer endYear = filter.getBirthYearEnd();
         if (startYear != null || endYear != null) {
             startYear = (startYear == null ? 0 : startYear) - 1900;
             if (startYear > 0) {
@@ -132,16 +133,23 @@ public class StudentService {
                 whereCondition.and().paramCondition("s.birthday", "<", new Date(endYear, 0, 1));
             }
         }
-        if (filterDto.getSkillIDs() != null && !filterDto.getSkillIDs().isEmpty()) {
+        if (filter.getSkillIDs() != null && !filter.getSkillIDs().isEmpty()) {
             queryBuilder.join(JPAQueryBuilder.JoinType.LEFT_JOIN, "s.skills", "sk");
-            whereCondition.and().paramCondition("sk.SkillID", "IN", filterDto.getSkillIDs());
+            whereCondition.and().paramCondition("sk.SkillID", "IN", filter.getSkillIDs());
             groupByID = true;
         }
-        if (filterDto.getMajorIDs() != null && !filterDto.getMajorIDs().isEmpty()) {
-            whereCondition.and().paramCondition("s.majorID", "IN", filterDto.getMajorIDs());
+        if (filter.getMajorIDs() != null && !filter.getMajorIDs().isEmpty()) {
+            whereCondition.and().paramCondition("s.majorID", "IN", filter.getMajorIDs());
         }
-        if (filterDto.getIds() != null && !filterDto.getIds().isEmpty() ) {
-            whereCondition.and().paramCondition("s.id", "IN", filterDto.getIds());
+        if (filter.getIds() != null && !filter.getIds().isEmpty() ) {
+            whereCondition.and().paramCondition("s.id", "IN", filter.getIds());
+        }
+        if (filter.getCreatedDate() != null && filter.getCreatedDate() > 0) {
+            Date startDate = DateTimeUtils.extractDateOnly(filter.getCreatedDate());
+            Date endDate = DateTimeUtils.addDayToDate(startDate, 1);
+            whereCondition.and().paramCondition("s.createdDate", ">=", startDate)
+                    .and()
+                    .paramCondition("s.createdDate", "<", endDate);
         }
 
         if (groupByID) {
@@ -189,7 +197,7 @@ public class StudentService {
                 s.getEmail(), s.getPhone(), s.getGender(),
                 s.getRegionID(), s.getAddress(), s.getLat(), s.getLon(),
                 s.getProfileVerified(), s.getLookingForJob(), s.getCompletePercent(),
-                car, unlocked, s.getSchoolID(), s.getMajorID(), s.getStudentCode(),
+                car, unlocked, s.getSchoolID(), s.getMajorID(), s.getStudentCode(), s.getCreatedDate(),
                 s.getCoverUrl(), s.getDescription(), s.getIdentityCard(),
                 s.getIdentityCardFrontImageUrl(), s.getIdentityCardBackImageUrl(),
                 sks, lks, exps);

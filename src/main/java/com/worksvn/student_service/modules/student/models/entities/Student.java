@@ -2,7 +2,7 @@ package com.worksvn.student_service.modules.student.models.entities;
 
 import com.worksvn.common.modules.common.enums.Gender;
 import com.worksvn.common.modules.common.responses.RegionAddress;
-import com.worksvn.common.modules.student.requests.NewStudentInfoDto;
+import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
 import com.worksvn.common.modules.student.requests.NewStudentRegistrationDto;
 import lombok.Data;
 import lombok.Getter;
@@ -29,6 +29,10 @@ public class Student {
     private String schoolID;
     @Column(name = "major_id")
     private int majorID;
+    @Column(name = "school_year_start")
+    private int schoolYearStart;
+    @Column(name = "school_year_end")
+    private int schoolYearEnd;
     @Column(name = "region_id")
     private Integer regionID;
     @Column(name = "student_code")
@@ -80,10 +84,13 @@ public class Student {
         this.lastName = registrationDto.getLastName();
         this.email = registrationDto.getEmail();
         this.phone = registrationDto.getPhone();
+        this.majorID = registrationDto.getMajorID();
+        this.schoolYearStart = registrationDto.getSchoolYearStart();
+        this.schoolYearEnd = registrationDto.getSchoolYearEnd();
         calculateCompletePercent();
     }
 
-    public void update(NewStudentInfoDto updateInfo,
+    public void update(UpdateStudentInfoDto updateInfo,
                        RegionAddress regionAddress) {
         this.firstName = updateInfo.getFirstName();
         this.lastName = updateInfo.getLastName();
@@ -104,6 +111,8 @@ public class Student {
         }
         this.studentCode = updateInfo.getStudentCode();
         this.majorID = updateInfo.getMajorID();
+        this.schoolYearStart = updateInfo.getSchoolYearStart();
+        this.schoolYearEnd = updateInfo.getSchoolYearEnd();
         calculateCompletePercent();
     }
 
@@ -117,7 +126,10 @@ public class Student {
                 ((lat == null || lon == null) ? 0 : 1) +
                 (birthday == null ? 0 : 1) +
                 (avatarUrl == null ? 0 : 1) +
-                (description == null ? 0 : 1);
-        this.completePercent = (int) Math.round(totalCompletedField / 10.0 * 100.0);
+                (description == null ? 0 : 1) +
+                (majorID > 0 ? 0 : 1)+
+                (schoolYearStart > 0 ? 0 : 1) +
+                (schoolYearEnd > 0? 0 : 1);
+        this.completePercent = (int) Math.round(totalCompletedField / 13.0 * 100.0);
     }
 }

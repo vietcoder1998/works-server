@@ -6,7 +6,7 @@ import com.worksvn.common.constants.StringConstants;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
-import com.worksvn.common.modules.student.requests.NewStudentInfoDto;
+import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
 import com.worksvn.common.modules.student.requests.StudentFilterDto;
 import com.worksvn.common.modules.student.responses.*;
 import com.worksvn.common.services.file_storage.FileStorageService;
@@ -94,7 +94,9 @@ public class StudentService {
                 "s.profileVerified", "s.lookingForJob", "s.completePercent",
                 "sar.attitudeRating", "sar.skillRating",
                 "sar.jobAccomplishmentRating", "sar.ratingCount",
-                unlockedID, "s.schoolID", "s.majorID", "s.studentCode", "s.createdDate")
+                unlockedID, "s.schoolID", "s.majorID",
+                "s.schoolYearStart", "s.schoolYearEnd",
+                "s.studentCode", "s.createdDate")
                 .from(Student.class, "s")
                 .joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentAverageRating.class, "sar",
                         queryBuilder.newCondition().condition("sar.studentID", "=", "s.id"));
@@ -132,6 +134,12 @@ public class StudentService {
             if (endYear > 0) {
                 whereCondition.and().paramCondition("s.birthday", "<", new Date(endYear, 0, 1));
             }
+        }
+        if (filter.getSchoolYearStart() != null && filter.getSchoolYearStart() > 0) {
+            whereCondition.and().paramCondition("s.schoolYearStart", "=", filter.getSchoolYearStart());
+        }
+        if (filter.getSchoolYearEnd() != null && filter.getSchoolYearEnd() > 0) {
+            whereCondition.and().paramCondition("s.schoolYearEnd", "=", filter.getSchoolYearEnd());
         }
         if (filter.getSkillIDs() != null && !filter.getSkillIDs().isEmpty()) {
             queryBuilder.join(JPAQueryBuilder.JoinType.LEFT_JOIN, "s.skills", "sk");
@@ -197,7 +205,8 @@ public class StudentService {
                 s.getEmail(), s.getPhone(), s.getGender(),
                 s.getRegionID(), s.getAddress(), s.getLat(), s.getLon(),
                 s.getProfileVerified(), s.getLookingForJob(), s.getCompletePercent(),
-                car, unlocked, s.getSchoolID(), s.getMajorID(), s.getStudentCode(), s.getCreatedDate(),
+                car, unlocked, s.getSchoolID(), s.getMajorID(), s.getSchoolYearStart(), s.getSchoolYearEnd(),
+                s.getStudentCode(), s.getCreatedDate(),
                 s.getCoverUrl(), s.getDescription(), s.getIdentityCard(),
                 s.getIdentityCardFrontImageUrl(), s.getIdentityCardBackImageUrl(),
                 sks, lks, exps);
@@ -242,7 +251,7 @@ public class StudentService {
     }
 
     //    @Transactional(rollbackFor = Exception.class)
-    public void updateStudentInfo(String studentID, NewStudentInfoDto updateInfo) throws Exception {
+    public void updateStudentInfo(String studentID, UpdateStudentInfoDto updateInfo) throws Exception {
         Student student = getStudent(studentID);
 
         // check major exist

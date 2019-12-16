@@ -8,7 +8,7 @@ import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.common.responses.AvatarUrlDto;
 import com.worksvn.common.modules.common.responses.CoverUrlDto;
 import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
-import com.worksvn.common.modules.student.requests.NewStudentInfoDto;
+import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
 import com.worksvn.common.modules.student.responses.StudentInfoDto;
 import com.worksvn.common.modules.student.responses.StudentNavigationDto;
 import com.worksvn.common.modules.student.responses.StudentProfileDto;
@@ -67,7 +67,7 @@ public class StudentProfileController extends BaseRESTController {
             @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND)
     })
     @PutMapping("/personalInfo")
-    public void updateStudentInfo(@RequestBody @Valid NewStudentInfoDto updateInfo) throws Exception {
+    public void updateStudentInfo(@RequestBody @Valid UpdateStudentInfoDto updateInfo) throws Exception {
         String studentID = getAuthorizedUser().getId();
         studentService.updateStudentInfo(studentID, updateInfo);
     }

@@ -13,13 +13,13 @@ import com.worksvn.common.modules.admin.responses.AnnouncementCommentDto;
 import com.worksvn.common.modules.admin.responses.AnnouncementDto;
 import com.worksvn.common.modules.admin.responses.AnnouncementPreview;
 import com.worksvn.common.modules.admin.responses.AnnouncementTypeDto;
+import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.common.responses.*;
+import com.worksvn.common.modules.employer.enums.JobApplyUserType;
 import com.worksvn.common.modules.employer.enums.JobHomePriority;
-import com.worksvn.common.modules.employer.requests.ActiveJobFilter;
-import com.worksvn.common.modules.employer.requests.HomeActiveJobFilter;
-import com.worksvn.common.modules.employer.requests.JobApplyRequestFilter;
-import com.worksvn.common.modules.employer.requests.SearchActiveJobFilter;
+import com.worksvn.common.modules.employer.requests.*;
 import com.worksvn.common.modules.employer.responses.JobApplyRequestPreview;
+import com.worksvn.common.modules.employer.responses.JobApplyResult;
 import com.worksvn.common.modules.employer.responses.JobDto;
 import com.worksvn.common.modules.employer.responses.JobPreview;
 import com.worksvn.common.modules.school.responses.SchoolShortNameDto;
@@ -281,6 +281,8 @@ public class APIs {
         return api;
     }
 
+    // JOB APPLY REQUEST ===============================================================================================
+
     public static ISApi<JobApplyRequestFilter, PageDto<JobApplyRequestPreview>> EMPLOYER_queryJobApplyRequestPreviews(List<String> sortBy, List<String> sortType,
                                                                                                                       int pageIndex, int pageSize,
                                                                                                                       JobApplyRequestFilter filter) {
@@ -297,6 +299,35 @@ public class APIs {
         api.addParam("pageSize", pageSize);
         return api;
     }
+
+    public static ISApi<NewJobApplyRequestDto, JobApplyResult> EMPLOYER_applyJob(String jobID,
+                                                                                 NewJobApplyRequestDto newRequest) {
+        ISApi<NewJobApplyRequestDto, JobApplyResult> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.POST, "api/internal/employers/jobs/{id}/apply",
+                newRequest,
+                new TypeReference<JobApplyResult>() {
+                },
+                true);
+        api.addParam("id", jobID);
+        return api;
+    }
+
+    public static ISApi<Object, Boolean> EMPLOYER_checkJobApplyState(String userID, JobApplyUserType userType,
+                                                                     String employerID, RequestState state) {
+        ISApi<Object, Boolean> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.GET, "api/internal/employers/jobs/apply/state/{state}" +
+                "?userID={userID}&userType={userType}&employerID={employerID}",
+                null,
+                new TypeReference<Boolean>() {
+                },
+                true);
+        api.addParam("state", state);
+        api.addParam("employerID", employerID);
+        api.addParam("userID", userID);
+        api.addParam("userType", userType);
+        return api;
+    }
+
 
     //##################################################################################################################
     // ADMIN SERVICE

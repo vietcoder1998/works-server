@@ -4,6 +4,7 @@ import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
 import com.worksvn.common.modules.common.responses.LatLon;
 import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
 import com.worksvn.common.modules.student.responses.StudentInfoDto;
+import com.worksvn.common.modules.student.responses.StudentJobApplyInfo;
 import com.worksvn.common.modules.student.responses.StudentNavigationDto;
 import com.worksvn.common.modules.student.responses.StudentQueryActiveJobInfo;
 import com.worksvn.student_service.modules.student.models.entities.Student;
@@ -104,4 +105,10 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     @Transactional
     @Query("delete from Student s where s.id in ?1")
     void deleteList(Set<String> userIDs);
+
+    @Query("select new com.worksvn.common.modules.student.responses.StudentJobApplyInfo" +
+            "(s.firstName, s.lastName, s.gender, s.avatarUrl) " +
+            "from Student s " +
+            "where s.id = ?1")
+    StudentJobApplyInfo getStudentJobApplyInfo(String studentID);
 }

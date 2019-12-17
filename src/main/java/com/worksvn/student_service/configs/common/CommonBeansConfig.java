@@ -9,6 +9,9 @@ import com.worksvn.common.services.file_storage.FileStorageService;
 import com.worksvn.common.services.firebase.firestore.FirestoreListener;
 import com.worksvn.common.services.firebase.firestore.FirestoreService;
 import com.worksvn.common.services.internal_service.DistributedDataService;
+import com.worksvn.common.services.notification.NotificationListener;
+import com.worksvn.common.services.notification.NotificationService;
+import com.worksvn.common.services.notification.UserNotificationService;
 import com.worksvn.common.services.thymeleaf.HtmlTemplateBindingService;
 import com.worksvn.common.utils.core.JacksonObjectMapper;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
@@ -129,6 +132,22 @@ public class CommonBeansConfig {
         acquireNewTokenService.setRestCommunicator(isRestCommunicator);
         isRestCommunicator.setAcquireNewTokenService(acquireNewTokenService);
         return acquireNewTokenService;
+    }
+
+    // NOTIFICATION ====================================================================================================
+
+    @Value("${application.firebase.fcm.legacy-server-key}")
+    private String firebaseLegacyServerKey;
+
+    @Bean
+    public NotificationService notificationService(ApplicationEventPublisher applicationEventPublisher) {
+        return new NotificationService(applicationEventPublisher);
+    }
+
+    @Bean
+    public NotificationListener notificationListener(UserNotificationService userNotificationService,
+                                                     RestCommunicator restCommunicator) {
+        return new NotificationListener(userNotificationService, restCommunicator, firebaseLegacyServerKey);
     }
 
     // INTERNAL ========================================================================================================

@@ -4,7 +4,6 @@ import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.constants.StringConstants;
 import com.worksvn.common.exceptions.ResponseException;
-import com.worksvn.common.modules.candidate.responses.CandidateJobApplyInfo;
 import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
 import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
@@ -384,6 +383,15 @@ public class StudentService {
         }
         return applyInfo;
     }
+
+    public StudentJobOfferInfo getStudentOfferInfo(String studentID) throws ResponseException {
+        StudentJobOfferInfo offerInfo = studentRepository.getStudentJobOfferInfo(studentID);
+        if (offerInfo == null) {
+            throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
+        }
+        return offerInfo;
+    }
+
 
     public void checkStudentExist(String studentID) throws ResponseException {
         if (!studentRepository.existsById(studentID)) {

@@ -18,10 +18,7 @@ import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.employer.enums.JobApplyUserType;
 import com.worksvn.common.modules.employer.enums.JobHomePriority;
 import com.worksvn.common.modules.employer.requests.*;
-import com.worksvn.common.modules.employer.responses.JobApplyRequestPreview;
-import com.worksvn.common.modules.employer.responses.JobApplyResult;
-import com.worksvn.common.modules.employer.responses.JobDto;
-import com.worksvn.common.modules.employer.responses.JobPreview;
+import com.worksvn.common.modules.employer.responses.*;
 import com.worksvn.common.modules.school.responses.SchoolShortNameDto;
 import com.worksvn.common.modules.school.responses.SimpleSchoolPreview;
 import org.springframework.http.HttpMethod;
@@ -328,6 +325,38 @@ public class APIs {
         return api;
     }
 
+    // JOB OFFER REQUEST ===============================================================================================
+
+    public static ISApi<JobOfferRequestFilter, PageDto<JobOfferRequestPreview>> EMPLOYER_queryJobOfferRequestPreviews(List<String> sortBy, List<String> sortType,
+                                                                                                                      int pageIndex, int pageSize,
+                                                                                                                      JobOfferRequestFilter filter) {
+        ISApi<JobOfferRequestFilter, PageDto<JobOfferRequestPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.POST, "api/internal/employers/jobs/offer/query" +
+                "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                filter,
+                new TypeReference<PageDto<JobOfferRequestPreview>>() {
+                },
+                true);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+
+    public static ISApi<NewJobOfferRequestState, Object> EMPLOYER_updateJobOfferState(String jobID, RequestState state,
+                                                                                      NewJobOfferRequestState newState) {
+        ISApi<NewJobOfferRequestState, Object> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.PUT, "api/internal/employers/jobs/{id}/offer/state/{state}",
+                newState,
+                new TypeReference<Object>() {
+                },
+                true);
+        api.addParam("id", jobID);
+        api.addParam("state", state);
+        return api;
+    }
 
     //##################################################################################################################
     // ADMIN SERVICE

@@ -11,6 +11,9 @@ import com.worksvn.common.modules.student.requests.StudentFilterDto;
 import com.worksvn.common.modules.student.responses.*;
 import com.worksvn.common.services.file_storage.FileStorageService;
 import com.worksvn.common.services.internal_service.DistributedDataService;
+import com.worksvn.common.services.notification.NotificationFactory;
+import com.worksvn.common.services.notification.NotificationService;
+import com.worksvn.common.services.notification.models.NotificationGroup;
 import com.worksvn.common.utils.core.DateTimeUtils;
 import com.worksvn.common.utils.core.FileChecker;
 import com.worksvn.common.utils.jpa.JPAQueryBuilder;
@@ -57,6 +60,8 @@ public class StudentService {
     private FileStorageService fileStorageService;
     @Autowired
     private MajorService majorService;
+    @Autowired
+    private NotificationService notificationService;
 
     @Value("${application.firebase.file-storage.student-dir.name:students/}")
     private String studentStorageDirectory;
@@ -433,6 +438,13 @@ public class StudentService {
         if (!studentRepository.existsById(studentID)) {
             throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
         }
+    }
+
+    public void verifyProfile(String studentID, boolean verified) throws ResponseException {
+        checkStudentExist(studentID);
+        studentRepository.updateStudentProfileVerified(studentID, verified);
+        notificationService.publishNotification(NotificationFactory
+                .USER_profileVerifiedChange(NotificationGroup.STUDENT, studentID, verified));
     }
 
     public void deleteList(Set<String> userIDs) {

@@ -64,6 +64,15 @@ public class StudentManagementController extends BaseRESTController {
         studentService.checkStudentExist(studentID);
     }
 
+    @ApiOperation(value = "Xác minh hồ sơ")
+    @Responses({
+    })
+    @PutMapping("/{id}/profile/verified/{state}")
+    public void verify(@PathVariable("id") String userID,
+                       @PathVariable("state") boolean verified) throws ResponseException {
+        studentService.verifyProfile(userID, verified);
+    }
+
     @ApiOperation(value = "Xóa danh sách")
     @Responses({
     })

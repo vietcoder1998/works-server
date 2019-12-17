@@ -114,4 +114,10 @@ public interface StudentRepository extends JpaRepository<Student, String> {
             "from Student s " +
             "where s.id = ?1")
     StudentJobOfferInfo getStudentJobOfferInfo(String studentID);
+
+    @Modifying
+    @Transactional
+    @Query("update Student s set s.profileVerified = ?2 " +
+            "where s.id = ?1")
+    void updateStudentProfileVerified(String studentID, boolean verified);
 }

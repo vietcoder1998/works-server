@@ -17,6 +17,7 @@ import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.employer.enums.JobApplyUserType;
 import com.worksvn.common.modules.employer.enums.JobHomePriority;
+import com.worksvn.common.modules.employer.enums.JobSavedUserType;
 import com.worksvn.common.modules.employer.requests.*;
 import com.worksvn.common.modules.employer.responses.*;
 import com.worksvn.common.modules.school.responses.SchoolShortNameDto;
@@ -355,6 +356,53 @@ public class APIs {
                 true);
         api.addParam("id", jobID);
         api.addParam("state", state);
+        return api;
+    }
+
+    // JOB SAVED =======================================================================================================
+
+    public static ISApi<JobSavedFilter, PageDto<JobSavedPreview>> EMPLOYER_queryJobSavedPreviews(List<String> sortBy,
+                                                                                                 List<String> sortType,
+                                                                                                 int pageIndex, int pageSize,
+                                                                                                 JobSavedFilter filter) {
+        ISApi<JobSavedFilter, PageDto<JobSavedPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.POST, "api/internal/employers/jobs/saved/query" +
+                "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                filter,
+                new TypeReference<PageDto<JobSavedPreview>>() {
+                },
+                true);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+    public static ISApi<Object, Object> EMPLOYER_saveJob(String jobID, String userID, JobSavedUserType userType) {
+        ISApi<Object, Object> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.POST, "api/internal/employers/jobs/{id}/saved" +
+                "?userID={userID}&userType={userType}",
+                null,
+                new TypeReference<Object>() {
+                },
+                true);
+        api.addParam("id", jobID);
+        api.addParam("userID", userID);
+        api.addParam("userType", userType);
+        return api;
+    }
+
+    public static ISApi<Set<String>, Object> EMPLOYER_deleteJobSaves(Set<String> ids, String userID, JobSavedUserType userType) {
+        ISApi<Set<String>, Object> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.DELETE, "api/internal/employers/jobs/saved" +
+                "?userID={userID}&userType={userType}",
+                ids,
+                new TypeReference<Object>() {
+                },
+                true);
+        api.addParam("userID", userID);
+        api.addParam("userType", userType);
         return api;
     }
 

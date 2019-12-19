@@ -15,6 +15,7 @@ import com.worksvn.common.modules.admin.responses.AnnouncementPreview;
 import com.worksvn.common.modules.admin.responses.AnnouncementTypeDto;
 import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.common.responses.*;
+import com.worksvn.common.modules.employer.enums.EmployerRatingUserType;
 import com.worksvn.common.modules.employer.enums.JobApplyUserType;
 import com.worksvn.common.modules.employer.enums.JobHomePriority;
 import com.worksvn.common.modules.employer.enums.JobSavedUserType;
@@ -403,6 +404,35 @@ public class APIs {
                 true);
         api.addParam("userID", userID);
         api.addParam("userType", userType);
+        return api;
+    }
+
+    // EMPLOYER RATING ===============================================================================================
+
+    public static ISApi<Object, EmployerRatingDto> EMPLOYER_getEmployerRating(
+            String employerID, String userID, EmployerRatingUserType userType) {
+        ISApi<Object, EmployerRatingDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.GET, "api/internal/employers/{id}/rating" +
+                "?userID={userID}&userType={userType}",
+                null,
+                new TypeReference<EmployerRatingDto>() {
+                },
+                true);
+        api.addParam("id", employerID);
+        api.addParam("userID", userID);
+        api.addParam("userType", userType);
+        return api;
+    }
+
+    public static ISApi<NewEmployerRatingDto, EmployerAverageRatingDto> EMPLOYER_rateEmployer(
+            String employerID, NewEmployerRatingDto newRating) {
+        ISApi<NewEmployerRatingDto, EmployerAverageRatingDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.POST, "api/internal/employers/{id}/rating",
+                newRating,
+                new TypeReference<EmployerAverageRatingDto>() {
+                },
+                true);
+        api.addParam("id", employerID);
         return api;
     }
 

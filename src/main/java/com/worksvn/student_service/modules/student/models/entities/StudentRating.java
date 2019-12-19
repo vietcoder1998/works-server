@@ -1,5 +1,7 @@
 package com.worksvn.student_service.modules.student.models.entities;
 
+import com.worksvn.common.modules.student.enums.StudentRatingUserType;
+import com.worksvn.common.modules.student.requests.NewStudentRatingDto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,17 +19,27 @@ import java.util.Date;
 @Setter
 public class StudentRating {
     public static final String CREATED_DATE = "createdDate";
+    public static final String LAST_MODIFIED = "lastModified";
 
     @Id
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @GeneratedValue(generator = "uuid")
     @Column(name = "id")
     private String id;
-    @Column(name = "employer_id")
-    private String employerID;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
+
+    @Column(name = "user_id")
+    private String userID;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_type")
+    private StudentRatingUserType userType;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+
     @Column(name = "attitude_rating")
     private int attitudeRating;
     @Column(name = "skill_rating")
@@ -38,9 +50,28 @@ public class StudentRating {
     private String comment;
     @Column(name = "created_date")
     private Date createdDate;
+    @Column(name = "last_modified")
+    private Date lastModified;
 
-    @PrePersist
-    void onPrePersist() {
-        this.createdDate = new Date();
+    public StudentRating(Student student) {
+        setCreatedDate(new Date());
+        this.student = student;
+    }
+
+    public void update(NewStudentRatingDto updateRating) {
+        this.userID = updateRating.getUserInfo().getId();
+        this.userType = updateRating.getUserInfo().getUserType();
+        this.name = updateRating.getUserInfo().getName();
+        this.avatarUrl = updateRating.getUserInfo().getAvatarUrl();
+        this.attitudeRating = updateRating.getAttitudeRating();
+        this.skillRating = updateRating.getSkillRating();
+        this.jobAccomplishmentRating = updateRating.getJobAccomplishmentRating();
+        this.comment = updateRating.getComment();
+        this.lastModified = new Date();
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+        this.lastModified = createdDate;
     }
 }

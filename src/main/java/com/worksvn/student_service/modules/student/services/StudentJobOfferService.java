@@ -1,7 +1,6 @@
 package com.worksvn.student_service.modules.student.services;
 
 import com.worksvn.common.base.models.PageDto;
-import com.worksvn.common.modules.candidate.responses.CandidateJobOfferInfo;
 import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.common.responses.LatLon;
 import com.worksvn.common.modules.employer.enums.JobOfferUserType;

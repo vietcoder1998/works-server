@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @AuthorizationRequired
 @PreAuthorize("#oauth2.hasScope('INTERNAL_SERVICE')")
 @Api(description = "Mở khóa hồ sơ")
-@RequestMapping("/api/internal/candidates")
+@RequestMapping("/api/internal/students")
 public class StudentUnlockController extends BaseRESTController {
     @Autowired
     private StudentUnlockService studentUnlockService;

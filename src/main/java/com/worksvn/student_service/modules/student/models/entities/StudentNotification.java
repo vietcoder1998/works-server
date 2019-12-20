@@ -46,9 +46,9 @@ public class StudentNotification {
     private Date createdDate = new Date();
 
     public StudentNotification(NotificationType type, String body,
-                               String candidateID,
+                               String studentID,
                                Map<String, Object> data) {
-        this(type, body, candidateID, data, new Date());
+        this(type, body, studentID, data, new Date());
     }
 
     public StudentNotification(UserNotification notification) {

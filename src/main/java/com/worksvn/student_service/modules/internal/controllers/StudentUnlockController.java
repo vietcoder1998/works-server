@@ -4,6 +4,7 @@ import com.worksvn.common.annotations.auth.AuthorizationRequired;
 import com.worksvn.common.annotations.swagger.Response;
 import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.constants.ResponseValue;
+import com.worksvn.common.modules.student.responses.StudentContactInfo;
 import com.worksvn.student_service.base.controllers.BaseRESTController;
 import com.worksvn.student_service.modules.student.services.StudentUnlockService;
 import io.swagger.annotations.Api;
@@ -26,8 +27,8 @@ public class StudentUnlockController extends BaseRESTController {
             @Response(responseValue = ResponseValue.STUDENT_UNLOCKED)
     })
     @PutMapping("/{id}/unlocked")
-    public void unlockProfile(@PathVariable("id") String studentID,
-                              @RequestParam(value = "employerID") String employerID) throws Exception {
-        studentUnlockService.unlockStudentByEmployer(studentID, employerID);
+    public StudentContactInfo unlockProfile(@PathVariable("id") String studentID,
+                                            @RequestParam(value = "employerID") String employerID) throws Exception {
+        return studentUnlockService.unlockStudentByEmployer(studentID, employerID);
     }
 }

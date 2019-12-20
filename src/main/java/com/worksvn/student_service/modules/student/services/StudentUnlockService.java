@@ -2,6 +2,7 @@ package com.worksvn.student_service.modules.student.services;
 
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
+import com.worksvn.common.modules.student.responses.StudentContactInfo;
 import com.worksvn.student_service.modules.employer.services.EmployerService;
 import com.worksvn.student_service.modules.student.models.entities.Student;
 import com.worksvn.student_service.modules.student.models.entities.StudentUnlocked;
@@ -23,7 +24,7 @@ public class StudentUnlockService {
         return studentUnlockedRepository.existsByStudent_IdAndEmployerID(studentID, employerID);
     }
 
-    public void unlockStudentByEmployer(String studentID, String employerID) throws Exception {
+    public StudentContactInfo unlockStudentByEmployer(String studentID, String employerID) throws Exception {
         if (studentUnlockedRepository.existsByStudent_IdAndEmployerID(studentID, employerID)) {
             throw new ResponseException(ResponseValue.STUDENT_UNLOCKED);
         }
@@ -31,5 +32,6 @@ public class StudentUnlockService {
         Student student = studentService.getStudent(studentID);
         StudentUnlocked studentUnlocked = new StudentUnlocked(student, employerID);
         studentUnlockedRepository.save(studentUnlocked);
+        return new StudentContactInfo(student.getEmail(), student.getPhone());
     }
 }

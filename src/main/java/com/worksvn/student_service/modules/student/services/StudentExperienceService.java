@@ -1,5 +1,6 @@
 package com.worksvn.student_service.modules.student.services;
 
+import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.student.requests.NewStudentExperienceDto;
@@ -25,8 +26,8 @@ public class StudentExperienceService {
     @Autowired
     private StudentService studentService;
 
-    public List<StudentExperienceDto> getListStudentExperienceDtos(String studentID,
-                                                                   List<String> sortBy, List<String> sortType) {
+    public PageDto<StudentExperienceDto> getStudentExperienceDtos(String studentID,
+                                                                  List<String> sortBy, List<String> sortType) {
         JPAQueryBuilder<StudentExperienceDto> queryBuilder = new JPAQueryBuilder<>();
         queryBuilder.selectAsObject(StudentExperienceDto.class,
                 "se.id", "se.jobName", "se.companyName",
@@ -39,7 +40,7 @@ public class StudentExperienceService {
         queryBuilder.where(whereCondition)
                 .orderBy(sortBy, sortType);
 
-        return queryExecutor.executeQuery(queryBuilder).getResultList();
+        return queryExecutor.executePaginationQuery(queryBuilder);
     }
 
     public void createNewStudentExperience(String studentID,
@@ -59,6 +60,10 @@ public class StudentExperienceService {
         }
         experience.update(updateExperience);
         experienceRepository.save(experience);
+    }
+
+    public void deleteStudentEducation(String studentID, String experienceID) {
+        experienceRepository.deleteAllByStudent_IdAndId(studentID, experienceID);
     }
 
     public void deleteStudentEducations(String studentID, Set<String> experienceIDs) {

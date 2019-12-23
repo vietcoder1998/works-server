@@ -31,7 +31,7 @@ public class StudentJobService {
                                                         List<String> sortBy, List<String> sortType,
                                                         Integer pageIndex, Integer pageSize) throws Exception {
         HomeActiveJobFilter homeFilter = new HomeActiveJobFilter();
-        createActiveJobFilter(studentID, filter, homeFilter, bySchool);
+        createActiveJobFilter(studentID, filter, homeFilter, true, bySchool);
         return jobService.getHomeActiveJobs(sortBy, sortType, pageIndex, pageSize, homeFilter, priority);
     }
 
@@ -40,7 +40,7 @@ public class StudentJobService {
                                                        List<String> sortBy, List<String> sortType,
                                                        int pageIndex, int pageSize) throws Exception {
         SearchActiveJobFilter searchFilter = new SearchActiveJobFilter();
-        createActiveJobFilter(studentID, filter, searchFilter, bySchool);
+        createActiveJobFilter(studentID, filter, searchFilter, false, bySchool);
         return jobService.searchActiveJobs(sortBy, sortType, pageIndex, pageSize, searchFilter);
     }
 
@@ -49,24 +49,28 @@ public class StudentJobService {
                                                     List<String> sortBy, List<String> sortType,
                                                     int pageIndex, int pageSize) throws Exception {
         ActiveJobFilter activeJobFilter = new ActiveJobFilter();
-        createActiveJobFilter(studentID, filter, activeJobFilter, bySchool);
+        createActiveJobFilter(studentID, filter, activeJobFilter, false, bySchool);
         return jobService.getActiveJobs(sortBy, sortType, pageIndex, pageSize, activeJobFilter);
     }
 
     private void createActiveJobFilter(String studentID, ActiveJobFilter sourceFilter,
-                                       ActiveJobFilter targetFilter, boolean bySchool) throws Exception {
+                                       ActiveJobFilter targetFilter,
+                                       boolean applyMajor,
+                                       boolean bySchool) throws Exception {
         if (sourceFilter != null) {
             BeanUtils.copyProperties(sourceFilter, targetFilter);
         }
-        StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
-        if (info != null) {
-            if (info.getMajorID() != null) {
-                Set<Integer> jobNameIDs = majorJobNameService.getJobNameIDsByMajorIDs(Sets.newHashSet(info.getMajorID()));
-                targetFilter.setJobNameIDs(jobNameIDs);
-            }
-            if (bySchool) {
-                targetFilter.setSchoolID(info.getSchoolID());
-                targetFilter.setSchoolIgnored(false);
+        if (applyMajor) {
+            StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
+            if (info != null) {
+                if (info.getMajorID() != null) {
+                    Set<Integer> jobNameIDs = majorJobNameService.getJobNameIDsByMajorIDs(Sets.newHashSet(info.getMajorID()));
+                    targetFilter.setJobNameIDs(jobNameIDs);
+                }
+                if (bySchool) {
+                    targetFilter.setSchoolID(info.getSchoolID());
+                    targetFilter.setSchoolIgnored(false);
+                }
             }
         }
         targetFilter.setUserID(studentID);

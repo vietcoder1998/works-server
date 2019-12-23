@@ -12,5 +12,9 @@ public interface StudentLanguageSkillRepository extends JpaRepository<StudentLan
 
     @Modifying
     @Transactional
+    void deleteAllByIdAndStudent_Id(String id, String studentID);
+
+    @Modifying
+    @Transactional
     void deleteAllByIdInAndStudent_Id(Set<String> ids, String studentID);
 }

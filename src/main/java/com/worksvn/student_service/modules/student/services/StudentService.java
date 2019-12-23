@@ -191,14 +191,13 @@ public class StudentService {
         List<SkillDto> sks = studentSkillService.getStudentSkillDtos(id);
 
         List<StudentLanguageSkillDto> lks = studentLanguageSkillService
-                .getListStudentLanguageSkillDtos(id,
-                        Collections.singletonList("slk." + StudentLanguageSkill.CREATED_DATE),
-                        Collections.singletonList("asc"));
+                .getStudentLanguageSkillDtos(id).getItems();
 
         List<StudentExperienceDto> exps = studentExperienceService
-                .getListStudentExperienceDtos(id,
+                .getStudentExperienceDtos(id,
                         Arrays.asList("se." + StudentExperience.STARTED_DATE, "se." + StudentExperience.FINISHED_DATE),
-                        Arrays.asList("desc", "asc"));
+                        Arrays.asList("desc", "asc"))
+                .getItems();
 
         Boolean unlocked = null;
         if (employerID != null) {

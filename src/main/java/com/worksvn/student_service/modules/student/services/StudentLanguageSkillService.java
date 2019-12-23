@@ -1,5 +1,6 @@
 package com.worksvn.student_service.modules.student.services;
 
+import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.student.requests.NewStudentLanguageSkillDto;
@@ -32,8 +33,7 @@ public class StudentLanguageSkillService {
     private DistributedDataService distributedDataService;
 
 
-    public List<StudentLanguageSkillDto> getListStudentLanguageSkillDtos(String studentID,
-                                                                      List<String> sortBy, List<String> sortType) throws Exception {
+    public PageDto<StudentLanguageSkillDto> getStudentLanguageSkillDtos(String studentID) throws Exception {
         JPAQueryBuilder<StudentLanguageSkillDto> queryBuilder = new JPAQueryBuilder<>();
         queryBuilder.selectAsObject(StudentLanguageSkillDto.class,
                 "slk.id", "slk.level", "slk.languageID",
@@ -43,11 +43,10 @@ public class StudentLanguageSkillService {
         JPAQueryBuilder<StudentLanguageSkillDto>.Condition whereCondition = queryBuilder.newCondition();
         whereCondition.and().paramCondition("slk.student.id", "=", studentID);
 
-        queryBuilder.where(whereCondition)
-                .orderBy(sortBy, sortType);
+        queryBuilder.where(whereCondition);
 
-        List<StudentLanguageSkillDto> result = queryExecutor.executeQuery(queryBuilder).getResultList();
-        distributedDataService.completeCollection(result, null);
+        PageDto<StudentLanguageSkillDto> result = queryExecutor.executePaginationQuery(queryBuilder);
+        distributedDataService.completeCollection(result.getItems(), null);
         return result;
     }
 
@@ -60,17 +59,21 @@ public class StudentLanguageSkillService {
         studentLanguageSkillRepository.save(newLanguageSkill);
     }
 
-    public void updateCandidateLanguageSkill(String studentID, String languageSkillID,
-                                             NewStudentLanguageSkillDto updateLanguage) throws Exception {
+    public void updateStudentLanguageSkill(String studentID, String languageSkillID,
+                                           NewStudentLanguageSkillDto updateLanguage) throws Exception {
         StudentLanguageSkill studentLanguageSkill = studentLanguageSkillRepository
                 .findFirstByIdAndStudent_Id(languageSkillID, studentID);
         if (studentLanguageSkill == null) {
-            throw new ResponseException(ResponseValue.CANDIDATE_LANGUAGE_SKILL_NOT_FOUND);
+            throw new ResponseException(ResponseValue.LANGUAGE_SKILL_NOT_FOUND);
         }
         // check language exist
         languageService.getLanguageDto(updateLanguage.getLanguageID());
         studentLanguageSkill.update(updateLanguage);
         studentLanguageSkillRepository.save(studentLanguageSkill);
+    }
+
+    public void deleteStudentLanguageSkill(String studentID, String languageSkillID) {
+        studentLanguageSkillRepository.deleteAllByIdAndStudent_Id(languageSkillID, studentID);
     }
 
     public void deleteStudentLanguageSkills(String studentID, Set<String> languageSkillIDs) {

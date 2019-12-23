@@ -23,5 +23,9 @@ public interface StudentExperienceRepository extends JpaRepository<StudentExperi
 
     @Modifying
     @Transactional
+    void deleteAllByStudent_IdAndId(String studentID, String id);
+
+    @Modifying
+    @Transactional
     void deleteAllByStudent_IdAndIdIn(String studentID, Set<String> ids);
 }

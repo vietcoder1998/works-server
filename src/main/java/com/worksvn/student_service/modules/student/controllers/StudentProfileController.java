@@ -36,7 +36,7 @@ public class StudentProfileController extends BaseRESTController {
             @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND)
     })
     @GetMapping("/personalInfo")
-    public StudentInfoDto getCandidatePersonalInfo() throws Exception {
+    public StudentInfoDto getStudentPersonalInfo() throws Exception {
         String studentID = getAuthorizedUser().getId();
         return studentService.getStudentInfo(studentID);
     }
@@ -46,7 +46,7 @@ public class StudentProfileController extends BaseRESTController {
             @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND)
     })
     @GetMapping("/headerProfile")
-    public StudentNavigationDto getCandidateNavigation() throws Exception {
+    public StudentNavigationDto getStudentNavigation() throws Exception {
         String studentID = getAuthorizedUser().getId();
         return studentService.getStudentNavigation(studentID);
     }
@@ -78,10 +78,10 @@ public class StudentProfileController extends BaseRESTController {
             @Response(responseValue = ResponseValue.CONTENT_TYPE_NOT_ALLOWED)
     })
     @PutMapping("/avatar")
-    public AvatarUrlDto updateCandidateAvatar(@RequestParam(value = "avatar", required = false) MultipartFile avatarImage)
+    public AvatarUrlDto updateStudentAvatar(@RequestParam(value = "avatar", required = false) MultipartFile avatarImage)
             throws IOException, ResponseException {
-        String candidateID = getAuthorizedUser().getId();
-        return studentService.updateStudentAvatar(candidateID, avatarImage);
+        String studentID = getAuthorizedUser().getId();
+        return studentService.updateStudentAvatar(studentID, avatarImage);
     }
 
     @ApiOperation(value = "Cập nhật ảnh cover")
@@ -90,10 +90,10 @@ public class StudentProfileController extends BaseRESTController {
             @Response(responseValue = ResponseValue.CONTENT_TYPE_NOT_ALLOWED)
     })
     @PutMapping("/cover")
-    public CoverUrlDto updateCandidateCover(@RequestParam(value = "cover", required = false) MultipartFile coverImage)
+    public CoverUrlDto updateStudentCover(@RequestParam(value = "cover", required = false) MultipartFile coverImage)
             throws IOException, ResponseException {
-        String candidateID = getAuthorizedUser().getId();
-        return studentService.updateStudentCover(candidateID, coverImage);
+        String studentID = getAuthorizedUser().getId();
+        return studentService.updateStudentCover(studentID, coverImage);
     }
 
     @ApiOperation(value = "Cập nhật ảnh thẻ (mặt trước và sau)")
@@ -102,8 +102,8 @@ public class StudentProfileController extends BaseRESTController {
             @Response(responseValue = ResponseValue.CONTENT_TYPE_NOT_ALLOWED)
     })
     @PutMapping("/cardImages")
-    public IdentityCardImageDto updateCandidateCardImage(@RequestParam(value = "front", required = false) MultipartFile frontImage,
-                                                         @RequestParam(value = "back", required = false) MultipartFile backImage)
+    public IdentityCardImageDto updateStudentCardImage(@RequestParam(value = "front", required = false) MultipartFile frontImage,
+                                                       @RequestParam(value = "back", required = false) MultipartFile backImage)
             throws IOException, ResponseException {
         String studentID = getAuthorizedUser().getId();
         return studentService.updateStudentIdentityCardImageUrl(studentID, frontImage, backImage);
@@ -114,7 +114,7 @@ public class StudentProfileController extends BaseRESTController {
             @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND)
     })
     @PutMapping("/lookingForJob/{state}")
-    public void updateCandidateLookingForJob(@PathVariable("state") boolean state) throws ResponseException {
+    public void updateStudentLookingForJob(@PathVariable("state") boolean state) throws ResponseException {
         String studentID = getAuthorizedUser().getId();
         studentService.updateStudentLookingForJob(studentID, state);
     }
@@ -124,7 +124,7 @@ public class StudentProfileController extends BaseRESTController {
             @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND)
     })
     @PutMapping("/description")
-    public void updateCandidateDescription(@RequestBody String description) throws ResponseException {
+    public void updateStudentDescription(@RequestBody String description) throws ResponseException {
         String studentID = getAuthorizedUser().getId();
         studentService.updateStudentDescription(studentID, description);
     }

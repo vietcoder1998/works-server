@@ -38,10 +38,9 @@ public class StudentJobActiveController extends BaseRESTController {
                                                  @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                                  @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                  @RequestParam(value = "priority", required = false) JobHomePriority priority,
-                                                 @RequestParam(value = "bySchool", defaultValue = "true") boolean bySchool,
                                                  @RequestBody(required = false) ClientHomeActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentJobService.getStudentHomeActiveJobs(studentID, bySchool, filter, priority, sortBy, sortType, pageIndex, pageSize);
+        return studentJobService.getStudentHomeActiveJobs(studentID, filter, priority, sortBy, sortType, pageIndex, pageSize);
     }
 
     @ApiOperation(value = "Tìm kiếm bài đăng ở trang chủ")
@@ -52,10 +51,9 @@ public class StudentJobActiveController extends BaseRESTController {
                                                 @RequestParam(value = "sortType", required = false) List<String> sortType,
                                                 @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
                                                 @RequestParam(value = "pageSize", defaultValue = "0") Integer pageSize,
-                                                @RequestParam(value = "bySchool", defaultValue = "true") boolean bySchool,
                                                 @RequestBody(required = false) ClientSearchActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentJobService.searchStudentActiveJobs(studentID, bySchool, filter, sortBy, sortType, pageIndex, pageSize);
+        return studentJobService.searchStudentActiveJobs(studentID, filter, sortBy, sortType, pageIndex, pageSize);
     }
 
     @ApiOperation(value = "Xem danh việc đang khả dụng")
@@ -66,10 +64,9 @@ public class StudentJobActiveController extends BaseRESTController {
                                              @RequestParam(value = "sortType", required = false) List<String> sortType,
                                              @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
                                              @RequestParam(value = "pageSize", defaultValue = "0") Integer pageSize,
-                                             @RequestParam(value = "bySchool", defaultValue = "true") boolean bySchool,
                                              @RequestBody(required = false) ClientActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentJobService.getStudentActiveJobs(studentID, bySchool, filter,
+        return studentJobService.getStudentActiveJobs(studentID, filter,
                 sortBy, sortType, pageIndex, pageSize);
     }
 

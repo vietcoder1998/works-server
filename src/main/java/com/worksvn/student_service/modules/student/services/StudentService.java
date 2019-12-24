@@ -188,7 +188,8 @@ public class StudentService {
 
         StudentAverageRatingDto car = studentAverageRatingService.getStudentAverageRatingDto(id);
 
-        List<SkillDto> sks = studentSkillService.getStudentSkillDtos(id);
+        List<SkillDto> sks = studentSkillService.getStudentSkillDtos(id, null, null)
+                .getItems();
 
         List<StudentLanguageSkillDto> lks = studentLanguageSkillService
                 .getStudentLanguageSkillDtos(id).getItems();

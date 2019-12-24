@@ -22,4 +22,8 @@ public class SkillService extends BaseSkillService {
                                             Set<Integer> ids) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs.PUBLIC_querySkills(ids, sortBy, sortType, pageIndex, pageSize));
     }
+
+    public Set<Integer> getExistIDs(Set<Integer> ids) throws Exception {
+        return restCommunicator.exchangeForSuccess(APIs.PUBLIC_getExistSkillIDs(ids));
+    }
 }

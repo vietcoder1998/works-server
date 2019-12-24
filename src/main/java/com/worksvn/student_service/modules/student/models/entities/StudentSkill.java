@@ -23,4 +23,9 @@ public class StudentSkill {
     private Student student;
     @Column(name = "skill_id")
     private int skillID;
+
+    public StudentSkill(Student student, int skillID) {
+        this.student = student;
+        this.skillID = skillID;
+    }
 }

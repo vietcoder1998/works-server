@@ -106,6 +106,16 @@ public class APIs {
         return api;
     }
 
+    public static ISApi<Set<Integer>, Set<Integer>> PUBLIC_getExistSkillIDs(Set<Integer> ids) {
+        ISApi<Set<Integer>, Set<Integer>> api = new ISApi<>(ISHost.PUBLIC_SERVICE,
+                HttpMethod.POST, "api/internal/skills/exists",
+                ids,
+                new TypeReference<Set<Integer>>() {
+                },
+                true);
+        return api;
+    }
+
     // MAJOR JOB NAMES =================================================================================================
 
     public static ISApi<Set<Integer>, Set<Integer>> PUBLIC_getJobNameIDsByMajorIDs(Set<Integer> majorIDs) {

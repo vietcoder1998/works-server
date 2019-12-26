@@ -146,6 +146,9 @@ public class StudentService {
         if (filter.getSchoolYearEnd() != null && filter.getSchoolYearEnd() > 0) {
             whereCondition.and().paramCondition("s.schoolYearEnd", "=", filter.getSchoolYearEnd());
         }
+        if (filter.getStudentCode() != null && !filter.getStudentCode().isEmpty()) {
+            whereCondition.and().paramCondition("s.studentCode", "=", filter.getStudentCode());
+        }
         if (filter.getSkillIDs() != null && !filter.getSkillIDs().isEmpty()) {
             queryBuilder.join(JPAQueryBuilder.JoinType.LEFT_JOIN, "s.skills", "sk");
             whereCondition.and().paramCondition("sk.SkillID", "IN", filter.getSkillIDs());

@@ -45,7 +45,7 @@ public class StudentJobApplyService {
         StudentJobApplyInfo applyInfo = studentService.getStudentApplyInfo(studentID);
         NewJobApplyRequestDto newRequest = new NewJobApplyRequestDto(studentID, JobApplyUserType.STUDENT,
                 applyInfo.getFirstName(), applyInfo.getLastName(),
-                applyInfo.getGender().name(), applyInfo.getAvatarUrl(),
+                applyInfo.getGender() == null? null : applyInfo.getGender().name(), applyInfo.getAvatarUrl(),
                 applyRequest.getMessage(), applyRequest.getShiftIDs());
         return jobApplyRequestService.applyJob(jobID, newRequest);
     }

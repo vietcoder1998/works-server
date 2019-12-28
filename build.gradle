@@ -78,8 +78,8 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-actuator')
 
     // Apache POI - .xlsx reader and generator
-    //implementation('org.apache.poi:poi-ooxml:3.17')
-    //implementation('org.apache.poi:poi:3.17')
+    implementation('org.apache.poi:poi-ooxml:3.17')
+    implementation('org.apache.poi:poi:3.17')
 
     // IText (.pdf generator) + Thymeleaf (.html binding)
     implementation('com.itextpdf:itextpdf:5.5.13')

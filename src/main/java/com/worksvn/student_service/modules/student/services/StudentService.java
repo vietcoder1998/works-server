@@ -259,7 +259,8 @@ public class StudentService {
     }
 
     //    @Transactional(rollbackFor = Exception.class)
-    public void updateStudentInfo(String studentID, UpdateStudentInfoDto updateInfo) throws Exception {
+    public void updateStudentInfo(String studentID, UpdateStudentInfoDto updateInfo,
+                                  MultipartFile avatarImage, MultipartFile coverImage) throws Exception {
         Student student = getStudent(studentID);
 
         // check major exist
@@ -273,6 +274,17 @@ public class StudentService {
         student.update(updateInfo, regionAddress);
         studentRepository.save(student);
 
+        String avatarUrl = uploadStudentAvatar(studentID, avatarImage, student.getAvatarUrl());
+        if (avatarUrl != null) {
+            student.setAvatarUrl(avatarUrl);
+        }
+
+
+        String coverUrl = uploadStudentCover(studentID, coverImage, student.getCoverUrl());
+        if (coverUrl != null) {
+            student.setCoverUrl(coverUrl);
+        }
+
 //        firestoreService.publishFirestoreTask(ChatRoomTaskFactory
 //                .updateCandidateInfo(candidateID, candidate.getAvatarUrl(),
 //                        candidate.getFirstName(), candidate.getLastName()));
@@ -282,38 +294,42 @@ public class StudentService {
             throws ResponseException, IOException {
         checkStudentExist(studentID);
         String oldAvatarUrl = studentRepository.getStudentAvatarUrl(studentID);
+        String newAvatarUrl = uploadStudentAvatar(studentID, imageFile, oldAvatarUrl);
+        studentRepository.updateStudentAvatar(studentID, newAvatarUrl);
+        return new AvatarUrlDto(newAvatarUrl);
+    }
 
+    private String uploadStudentAvatar(String studentID, MultipartFile imageFile,
+                                       String oldAvatarUrl) throws IOException, ResponseException {
         String newAvatarUrl = uploadImageFile(imageFile, studentStorageDirectory + studentID,
                 StringConstants.AVATAR_IMAGE_NAME + "_" + new Date().getTime());
-
-        studentRepository.updateStudentAvatar(studentID, newAvatarUrl);
-
         try {
             fileStorageService.deleteFileByUrl(oldAvatarUrl);
         } catch (Exception e) {
             logger.error("[File Storage Service] Delete file(s) failed: " + oldAvatarUrl, e);
         }
-
-        return new AvatarUrlDto(newAvatarUrl);
+        return newAvatarUrl;
     }
 
     public CoverUrlDto updateStudentCover(String studentID, MultipartFile imageFile)
             throws IOException, ResponseException {
         checkStudentExist(studentID);
         String oldCoverUrl = studentRepository.getStudentAvatarUrl(studentID);
+        String coverUrl = uploadStudentCover(studentID, imageFile, oldCoverUrl);
+        studentRepository.updateStudentCover(studentID, coverUrl);
+        return new CoverUrlDto(coverUrl);
+    }
 
+    private String uploadStudentCover(String studentID, MultipartFile imageFile,
+                                    String oldCoverUrl) throws IOException, ResponseException {
         String coverUrl = uploadImageFile(imageFile, studentStorageDirectory + studentID,
                 StringConstants.COVER_IMAGE_NAME + "_" + new Date().getTime());
-
-        studentRepository.updateStudentCover(studentID, coverUrl);
-
         try {
             fileStorageService.deleteFileByUrl(oldCoverUrl);
         } catch (Exception e) {
             logger.error("[File Storage Service] Delete file(s) failed: " + oldCoverUrl, e);
         }
-
-        return new CoverUrlDto(coverUrl);
+        return coverUrl;
     }
 
     public IdentityCardImageDto updateStudentIdentityCardImageUrl(String studentID,

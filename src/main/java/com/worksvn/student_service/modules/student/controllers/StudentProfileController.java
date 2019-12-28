@@ -5,6 +5,7 @@ import com.worksvn.common.annotations.swagger.Response;
 import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
+import com.worksvn.common.modules.candidate.requests.NewCandidateInfoDto;
 import com.worksvn.common.modules.common.responses.AvatarUrlDto;
 import com.worksvn.common.modules.common.responses.CoverUrlDto;
 import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
@@ -17,6 +18,7 @@ import com.worksvn.student_service.modules.student.services.StudentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,7 +71,20 @@ public class StudentProfileController extends BaseRESTController {
     @PutMapping("/personalInfo")
     public void updateStudentInfo(@RequestBody @Valid UpdateStudentInfoDto updateInfo) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        studentService.updateStudentInfo(studentID, updateInfo);
+        studentService.updateStudentInfo(studentID, updateInfo, null, null);
+    }
+
+    @ApiOperation(value = "Cập nhật thông tin cá nhân cùng ảnh đại diện, cover",
+            notes = "Link [PUBLIC][common][LocationController] Truy vấn tỉnh/thành phố và địa chỉ")
+    @Responses({
+            @Response(responseValue = ResponseValue.CANDIDATE_NOT_FOUND)
+    })
+    @PutMapping(path = "/personalInfo/extend", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void updateCandidatePersonalInfoWithImage(@RequestParam(value = "avatar", required = false) MultipartFile avatarImage,
+                                                     @RequestParam(value = "cover", required = false) MultipartFile coverImage,
+                                                     @ModelAttribute @Valid UpdateStudentInfoDto updateInfo) throws Exception {
+        String studentID = getAuthorizedUser().getId();
+        studentService.updateStudentInfo(studentID, updateInfo, avatarImage, coverImage);
     }
 
     @ApiOperation(value = "Cập nhật ảnh avatar")

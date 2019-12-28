@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worksvn.common.components.communication.*;
 import com.worksvn.common.components.core.JSONProcessor;
 import com.worksvn.common.components.swagger.*;
+import com.worksvn.common.services.excel.import_excel.ImportExcelService;
 import com.worksvn.common.services.file_storage.FileStorageService;
 import com.worksvn.common.services.firebase.firestore.FirestoreListener;
 import com.worksvn.common.services.firebase.firestore.FirestoreService;
@@ -230,5 +231,12 @@ public class CommonBeansConfig {
     @Bean
     public FileStorageService fileStorageService() {
         return new FileStorageService();
+    }
+
+    // IMPORT/EXPORT EXCEL =============================================================================================
+
+    @Bean
+    public ImportExcelService importExcelService() {
+        return new ImportExcelService();
     }
 }

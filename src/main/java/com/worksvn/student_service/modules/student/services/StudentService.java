@@ -271,15 +271,18 @@ public class StudentService {
         student.update(updateInfo, regionAddress);
         studentRepository.save(student);
 
-        String avatarUrl = uploadStudentAvatar(studentID, avatarImage, student.getAvatarUrl());
-        if (avatarUrl != null) {
-            student.setAvatarUrl(avatarUrl);
+        if (avatarImage != null) {
+            String avatarUrl = uploadStudentAvatar(studentID, avatarImage, student.getAvatarUrl());
+            if (avatarUrl != null) {
+                student.setAvatarUrl(avatarUrl);
+            }
         }
 
-
-        String coverUrl = uploadStudentCover(studentID, coverImage, student.getCoverUrl());
-        if (coverUrl != null) {
-            student.setCoverUrl(coverUrl);
+        if (coverImage != null) {
+            String coverUrl = uploadStudentCover(studentID, coverImage, student.getCoverUrl());
+            if (coverUrl != null) {
+                student.setCoverUrl(coverUrl);
+            }
         }
 
 //        firestoreService.publishFirestoreTask(ChatRoomTaskFactory

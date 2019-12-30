@@ -110,9 +110,6 @@ public class Student {
             }
         }
         this.studentCode = updateInfo.getStudentCode();
-        this.majorID = updateInfo.getMajorID();
-        this.schoolYearStart = updateInfo.getSchoolYearStart();
-        this.schoolYearEnd = updateInfo.getSchoolYearEnd();
         calculateCompletePercent();
     }
 

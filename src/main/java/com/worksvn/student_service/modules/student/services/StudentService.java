@@ -263,9 +263,6 @@ public class StudentService {
                                   MultipartFile avatarImage, MultipartFile coverImage) throws Exception {
         Student student = getStudent(studentID);
 
-        // check major exist
-        majorService.getMajorDto(updateInfo.getMajorID());
-
         RegionAddress regionAddress = null;
         if (updateInfo.getLat() != null && updateInfo.getLon() != null) {
             regionAddress = locationService.getRegionAddress(updateInfo.getLat(), updateInfo.getLon());

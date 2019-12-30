@@ -79,8 +79,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         return (request, response, authException) -> {
             ResponseValue responseValue = null;
             if (authException instanceof InsufficientAuthenticationException) {
-                if (authException.getMessage().equals("Full authentication is required to access this resource")) {
+                String message = authException.getMessage();
+                if (message.equals("Full authentication is required to access this resource")) {
                     responseValue = ResponseValue.AUTHENTICATION_REQUIRED;
+                } else if (message.startsWith("Invalid token does not contain resource id")) {
+                    responseValue = ResponseValue.CANNOT_ACCESS_THIS_RESOURCE_SERVER;
                 } else {
                     Throwable cause = authException.getCause();
                     if (cause instanceof InvalidTokenException) {

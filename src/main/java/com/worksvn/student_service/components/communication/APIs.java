@@ -13,6 +13,8 @@ import com.worksvn.common.modules.admin.responses.AnnouncementCommentDto;
 import com.worksvn.common.modules.admin.responses.AnnouncementDto;
 import com.worksvn.common.modules.admin.responses.AnnouncementPreview;
 import com.worksvn.common.modules.admin.responses.AnnouncementTypeDto;
+import com.worksvn.common.modules.auth.requests.UserFilter;
+import com.worksvn.common.modules.auth.responses.UserDto;
 import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.employer.enums.EmployerRatingUserType;
@@ -29,6 +31,27 @@ import java.util.List;
 import java.util.Set;
 
 public class APIs {
+
+    //##################################################################################################################
+    // AUTH SERVICE
+    //##################################################################################################################
+
+    public static ISApi<UserFilter, PageDto<UserDto>> AUTH_queryUsers(UserFilter filter,
+                                                                      List<String> sortBy, List<String> sortType,
+                                                                      Integer pageIndex, Integer pageSize) {
+        ISApi<UserFilter, PageDto<UserDto>> api = new ISApi<>(ISHost.AUTH_SERVICE,
+                HttpMethod.POST, "api/internal/users/query" +
+                "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                filter,
+                new TypeReference<PageDto<UserDto>>() {
+                },
+                true);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
 
     //##################################################################################################################
     // PUBLIC SERVICE

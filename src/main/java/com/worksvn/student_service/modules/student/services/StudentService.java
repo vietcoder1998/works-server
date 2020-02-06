@@ -4,6 +4,8 @@ import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.constants.StringConstants;
 import com.worksvn.common.exceptions.ResponseException;
+import com.worksvn.common.modules.auth.requests.UserFilter;
+import com.worksvn.common.modules.auth.responses.UserDto;
 import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
 import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
@@ -19,6 +21,7 @@ import com.worksvn.common.utils.core.FileChecker;
 import com.worksvn.common.utils.jpa.JPAQueryBuilder;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
 import com.worksvn.student_service.constants.NumberConstants;
+import com.worksvn.student_service.modules.auth.services.UserService;
 import com.worksvn.student_service.modules.common.services.MajorService;
 import com.worksvn.student_service.modules.services.geocoding.LocationService;
 import com.worksvn.student_service.modules.student.models.entities.*;
@@ -32,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -42,6 +46,8 @@ public class StudentService {
     @Autowired
     private JPAQueryExecutor queryExecutor;
 
+    @Autowired
+    private UserService userService;
     @Autowired
     private DistributedDataService distributedDataService;
     @Autowired
@@ -58,8 +64,8 @@ public class StudentService {
     private LocationService locationService;
     @Autowired
     private FileStorageService fileStorageService;
-    @Autowired
-    private MajorService majorService;
+//    @Autowired
+//    private MajorService majorService;
     @Autowired
     private NotificationService notificationService;
 
@@ -71,6 +77,20 @@ public class StudentService {
                                                       StudentFilterDto filter) throws Exception {
         if (filter == null) {
             filter = new StudentFilterDto();
+        }
+
+        if (filter.getUsername() != null && !filter.getUsername().isEmpty()) {
+            UserFilter userFilter = new UserFilter();
+            userFilter.setUsername(filter.getUsername());
+            PageDto<UserDto> pageUsers = userService.queryUsers(userFilter, null, null, pageIndex, pageSize);
+            if (pageUsers != null && pageUsers.getItems() != null && !pageUsers.getItems().isEmpty()) {
+                Set<String> userIDs = pageUsers.getItems().stream()
+                        .map(UserDto::getId)
+                        .collect(Collectors.toSet());
+                filter.setIds(userIDs);
+            } else {
+                return new PageDto<>();
+            }
         }
 
         JPAQueryBuilder<StudentPreview> queryBuilder = new JPAQueryBuilder<>();

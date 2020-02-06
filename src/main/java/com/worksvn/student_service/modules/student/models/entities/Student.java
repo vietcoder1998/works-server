@@ -82,6 +82,11 @@ public class Student {
         this.schoolID = schoolID;
         this.firstName = registrationDto.getFirstName();
         this.lastName = registrationDto.getLastName();
+        try {
+            this.gender = Gender.valueOf(registrationDto.getGender());
+        } catch (Exception e) {
+            this.gender = null;
+        }
         this.email = registrationDto.getEmail();
         this.phone = registrationDto.getPhone();
         this.majorID = registrationDto.getMajorID();
@@ -124,9 +129,9 @@ public class Student {
                 (birthday == null ? 0 : 1) +
                 (avatarUrl == null ? 0 : 1) +
                 (description == null ? 0 : 1) +
-                (majorID > 0 ? 0 : 1)+
+                (majorID > 0 ? 0 : 1) +
                 (schoolYearStart > 0 ? 0 : 1) +
-                (schoolYearEnd > 0? 0 : 1);
+                (schoolYearEnd > 0 ? 0 : 1);
         this.completePercent = (int) Math.round(totalCompletedField / 13.0 * 100.0);
     }
 }

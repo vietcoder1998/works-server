@@ -24,6 +24,7 @@ import com.worksvn.common.modules.employer.enums.JobSavedUserType;
 import com.worksvn.common.modules.employer.requests.*;
 import com.worksvn.common.modules.employer.responses.*;
 import com.worksvn.common.modules.school.responses.SchoolShortNameDto;
+import com.worksvn.common.modules.school.responses.SchoolSurveyFormDto;
 import com.worksvn.common.modules.school.responses.SimpleSchoolPreview;
 import org.springframework.http.HttpMethod;
 
@@ -216,6 +217,19 @@ public class APIs {
         api.addParam("sortType", sortType);
         api.addParam("pageIndex", pageIndex);
         api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+    // SCHOOL SURVEY FORM ==============================================================================================
+
+    public static ISApi<Object, SchoolSurveyFormDto> SCHOOL_getSchoolSurveyForm(String schoolID) {
+        ISApi<Object, SchoolSurveyFormDto> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.GET, "api/internal/schools/{id}/surveys",
+                null,
+                new TypeReference<SchoolSurveyFormDto>() {
+                },
+                true);
+        api.addParam("id", schoolID);
         return api;
     }
 

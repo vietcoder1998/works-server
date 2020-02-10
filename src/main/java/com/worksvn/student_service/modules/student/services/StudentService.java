@@ -22,7 +22,6 @@ import com.worksvn.common.utils.jpa.JPAQueryBuilder;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
 import com.worksvn.student_service.constants.NumberConstants;
 import com.worksvn.student_service.modules.auth.services.UserService;
-import com.worksvn.student_service.modules.common.services.MajorService;
 import com.worksvn.student_service.modules.services.geocoding.LocationService;
 import com.worksvn.student_service.modules.student.models.entities.*;
 import com.worksvn.student_service.modules.student.repositories.StudentRepository;

@@ -41,7 +41,7 @@ public class GlobalControllerExceptionHandler {
                     new ISResponseDto(e.getApi(), e.getHttpStatus(), e.getBody()));
         } else {
             responseBody = new BaseResponseBody<>(internalBody.getCode(), internalBody.getMsg(),
-                    internalBody);
+                    internalBody.getData());
         }
         return new BaseResponse<>(e.getHttpStatus(), responseBody);
     }

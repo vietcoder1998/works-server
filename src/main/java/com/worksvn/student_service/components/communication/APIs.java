@@ -152,6 +152,29 @@ public class APIs {
         return api;
     }
 
+    // JOB NAME ========================================================================================================
+
+    public static ISApi<Set<Integer>, PageDto<JobNameDto>> PUBLIC_getJobNames(
+            String name, Boolean matchingName,
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize,
+            Set<Integer> ids) {
+        ISApi<Set<Integer>, PageDto<JobNameDto>> api = new ISApi<>(ISHost.PUBLIC_SERVICE,
+                HttpMethod.POST, "api/internal/jobNames/query" +
+                "?name={name}&matchingName={matchingName}&sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                ids,
+                new TypeReference<PageDto<JobNameDto>>() {
+                },
+                true);
+        api.addParam("name", name);
+        api.addParam("matchingName", matchingName);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
     //##################################################################################################################
     // SCHOOL SERVICE
     //##################################################################################################################

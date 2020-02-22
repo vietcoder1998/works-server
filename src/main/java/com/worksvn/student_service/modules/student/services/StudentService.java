@@ -63,8 +63,6 @@ public class StudentService {
     private LocationService locationService;
     @Autowired
     private FileStorageService fileStorageService;
-//    @Autowired
-//    private MajorService majorService;
     @Autowired
     private NotificationService notificationService;
 
@@ -173,6 +171,17 @@ public class StudentService {
             whereCondition.and().paramCondition("sk.SkillID", "IN", filter.getSkillIDs());
             groupByID = true;
         }
+
+        boolean or = false;
+        if (filter.getJobNameIDs() != null && !filter.getJobNameIDs().isEmpty()) {
+            queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentExperience.class, "sexp",
+                    queryBuilder.newCondition().condition("sexp.candidate.id", "=", "s.id"));
+
+            whereCondition.and().paramCondition("cexp.jobNameID", "IN", filter.getJobNameIDs());
+            or = true;
+            groupByID = true;
+        }
+
         if (filter.getMajorIDs() != null && !filter.getMajorIDs().isEmpty()) {
             whereCondition.and().paramCondition("s.majorID", "IN", filter.getMajorIDs());
         }

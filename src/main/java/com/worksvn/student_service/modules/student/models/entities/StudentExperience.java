@@ -33,6 +33,8 @@ public class StudentExperience {
 
     @Column(name = "job_name")
     private String jobName;
+    @Column(name = "job_name_id")
+    private Integer jobNameID;
     @Column(name = "company_name")
     private String companyName;
     @Column(name = "started_date")
@@ -44,13 +46,15 @@ public class StudentExperience {
     @Column(name = "created_date")
     private Date createdDate = new Date();
 
-    public StudentExperience(Student student, NewStudentExperienceDto newEducation) {
+    public StudentExperience(Student student, NewStudentExperienceDto newEducation,
+                             Integer jobNameID) {
         this.student = student;
-        update(newEducation);
+        update(newEducation, jobNameID);
     }
 
-    public void update(NewStudentExperienceDto newEducation) {
+    public void update(NewStudentExperienceDto newEducation, Integer jobNameID) {
         this.jobName = newEducation.getJobName();
+        this.jobNameID = jobNameID;
         this.companyName = newEducation.getCompanyName();
         this.description = newEducation.getDescription();
         if (newEducation.getStartedDate() > 0) {

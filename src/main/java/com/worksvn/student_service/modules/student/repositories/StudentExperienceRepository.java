@@ -21,6 +21,8 @@ public interface StudentExperienceRepository extends JpaRepository<StudentExperi
             "where se.student.id = ?1")
     List<StudentExperienceDto> getStudentExperienceDtos(String studentID, Sort sort);
 
+    List<StudentExperience> findAllByJobNameID(Integer jobNameID);
+
     @Modifying
     @Transactional
     void deleteAllByStudent_IdAndId(String studentID, String id);

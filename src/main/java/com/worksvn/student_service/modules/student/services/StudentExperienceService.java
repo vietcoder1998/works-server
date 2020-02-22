@@ -3,10 +3,12 @@ package com.worksvn.student_service.modules.student.services;
 import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
+import com.worksvn.common.modules.common.responses.JobNameDto;
 import com.worksvn.common.modules.student.requests.NewStudentExperienceDto;
 import com.worksvn.common.modules.student.responses.StudentExperienceDto;
 import com.worksvn.common.utils.jpa.JPAQueryBuilder;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
+import com.worksvn.student_service.modules.common.services.JobNameService;
 import com.worksvn.student_service.modules.student.models.entities.Student;
 import com.worksvn.student_service.modules.student.models.entities.StudentExperience;
 import com.worksvn.student_service.modules.student.repositories.StudentExperienceRepository;
@@ -25,6 +27,8 @@ public class StudentExperienceService {
 
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private JobNameService jobNameService;
 
     public PageDto<StudentExperienceDto> getStudentExperienceDtos(String studentID,
                                                                   List<String> sortBy, List<String> sortType) {
@@ -45,20 +49,22 @@ public class StudentExperienceService {
 
     public void createNewStudentExperience(String studentID,
                                            NewStudentExperienceDto newExperience)
-            throws ResponseException {
+            throws Exception {
         Student student = studentService.getStudent(studentID);
-        StudentExperience experience = new StudentExperience(student, newExperience);
+        Integer jobNameID = findMatchingJobNameIDByName(newExperience.getJobName());
+        StudentExperience experience = new StudentExperience(student, newExperience, jobNameID);
         experienceRepository.save(experience);
     }
 
     public void updateStudentExperience(String studentID, String experienceID,
                                         NewStudentExperienceDto updateExperience)
-            throws ResponseException {
+            throws Exception {
         StudentExperience experience = experienceRepository.findFirstByIdAndStudent_Id(experienceID, studentID);
         if (experience == null) {
             throw new ResponseException(ResponseValue.STUDENT_EXPERIENCE_NOT_FOUND);
         }
-        experience.update(updateExperience);
+        Integer jobNameID = findMatchingJobNameIDByName(updateExperience.getJobName());
+        experience.update(updateExperience, jobNameID);
         experienceRepository.save(experience);
     }
 
@@ -70,5 +76,27 @@ public class StudentExperienceService {
         if (experienceIDs != null && !experienceIDs.isEmpty()) {
             experienceRepository.deleteAllByStudent_IdAndIdIn(studentID, experienceIDs);
         }
+    }
+
+    private Integer findMatchingJobNameIDByName(String name) throws Exception {
+        JobNameDto jobName = jobNameService.findJobNameByName(name);
+        return jobName == null ? null : jobName.getId();
+    }
+
+    public void matchingAllStudentEducationJobName() throws Exception {
+        List<StudentExperience> studentExperiences = experienceRepository.findAllByJobNameID(null);
+        for (int i = studentExperiences.size() - 1; i >= 0; i--) {
+            StudentExperience experience = studentExperiences.get(i);
+            Integer matchingJobNameID = null;
+            if (experience.getJobName() != null) {
+                matchingJobNameID = findMatchingJobNameIDByName(experience.getJobName());
+            }
+            if (matchingJobNameID != null) {
+                experience.setJobNameID(matchingJobNameID);
+            } else {
+                studentExperiences.remove(i);
+            }
+        }
+        experienceRepository.saveAll(studentExperiences);
     }
 }

@@ -44,7 +44,7 @@ public class StudentExperienceController extends BaseRESTController {
     })
     @PostMapping
     public void addStudentExperience(@RequestBody @Valid NewStudentExperienceDto newExperience)
-            throws ResponseException {
+            throws Exception {
         String studentID = getAuthorizedUser().getId();
         studentExperienceService.createNewStudentExperience(studentID, newExperience);
     }
@@ -56,7 +56,7 @@ public class StudentExperienceController extends BaseRESTController {
     @PutMapping("/{id}")
     public void updateStudentExperience(@PathVariable("id") String experienceID,
                                         @RequestBody @Valid NewStudentExperienceDto newExperience)
-            throws ResponseException {
+            throws Exception {
         String studentID = getAuthorizedUser().getId();
         studentExperienceService.updateStudentExperience(studentID, experienceID, newExperience);
     }

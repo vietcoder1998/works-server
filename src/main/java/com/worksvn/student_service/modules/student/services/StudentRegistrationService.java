@@ -23,12 +23,11 @@ public class StudentRegistrationService {
     @Transactional(rollbackFor = Exception.class)
     public void registerNewStudent(String schoolID, NewStudentRegistrationDto registrationDto) throws Exception {
         String schoolShortName = schoolService.getSchoolShortName(schoolID);
-        String username = schoolShortName + registrationDto.getUsername();
+        String username = schoolShortName.toLowerCase() + registrationDto.getUsername();
         String userID = userService.registerNewUserByUsername(username, registrationDto.getPassword());
         if (studentRepository.existsById(userID)) {
             throw new ResponseException(ResponseValue.STUDENT_EXISTS);
         }
-
         studentRepository.save(new Student(userID, schoolID, registrationDto));
     }
 }

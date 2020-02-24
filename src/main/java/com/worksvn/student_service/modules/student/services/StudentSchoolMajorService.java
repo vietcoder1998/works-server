@@ -18,15 +18,16 @@ public class StudentSchoolMajorService {
 
     public PageDto<BranchDto> getStudentSchoolBranches(String studentID,
                                                        List<String> sortBy, List<String> sortType,
-                                                       int pageIndex, int pageSize) throws Exception {
+                                                       Integer pageIndex, Integer pageSize) throws Exception {
         String schoolID = studentService.getStudentSchoolID(studentID);
         return schoolMajorService.getSchoolBranches(schoolID, sortBy, sortType, pageIndex, pageSize);
     }
 
     public PageDto<MajorDto> getStudentSchoolMajors(String studentID, Integer branchID,
                                                     List<String> sortBy, List<String> sortType,
-                                                    int pageIndex, int pageSize) throws Exception {
+                                                    Integer pageIndex, Integer pageSize) throws Exception {
         String schoolID = studentService.getStudentSchoolID(studentID);
-        return schoolMajorService.getSchoolMajors(schoolID, branchID, sortBy, sortType, pageIndex, pageSize);
+        return schoolMajorService.getSchoolMajors(schoolID, branchID, null, null,
+                sortBy, sortType, pageIndex, pageSize);
     }
 }

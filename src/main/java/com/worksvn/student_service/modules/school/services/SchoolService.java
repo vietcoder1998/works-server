@@ -24,4 +24,8 @@ public class SchoolService extends BaseSchoolService {
     public SimpleSchoolPreview getSimpleSchoolPreview(String schoolID) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs.SCHOOL_getSchoolSimpleInfo(schoolID));
     }
+
+    public void checkSchoolExist(String schoolID) throws Exception {
+        restCommunicator.exchangeForSuccess(APIs.SCHOOL_checkSchoolExists(schoolID));
+    }
 }

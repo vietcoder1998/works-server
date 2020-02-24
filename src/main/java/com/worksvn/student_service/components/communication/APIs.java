@@ -74,6 +74,30 @@ public class APIs {
 
     // MAJOR ===========================================================================================================
 
+
+    public static ISApi<Object, PageDto<MajorDto>> PUBLIC_queryMajors(Integer branchID,
+                                                                      String name, Boolean matchingName,
+                                                                      Set<Integer> ids,
+                                                                      List<String> sortBy, List<String> sortType,
+                                                                      Integer pageIndex, Integer pageSize) {
+        ISApi<Object, PageDto<MajorDto>> api = new ISApi<>(ISHost.PUBLIC_SERVICE,
+                HttpMethod.POST, "api/internal/majors/query" +
+                "?branchID={branchID}&name={name}&matchingName={matchingName}" +
+                "&sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                ids,
+                new TypeReference<PageDto<MajorDto>>() {
+                },
+                true);
+        api.addParam("branchID", branchID);
+        api.addParam("name", name);
+        api.addParam("matchingName", matchingName);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
     public static ISApi<Object, MajorDto> PUBLIC_getMajor(int id) {
         ISApi<Object, MajorDto> api = new ISApi<>(ISHost.PUBLIC_SERVICE,
                 HttpMethod.GET, "api/internal/majors/{id}",
@@ -203,6 +227,17 @@ public class APIs {
         return api;
     }
 
+    public static ISApi<Object, Object> SCHOOL_checkSchoolExists(String schoolID) {
+        ISApi<Object, Object> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.GET, "api/internal/schools/{id}/exists",
+                null,
+                new TypeReference<Object>() {
+                },
+                true);
+        api.addParam("id", schoolID);
+        return api;
+    }
+
     // SCHOOL EDUCATION ================================================================================================
 
     public static ISApi<Object, PageDto<BranchDto>> SCHOOL_getSchoolBranches(String schoolID,
@@ -225,21 +260,48 @@ public class APIs {
 
 
     public static ISApi<Object, PageDto<MajorDto>> SCHOOL_getSchoolMajors(String schoolID, Integer branchID,
+                                                                          String name, Boolean matchingName,
                                                                           List<String> sortBy, List<String> sortType,
                                                                           Integer pageIndex, Integer pageSize) {
         ISApi<Object, PageDto<MajorDto>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
                 HttpMethod.GET, "api/internal/schools/{id}/education/majors" +
-                "?branchID={branchID}&sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                "?branchID={branchID}&name={name}&matchingName={matchingName}" +
+                "&sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
                 null,
                 new TypeReference<PageDto<MajorDto>>() {
                 },
                 true);
         api.addParam("id", schoolID);
         api.addParam("branchID", branchID);
+        api.addParam("name", name);
+        api.addParam("matchingName", matchingName);
         api.addParam("sortBy", sortBy);
         api.addParam("sortType", sortType);
         api.addParam("pageIndex", pageIndex);
         api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+    public static ISApi<Object, Object> SCHOOL_checkSchoolMajorExists(String schoolID, int majorID) {
+        ISApi<Object, Object> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.GET, "api/internal/schools/{sid}/education/majors/{mid}",
+                null,
+                new TypeReference<Object>() {
+                },
+                true);
+        api.addParam("sid", schoolID);
+        api.addParam("mid", majorID);
+        return api;
+    }
+
+    public static ISApi<Object, Set<Integer>> SCHOOL_addNewSchoolMajors(String schoolID, Set<Integer> majorIDs) {
+        ISApi<Object, Set<Integer>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.POST, "api/internal/schools/{id}/education/majors",
+                majorIDs,
+                new TypeReference<Set<Integer>>() {
+                },
+                true);
+        api.addParam("id", schoolID);
         return api;
     }
 

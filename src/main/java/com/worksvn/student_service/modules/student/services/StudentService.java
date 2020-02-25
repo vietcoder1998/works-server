@@ -342,7 +342,7 @@ public class StudentService {
     public CoverUrlDto updateStudentCover(String studentID, MultipartFile imageFile)
             throws IOException, ResponseException {
         checkStudentExist(studentID);
-        String oldCoverUrl = studentRepository.getStudentAvatarUrl(studentID);
+        String oldCoverUrl = studentRepository.getStudentCoverUrl(studentID);
         String coverUrl = uploadStudentCover(studentID, imageFile, oldCoverUrl);
         studentRepository.updateStudentCover(studentID, coverUrl);
         return new CoverUrlDto(coverUrl);

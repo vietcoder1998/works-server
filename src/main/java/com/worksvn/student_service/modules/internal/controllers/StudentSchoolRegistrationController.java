@@ -19,8 +19,8 @@ import javax.validation.Valid;
 @AuthorizationRequired
 @PreAuthorize("#oauth2.hasScope('INTERNAL_SERVICE')")
 @Api(description = "Đăng ký tài khoản sinh viên")
-@RequestMapping("/api/internal/students/registration")
-public class StudentRegistrationController extends BaseRESTController {
+@RequestMapping("/api/internal/students")
+public class StudentSchoolRegistrationController extends BaseRESTController {
     @Autowired
     private StudentRegistrationService studentRegistrationService;
 
@@ -28,9 +28,10 @@ public class StudentRegistrationController extends BaseRESTController {
     @Responses(value = {
             @Response(responseValue = ResponseValue.STUDENT_EXISTS)
     })
-    @PostMapping()
+    @PostMapping("/registration")
     public void registerNewStudent(@RequestParam("schoolID") String schoolID,
-                                   @RequestBody @Valid NewStudentRegistrationDto registrationDto) throws Exception {
-        studentRegistrationService.registerNewStudent(schoolID, registrationDto);
+                                   @RequestBody @Valid NewStudentRegistrationDto registrationDto,
+                                   @RequestParam(value = "activated", defaultValue = "true") boolean activated) throws Exception {
+        studentRegistrationService.registerNewStudent(schoolID, registrationDto, activated);
     }
 }

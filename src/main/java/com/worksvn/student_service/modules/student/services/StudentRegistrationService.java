@@ -21,10 +21,12 @@ public class StudentRegistrationService {
     private StudentRepository studentRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public void registerNewStudent(String schoolID, NewStudentRegistrationDto registrationDto) throws Exception {
+    public void registerNewStudent(String schoolID, NewStudentRegistrationDto registrationDto,
+                                   boolean activated) throws Exception {
         String schoolShortName = schoolService.getSchoolShortName(schoolID);
         String username = schoolShortName.toLowerCase() + registrationDto.getUsername();
-        String userID = userService.registerNewUserByUsername(username, registrationDto.getPassword());
+        String email = registrationDto.getEmail();
+        String userID = userService.registerNewUserByUsername(username, registrationDto.getPassword(), email, activated);
         if (studentRepository.existsById(userID)) {
             throw new ResponseException(ResponseValue.STUDENT_EXISTS);
         }

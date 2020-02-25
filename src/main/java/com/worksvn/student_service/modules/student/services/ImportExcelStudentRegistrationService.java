@@ -196,7 +196,7 @@ public class ImportExcelStudentRegistrationService {
                         registration.setMajorID(majorID);
                         registration.setPhone(phone);
                         registration.setEmail(email);
-                        studentRegistrationService.registerNewStudent(schoolID, registration);
+                        studentRegistrationService.registerNewStudent(schoolID, registration, true);
                     } catch (Exception e) {
                         if (e instanceof ResponseException) {
                             throw new Exception(JacksonObjectMapper.getInstance().writeValueAsString(((ResponseException) e).getBody()));

@@ -23,6 +23,9 @@ public class StudentRegistrationService {
     @Transactional(rollbackFor = Exception.class)
     public void registerNewStudent(String schoolID, NewStudentRegistrationDto registrationDto,
                                    boolean activated) throws Exception {
+        if (registrationDto.getUsername() == null || registrationDto.getUsername().isEmpty()) {
+            throw new ResponseException(ResponseValue.INVALID_USERNAME);
+        }
         String schoolShortName = schoolService.getSchoolShortName(schoolID);
         String username = schoolShortName.toLowerCase() + registrationDto.getUsername();
         String email = registrationDto.getEmail();

@@ -23,13 +23,18 @@ public class StudentRegistrationService {
     @Transactional(rollbackFor = Exception.class)
     public void registerNewStudent(String schoolID, NewStudentRegistrationDto registrationDto,
                                    boolean activated) throws Exception {
-        if (registrationDto.getUsername() == null || registrationDto.getUsername().isEmpty()) {
+        String username;
+        String userID;
+        String email = registrationDto.getEmail();
+        String schoolShortName = schoolService.getSchoolShortName(schoolID);
+        if (registrationDto.getUsername() != null && !registrationDto.getUsername().isEmpty()) {
+            username = schoolShortName.toLowerCase() + registrationDto.getUsername();
+            userID = userService.registerNewUserByUsername(username, registrationDto.getPassword(), email, activated);
+        } else if (email != null && !email.isEmpty()){
+            userID = userService.registerNewUserByEmail(email, registrationDto.getPassword(), activated);
+        } else {
             throw new ResponseException(ResponseValue.INVALID_USERNAME);
         }
-        String schoolShortName = schoolService.getSchoolShortName(schoolID);
-        String username = schoolShortName.toLowerCase() + registrationDto.getUsername();
-        String email = registrationDto.getEmail();
-        String userID = userService.registerNewUserByUsername(username, registrationDto.getPassword(), email, activated);
         if (studentRepository.existsById(userID)) {
             throw new ResponseException(ResponseValue.STUDENT_EXISTS);
         }

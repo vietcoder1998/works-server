@@ -19,6 +19,20 @@ public class UserService {
     @Autowired
     private ISRestCommunicator restCommunicator;
 
+    public String registerNewUserByEmail(String email, String password, boolean isActivated) throws Exception {
+        String userID;
+        ISRestCommunicator.ExchangeResult<UserIDDto> result = restCommunicator
+                .exchange(CommonAPIs.AUTH_registerNewUserByEmail(email, password, isActivated));
+        if (result.isSuccess()) {
+            userID = result.getConvertedBody().getData().getUserID();
+        } else if (result.getOriginBody().getCode() == ResponseValue.USERNAME_EXISTS.specialCode()) {
+            userID = result.getOriginBodyData(UserIDDto.class).getUserID();
+        } else {
+            throw new ISResponseException(result);
+        }
+        return userID;
+    }
+
     public String registerNewUserByUsername(String username, String password, String email,
                                             boolean activated) throws Exception {
         String userID;

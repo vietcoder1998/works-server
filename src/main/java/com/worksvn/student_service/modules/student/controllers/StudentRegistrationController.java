@@ -1,6 +1,5 @@
 package com.worksvn.student_service.modules.student.controllers;
 
-import com.worksvn.common.annotations.auth.AuthorizationRequired;
 import com.worksvn.common.annotations.swagger.Response;
 import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.constants.ResponseValue;

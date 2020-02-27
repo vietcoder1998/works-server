@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@AuthorizationRequired
 @Api(description = "Đăng ký tài khoản sinh viên")
 @RequestMapping("/api/students")
 public class StudentRegistrationController extends BaseRESTController {

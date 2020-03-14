@@ -43,7 +43,7 @@ public class ImportExcelStudentRegistrationService {
             config.setStartColumn(1);
         }
         if (config.getStartRow() == null) {
-            config.setStartRow(3);
+            config.setStartRow(4);
         }
 
         schoolService.checkSchoolExist(schoolID);
@@ -65,22 +65,45 @@ public class ImportExcelStudentRegistrationService {
             @Override
             public void nextCell(int row, int column, CellWrapper cell) throws Exception {
                 switch (column) {
+//                    case 1: {
+//                        username = cell.getValue(String.class);
+//                        if (username == null || username.isEmpty()) {
+//                            throw new Exception("Username is missing");
+//                        }
+//                        if (!username.matches(RegexPattern.USERNAME_REGEX)) {
+//                            throw new Exception("Username is invalid");
+//                        }
+//                    }
+//                    break;
+
+//                    case 2: {
+//                        password = cell.getValue(String.class);
+//                        if (password != null && !password.matches(RegexPattern.PASSWORD_REGEX)) {
+//                            throw new Exception("Password is invalid");
+//                        }
+//                    }
+//                    break;
+
                     case 1: {
-                        username = cell.getValue(String.class);
-                        if (username == null || username.isEmpty()) {
-                            throw new Exception("Phone is missing");
+                        email = cell.getValue(String.class);
+                        if (email == null || email.isEmpty()) {
+                            throw new Exception("Email is missing");
                         }
-                        if (!username.matches(RegexPattern.USERNAME_REGEX)) {
-                            throw new Exception("Username is invalid");
+                        if (!email.matches(RegexPattern.EMAIL_REGEX)) {
+                            throw new Exception("Email '" + email + "' is invalid");
                         }
                     }
                     break;
 
                     case 2: {
-                        password = cell.getValue(String.class);
-                        if (password != null && !password.matches(RegexPattern.PASSWORD_REGEX)) {
-                            throw new Exception("Password is invalid");
+                        phone = cell.getValue(String.class);
+                        if (phone == null || phone.isEmpty()) {
+                            throw new Exception("Phone is missing");
                         }
+                        if (!phone.matches(RegexPattern.PHONE_REGEX)) {
+                            throw new Exception("Phone '" + phone + "' is invalid");
+                        }
+                        password = phone;
                     }
                     break;
 
@@ -156,26 +179,6 @@ public class ImportExcelStudentRegistrationService {
                             }
                         }
                         majorID = major.getId();
-                    }
-                    break;
-
-                    case 9: {
-                        phone = cell.getValue(String.class);
-                        if (phone == null || phone.isEmpty()) {
-                            if (password == null || password.isEmpty()) {
-                                throw new Exception("Phone is missing");
-                            }
-                        } else if (!phone.matches(RegexPattern.PHONE_REGEX)) {
-                            throw new Exception("Phone '" + phone + "' is invalid");
-                        }
-                    }
-                    break;
-
-                    case 10: {
-                        email = cell.getValue(String.class);
-                        if (email != null && !email.matches(RegexPattern.EMAIL_REGEX)) {
-                            throw new Exception("Email '" + email + "' is invalid");
-                        }
                     }
                     break;
                 }

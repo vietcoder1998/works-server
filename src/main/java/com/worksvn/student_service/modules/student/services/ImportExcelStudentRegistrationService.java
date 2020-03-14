@@ -1,5 +1,6 @@
 package com.worksvn.student_service.modules.student.services;
 
+import com.worksvn.common.base.models.BaseResponseBody;
 import com.worksvn.common.constants.RegexPattern;
 import com.worksvn.common.exceptions.ISResponseException;
 import com.worksvn.common.exceptions.ResponseException;
@@ -202,7 +203,8 @@ public class ImportExcelStudentRegistrationService {
                         studentRegistrationService.registerNewStudent(schoolID, registration, true);
                     } catch (Exception e) {
                         if (e instanceof ResponseException) {
-                            throw new Exception(JacksonObjectMapper.getInstance().writeValueAsString(((ResponseException) e).getBody()));
+                            BaseResponseBody<?> body = ((ResponseException) e).getBody();
+                            throw new Exception(body.getCode() + " " + body.getMsg());
                         } else {
                             e.printStackTrace();
                             throw e;

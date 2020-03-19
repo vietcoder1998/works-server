@@ -23,9 +23,8 @@ import com.worksvn.common.modules.employer.enums.JobHomePriority;
 import com.worksvn.common.modules.employer.enums.JobSavedUserType;
 import com.worksvn.common.modules.employer.requests.*;
 import com.worksvn.common.modules.employer.responses.*;
-import com.worksvn.common.modules.school.responses.SchoolShortNameDto;
-import com.worksvn.common.modules.school.responses.SchoolSurveyFormDto;
-import com.worksvn.common.modules.school.responses.SimpleSchoolPreview;
+import com.worksvn.common.modules.school.requests.SchoolEventFilter;
+import com.worksvn.common.modules.school.responses.*;
 import org.springframework.http.HttpMethod;
 
 import java.util.List;
@@ -317,6 +316,30 @@ public class APIs {
         api.addParam("id", schoolID);
         return api;
     }
+
+    // SCHOOL EVENT ====================================================================================================
+
+    public static ISApi<SchoolEventFilter, PageDto<SchoolEventPreviewDto>> SCHOOL_querySchoolEvents(
+            SchoolEventFilter filter,
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize) {
+        ISApi<SchoolEventFilter, PageDto<SchoolEventPreviewDto>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.POST, "api/internal/schools/events/query?" +
+                "sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                filter,
+                new TypeReference<PageDto<SchoolEventPreviewDto>>() {
+                },
+                true);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+//    public static ISApi<Object, SchoolEventDto> SCHOOL_getSchoolEventDetail(String eventID) {
+//
+//    }
 
     //##################################################################################################################
     // EMPLOYER SERVICE

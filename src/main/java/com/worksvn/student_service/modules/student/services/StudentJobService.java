@@ -32,6 +32,9 @@ public class StudentJobService {
                                                         Integer pageIndex, Integer pageSize) throws Exception {
         HomeActiveJobFilter homeFilter = new HomeActiveJobFilter();
         createActiveJobFilter(studentID, filter, homeFilter, true);
+        if (homeFilter.getSchoolID() == null) {
+            return new PageDto<>();
+        }
         return jobService.getHomeActiveJobs(sortBy, sortType, pageIndex, pageSize, homeFilter, priority);
     }
 
@@ -41,6 +44,9 @@ public class StudentJobService {
                                                        int pageIndex, int pageSize) throws Exception {
         SearchActiveJobFilter searchFilter = new SearchActiveJobFilter();
         createActiveJobFilter(studentID, filter, searchFilter, false);
+        if (searchFilter.getSchoolID() == null) {
+            return new PageDto<>();
+        }
         return jobService.searchActiveJobs(sortBy, sortType, pageIndex, pageSize, searchFilter);
     }
 
@@ -49,7 +55,10 @@ public class StudentJobService {
                                                     List<String> sortBy, List<String> sortType,
                                                     int pageIndex, int pageSize) throws Exception {
         ActiveJobFilter activeJobFilter = new ActiveJobFilter();
-        createActiveJobFilter(studentID, filter, activeJobFilter, false);
+        createActiveJobFilter(studentID, filter, activeJobFilter, true);
+        if (activeJobFilter.getSchoolID() == null) {
+            return new PageDto<>();
+        }
         return jobService.getActiveJobs(sortBy, sortType, pageIndex, pageSize, activeJobFilter);
     }
 
@@ -59,17 +68,17 @@ public class StudentJobService {
         if (sourceFilter != null) {
             BeanUtils.copyProperties(sourceFilter, targetFilter);
         }
-        if (applyMajor) {
-            StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
-            if (info != null) {
+        StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
+        if (info != null) {
+            targetFilter.setSchoolID(info.getSchoolID());
+            if (applyMajor) {
                 if (info.getMajorID() != null) {
                     Set<Integer> jobNameIDs = majorJobNameService.getJobNameIDsByMajorIDs(Sets.newHashSet(info.getMajorID()));
                     targetFilter.setJobNameIDs(jobNameIDs);
                 }
-                targetFilter.setSchoolID(info.getSchoolID());
-                targetFilter.setSchoolIgnored(false);
             }
         }
+        targetFilter.setSchoolIgnored(false);
         targetFilter.setUserID(studentID);
         targetFilter.setUserType(StringConstants.STUDENT);
     }

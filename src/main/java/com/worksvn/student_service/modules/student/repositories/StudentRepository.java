@@ -24,12 +24,15 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     String getSchoolID(String id);
 
     @Query("select new com.worksvn.common.modules.student.responses.StudentInfoDto" +
-            "(s.id, s.firstName, s.lastName, s.gender, s.email, s.phone, s.address," +
-            "s.birthday, s.avatarUrl, s.coverUrl, s.description, s.identityCard," +
-            "sar.attitudeRating, sar.skillRating, sar.jobAccomplishmentRating, sar.ratingCount," +
-            "s.regionID, s.lat, s.lon," +
-            "s.identityCardFrontImageUrl, s.identityCardBackImageUrl," +
-            "s.studentCode, s.majorID) " +
+            "(s.id, s.firstName, s.lastName, " +
+            "s.gender, s.birthday, s.identityCard, " +
+            "s.email, s.phone, " +
+            "s.address, s.regionID, s.lat, s.lon, " +
+            "s.studentCode, " +
+            "s.avatarUrl, s.coverUrl, s.description, " +
+            "sar.attitudeRating, sar.skillRating, sar.jobAccomplishmentRating, sar.ratingCount, " +
+            "s.identityCardFrontImageUrl, s.identityCardBackImageUrl, " +
+            "s.majorID) " +
             "from Student s " +
             "left join StudentAverageRating sar on sar.studentID = s.id " +
             "where s.id = ?1")

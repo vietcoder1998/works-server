@@ -185,7 +185,7 @@ public class StudentService {
         if (filter.getMajorIDs() != null && !filter.getMajorIDs().isEmpty()) {
             whereCondition.and().paramCondition("s.majorID", "IN", filter.getMajorIDs());
         }
-        if (filter.getIds() != null && !filter.getIds().isEmpty() ) {
+        if (filter.getIds() != null && !filter.getIds().isEmpty()) {
             whereCondition.and().paramCondition("s.id", "IN", filter.getIds());
         }
         if (filter.getCreatedDate() != null && filter.getCreatedDate() > 0) {
@@ -287,8 +287,8 @@ public class StudentService {
     }
 
     //    @Transactional(rollbackFor = Exception.class)
-    public void updateStudentInfo(String studentID, UpdateStudentInfoDto updateInfo,
-                                  MultipartFile avatarImage, MultipartFile coverImage) throws Exception {
+    public SimpleStudentInfoDto updateStudentInfo(String studentID, UpdateStudentInfoDto updateInfo,
+                                                  MultipartFile avatarImage, MultipartFile coverImage) throws Exception {
         Student student = getStudent(studentID);
 
         RegionAddress regionAddress = null;
@@ -316,6 +316,7 @@ public class StudentService {
 //        firestoreService.publishFirestoreTask(ChatRoomTaskFactory
 //                .updateCandidateInfo(candidateID, candidate.getAvatarUrl(),
 //                        candidate.getFirstName(), candidate.getLastName()));
+        return new SimpleStudentInfoDto(studentID, updateInfo, regionAddress);
     }
 
     public AvatarUrlDto updateStudentAvatar(String studentID, MultipartFile imageFile)
@@ -349,7 +350,7 @@ public class StudentService {
     }
 
     private String uploadStudentCover(String studentID, MultipartFile imageFile,
-                                    String oldCoverUrl) throws IOException, ResponseException {
+                                      String oldCoverUrl) throws IOException, ResponseException {
         String coverUrl = uploadImageFile(imageFile, studentStorageDirectory + studentID,
                 StringConstants.COVER_IMAGE_NAME + "_" + new Date().getTime());
         try {

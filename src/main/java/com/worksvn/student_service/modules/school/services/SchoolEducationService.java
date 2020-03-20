@@ -48,7 +48,7 @@ public class SchoolEducationService {
         restCommunicator.exchangeForSuccess(APIs.SCHOOL_checkSchoolMajorExists(schoolID, majorID));
     }
 
-    public void addSchoolMajor(String schoolID, Set<Integer> majorIDs) {
-
+    public void addSchoolMajor(String schoolID, Set<Integer> majorIDs) throws Exception {
+        restCommunicator.exchangeForSuccess(APIs.SCHOOL_addNewSchoolMajors(schoolID, majorIDs));
     }
 }

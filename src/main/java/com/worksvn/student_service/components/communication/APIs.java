@@ -257,7 +257,6 @@ public class APIs {
         return api;
     }
 
-
     public static ISApi<Object, PageDto<MajorDto>> SCHOOL_getSchoolMajors(String schoolID, Integer branchID,
                                                                           String name, Boolean matchingName,
                                                                           List<String> sortBy, List<String> sortType,
@@ -337,9 +336,21 @@ public class APIs {
         return api;
     }
 
-//    public static ISApi<Object, SchoolEventDto> SCHOOL_getSchoolEventDetail(String eventID) {
-//
-//    }
+    public static ISApi<Object, SchoolEventDto> SCHOOL_getSchoolEvent(String schoolID, String eventID,
+                                                                      Boolean ignoreNotStarted, Boolean ignoreFinished) {
+        ISApi<Object, SchoolEventDto> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.GET, "api/internal/schools/events/{id}?" +
+                "schoolID={schoolID}&ignoredNotStarted={ignoredNotStarted}&ignoreFinished={ignoreFinished}",
+                null,
+                new TypeReference<SchoolEventDto>() {
+                },
+                true);
+        api.addParam("id", eventID);
+        api.addParam("schoolID", schoolID);
+        api.addParam("ignoredNotStarted", ignoreNotStarted);
+        api.addParam("ignoreFinished", ignoreFinished);
+        return api;
+    }
 
     //##################################################################################################################
     // EMPLOYER SERVICE

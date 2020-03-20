@@ -5,11 +5,11 @@ import com.worksvn.common.annotations.swagger.Response;
 import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
-import com.worksvn.common.modules.candidate.requests.NewCandidateInfoDto;
 import com.worksvn.common.modules.common.responses.AvatarUrlDto;
 import com.worksvn.common.modules.common.responses.CoverUrlDto;
 import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
 import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
+import com.worksvn.common.modules.student.responses.SimpleStudentInfoDto;
 import com.worksvn.common.modules.student.responses.StudentInfoDto;
 import com.worksvn.common.modules.student.responses.StudentNavigationDto;
 import com.worksvn.common.modules.student.responses.StudentProfileDto;
@@ -69,9 +69,9 @@ public class StudentProfileController extends BaseRESTController {
             @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND)
     })
     @PutMapping("/personalInfo")
-    public void updateStudentInfo(@RequestBody @Valid UpdateStudentInfoDto updateInfo) throws Exception {
+    public SimpleStudentInfoDto updateStudentInfo(@RequestBody @Valid UpdateStudentInfoDto updateInfo) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        studentService.updateStudentInfo(studentID, updateInfo, null, null);
+        return studentService.updateStudentInfo(studentID, updateInfo, null, null);
     }
 
     @ApiOperation(value = "Cập nhật thông tin cá nhân cùng ảnh đại diện, cover",
@@ -80,11 +80,11 @@ public class StudentProfileController extends BaseRESTController {
             @Response(responseValue = ResponseValue.CANDIDATE_NOT_FOUND)
     })
     @PutMapping(path = "/personalInfo/extend", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void updateCandidatePersonalInfoWithImage(@RequestParam(value = "avatar", required = false) MultipartFile avatarImage,
-                                                     @RequestParam(value = "cover", required = false) MultipartFile coverImage,
-                                                     @ModelAttribute @Valid UpdateStudentInfoDto updateInfo) throws Exception {
+    public SimpleStudentInfoDto updateCandidatePersonalInfoWithImage(@RequestParam(value = "avatar", required = false) MultipartFile avatarImage,
+                                                                     @RequestParam(value = "cover", required = false) MultipartFile coverImage,
+                                                                     @ModelAttribute @Valid UpdateStudentInfoDto updateInfo) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        studentService.updateStudentInfo(studentID, updateInfo, avatarImage, coverImage);
+        return studentService.updateStudentInfo(studentID, updateInfo, avatarImage, coverImage);
     }
 
     @ApiOperation(value = "Cập nhật ảnh avatar")

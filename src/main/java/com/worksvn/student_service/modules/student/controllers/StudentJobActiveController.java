@@ -29,7 +29,7 @@ public class StudentJobActiveController extends BaseRESTController {
     @Autowired
     private StudentJobService studentJobService;
 
-    @ApiOperation(value = "Xem danh bài đăng ở trang chủ")
+    @ApiOperation(value = "Xem danh sách bài đăng ở trang chủ")
     @Responses(value = {
     })
     @PostMapping("/active/home")
@@ -56,7 +56,7 @@ public class StudentJobActiveController extends BaseRESTController {
         return studentJobService.searchStudentActiveJobs(studentID, filter, sortBy, sortType, pageIndex, pageSize);
     }
 
-    @ApiOperation(value = "Xem danh việc đang khả dụng")
+    @ApiOperation(value = "Xem danh sách việc đang khả dụng")
     @Responses(value = {
     })
     @PostMapping("/active")

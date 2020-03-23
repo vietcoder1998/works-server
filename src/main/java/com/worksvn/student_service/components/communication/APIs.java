@@ -352,6 +352,51 @@ public class APIs {
         return api;
     }
 
+    // ACTIVE EMPLOYER SCHOOL EVENT JOB ================================================================================
+
+    public static ISApi<ActiveJobFilter, PageDto<JobPreview>> SCHOOL_queryActiveEmployerSchoolEventJobs(
+            String schoolID, String eventID,
+            ActiveJobFilter filter,
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize) {
+        ISApi<ActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.POST, "api/internal/schools/{sid}/events/{eid}/jobs/active/query?" +
+                "sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                filter,
+                new TypeReference<PageDto<JobPreview>>() {
+                },
+                true);
+        api.addParam("sid", schoolID);
+        api.addParam("eid", eventID);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+    public static ISApi<Object, JobDto> SCHOOL_getActiveEmployerSchoolEventJob(
+            String schoolID, String eventID, String jobID,
+            String userID, String userType,
+            Double centerLat, Double centerLon) {
+        ISApi<Object, JobDto> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.GET, "api/internal/schools/{sid}/events/{eid}/jobs/{jid}/active" +
+                "?userID={userID}&userType={userType}" +
+                "&centerLat={centerLat}&centerLon={centerLon}",
+                null,
+                new TypeReference<JobDto>() {
+                },
+                true);
+        api.addParam("sid", schoolID);
+        api.addParam("eid", eventID);
+        api.addParam("jid", jobID);
+        api.addParam("userID", userID);
+        api.addParam("userType", userType);
+        api.addParam("centerLat", centerLat);
+        api.addParam("centerLon", centerLon);
+        return api;
+    }
+
     //##################################################################################################################
     // EMPLOYER SERVICE
     //##################################################################################################################

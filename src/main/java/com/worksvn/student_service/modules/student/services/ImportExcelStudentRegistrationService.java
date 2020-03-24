@@ -1,15 +1,14 @@
 package com.worksvn.student_service.modules.student.services;
 
-import com.worksvn.common.base.models.BaseResponseBody;
 import com.worksvn.common.constants.RegexPattern;
 import com.worksvn.common.exceptions.ISResponseException;
-import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.common.enums.Gender;
 import com.worksvn.common.modules.common.responses.MajorDto;
 import com.worksvn.common.modules.student.requests.NewStudentRegistrationDto;
 import com.worksvn.common.services.excel.import_excel.ImportExcelService;
+import com.worksvn.common.services.excel.import_excel.exception.InvalidCellDataException;
+import com.worksvn.common.services.excel.import_excel.exception.MissingCellDataException;
 import com.worksvn.common.services.excel.import_excel.models.*;
-import com.worksvn.common.utils.core.JacksonObjectMapper;
 import com.worksvn.student_service.modules.common.services.MajorService;
 import com.worksvn.student_service.modules.school.services.SchoolEducationService;
 import com.worksvn.student_service.modules.school.services.SchoolService;
@@ -64,7 +63,7 @@ public class ImportExcelStudentRegistrationService {
             String email;
 
             @Override
-            public void nextCell(int row, int column, CellWrapper cell) throws Exception {
+            public boolean nextCell(int row, int column, CellWrapper cell) throws Exception {
                 switch (column) {
 //                    case 1: {
 //                        username = cell.getValue(String.class);
@@ -88,41 +87,41 @@ public class ImportExcelStudentRegistrationService {
                     case 1: {
                         email = cell.getValue(String.class);
                         if (email == null || email.isEmpty()) {
-                            throw new Exception("Email is missing");
+                            throw new MissingCellDataException("Email");
                         }
                         if (!email.matches(RegexPattern.EMAIL_REGEX)) {
-                            throw new Exception("Email '" + email + "' is invalid");
+                            throw new InvalidCellDataException("Email", email, null);
                         }
+                        return true;
                     }
-                    break;
 
                     case 2: {
                         phone = cell.getValue(String.class);
                         if (phone == null || phone.isEmpty()) {
-                            throw new Exception("Phone is missing");
+                            throw new MissingCellDataException("Số điện thoại");
                         }
                         if (!phone.matches(RegexPattern.PHONE_REGEX)) {
-                            throw new Exception("Phone '" + phone + "' is invalid");
+                            throw new InvalidCellDataException("Số điện thoại", phone, null);
                         }
                         password = phone;
+                        return true;
                     }
-                    break;
 
                     case 3: {
                         lastName = cell.getValue(String.class);
                         if (lastName == null || lastName.isEmpty()) {
-                            throw new Exception("Last name is missing");
+                            throw new MissingCellDataException("Họ (đệm)");
                         }
+                        return true;
                     }
-                    break;
 
                     case 4: {
                         firstName = cell.getValue(String.class);
                         if (firstName == null || firstName.isEmpty()) {
-                            throw new Exception("First name is missing");
+                            throw new MissingCellDataException("Tên");
                         }
+                        return true;
                     }
-                    break;
 
                     case 5: {
                         String genderString = cell.getValue(String.class);
@@ -132,42 +131,42 @@ public class ImportExcelStudentRegistrationService {
                             } else if (genderString.equalsIgnoreCase(Gender.MALE.getValue())) {
                                 gender = Gender.MALE;
                             } else {
-                                throw new Exception("Gender '" + genderString + "' is invalid");
+                                throw new InvalidCellDataException("Giới tính", genderString, null);
                             }
                         }
+                        return true;
                     }
-                    break;
 
                     case 6: {
                         schoolYearStart = cell.getValue(Integer.class);
                         if (schoolYearStart == null) {
-                            throw new Exception("School year start is missing");
+                            throw new MissingCellDataException("Năm nhập học");
                         }
                         if (schoolYearStart < 1970) {
-                            throw new Exception("School year start is invalid, required >= 1970");
+                            throw new InvalidCellDataException("Năm nhập học", schoolYearStart, "year >= 1970");
                         }
+                        return true;
                     }
-                    break;
 
                     case 7: {
                         schoolYearEnd = cell.getValue(Integer.class);
                         if (schoolYearEnd == null) {
-                            throw new Exception("School year end is missing");
+                            throw new MissingCellDataException("Năm tốt nghiệp");
                         }
                         if (schoolYearEnd < schoolYearStart) {
-                            throw new Exception("School year end must be greater or equal school year start");
+                            throw new Exception("Năm tốt nghiệp phải lớn hơn năm nhập học");
                         }
+                        return true;
                     }
-                    break;
 
                     case 8: {
                         String majorName = cell.getValue(String.class);
                         if (majorName == null || majorName.isEmpty()) {
-                            throw new Exception("major name is missing");
+                            throw new MissingCellDataException("Chuyên nghành");
                         }
                         MajorDto major = majorService.findMajor(majorName);
                         if (major == null) {
-                            throw new Exception("major not found");
+                            throw new Exception("Chuyên nghành '" + majorName + "'không tồn tại");
                         }
                         try {
                             schoolEducationService.checkSchoolMajorExists(schoolID, major.getId());
@@ -176,41 +175,33 @@ public class ImportExcelStudentRegistrationService {
                                 schoolEducationService.addSchoolMajor(schoolID,
                                         Stream.of(major.getId()).collect(Collectors.toSet()));
                             } else {
-                                throw new Exception("school major not found");
+                                throw new Exception("Trường không đào tạo chuyên nghành '" + majorName + "'");
                             }
                         }
                         majorID = major.getId();
+                        return true;
                     }
-                    break;
+
+                    default: {
+                        return false;
+                    }
                 }
             }
 
             @Override
-            public void onEndOfRow(int row, Exception errorCause) throws Exception {
-                if (errorCause == null) {
-                    try {
-                        NewStudentRegistrationDto registration = new NewStudentRegistrationDto();
-                        registration.setUsername(username);
-                        registration.setPassword(password);
-                        registration.setFirstName(firstName);
-                        registration.setLastName(lastName);
-                        registration.setGender(gender.name());
-                        registration.setSchoolYearStart(schoolYearStart);
-                        registration.setSchoolYearEnd(schoolYearEnd);
-                        registration.setMajorID(majorID);
-                        registration.setPhone(phone);
-                        registration.setEmail(email);
-                        studentRegistrationService.registerNewStudent(schoolID, registration, true);
-                    } catch (Exception e) {
-                        if (e instanceof ResponseException) {
-                            BaseResponseBody<?> body = ((ResponseException) e).getBody();
-                            throw new Exception(body.getCode() + " " + body.getMsg());
-                        } else {
-                            e.printStackTrace();
-                            throw e;
-                        }
-                    }
-                }
+            public void onEndOfRow(int row) throws Exception {
+                NewStudentRegistrationDto registration = new NewStudentRegistrationDto();
+                registration.setUsername(username);
+                registration.setPassword(password);
+                registration.setFirstName(firstName);
+                registration.setLastName(lastName);
+                registration.setGender(gender.name());
+                registration.setSchoolYearStart(schoolYearStart);
+                registration.setSchoolYearEnd(schoolYearEnd);
+                registration.setMajorID(majorID);
+                registration.setPhone(phone);
+                registration.setEmail(email);
+                studentRegistrationService.registerNewStudent(schoolID, registration, true);
             }
         };
         adapters.newProcessorAdapter(adapter);

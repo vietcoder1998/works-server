@@ -10,7 +10,7 @@ public class EmployerService {
     @Autowired
     private ISRestCommunicator restCommunicator;
 
-    public boolean checkEmployerExist(String employerID) throws Exception {
-        return restCommunicator.exchangeForSuccess(APIs.EMPLOYER_checkEmployerExists(employerID));
+    public void checkEmployerExist(String employerID) throws Exception {
+        restCommunicator.exchangeForSuccess(APIs.EMPLOYER_checkEmployerExists(employerID));
     }
 }

@@ -403,11 +403,11 @@ public class APIs {
 
     // EMPLOYER ========================================================================================================
 
-    public static ISApi<Object, Boolean> EMPLOYER_checkEmployerExists(String employerID) {
-        ISApi<Object, Boolean> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+    public static ISApi<Object, Object> EMPLOYER_checkEmployerExists(String employerID) {
+        ISApi<Object, Object> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.GET, "api/internal/employers/{id}/exists",
                 null,
-                new TypeReference<Boolean>() {
+                new TypeReference<Object>() {
                 },
                 true);
         api.addParam("id", employerID);

@@ -46,7 +46,7 @@ public class StudentSavedService {
                 "s.regionID", "s.address", "s.lat", "s.lon",
                 "s.profileVerified", "s.lookingForJob", "s.completePercent",
                 "sar.attitudeRating", "sar.skillRating", "sar.jobAccomplishmentRating", "sar.ratingCount",
-                "cu.id", "s.schoolID", "s.majorID",
+                "su.id", "s.schoolID", "s.majorID",
                 "s.schoolYearStart", "s.schoolYearEnd", "s.studentCode",
                 "s.createdDate")
                 .from(StudentSaved.class, "ss")

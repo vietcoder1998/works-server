@@ -98,7 +98,7 @@ public class StudentService {
 
         String unlockedID = null;
         String savedID = null;
-        if (filter.getEmployerID() != null) {
+        if (filter.getEmployerID() != null && !filter.getEmployerID().isEmpty()) {
             queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentUnlocked.class, "su",
                     queryBuilder.newCondition()
                             .condition("su.student.id", "=", "s.id")

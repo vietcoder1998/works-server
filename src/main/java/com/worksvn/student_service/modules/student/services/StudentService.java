@@ -177,16 +177,16 @@ public class StudentService {
         }
         if (filter.getSkillIDs() != null && !filter.getSkillIDs().isEmpty()) {
             queryBuilder.join(JPAQueryBuilder.JoinType.LEFT_JOIN, "s.skills", "sk");
-            whereCondition.and().paramCondition("sk.SkillID", "IN", filter.getSkillIDs());
+            whereCondition.and().paramCondition("sk.skillID", "IN", filter.getSkillIDs());
             groupByID = true;
         }
 
         boolean or = false;
         if (filter.getJobNameIDs() != null && !filter.getJobNameIDs().isEmpty()) {
             queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentExperience.class, "sexp",
-                    queryBuilder.newCondition().condition("sexp.candidate.id", "=", "s.id"));
+                    queryBuilder.newCondition().condition("sexp.student.id", "=", "s.id"));
 
-            whereCondition.and().paramCondition("cexp.jobNameID", "IN", filter.getJobNameIDs());
+            whereCondition.and().paramCondition("sexp.jobNameID", "IN", filter.getJobNameIDs());
             or = true;
             groupByID = true;
         }

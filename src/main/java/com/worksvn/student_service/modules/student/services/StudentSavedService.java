@@ -57,7 +57,7 @@ public class StudentSavedService {
                         queryBuilder.newCondition().condition("su.student.id", "=", "s.id")
                                 .and().paramCondition("su.employerID", "=", employerID));
 
-        JPAQueryBuilder.Condition whereCondition = queryBuilder.newCondition();
+        JPAQueryBuilder<StudentSavedPreview>.Condition whereCondition = queryBuilder.newCondition();
         if (employerID != null && !employerID.isEmpty()) {
             whereCondition.and().paramCondition("ss.employerID", "=", employerID);
         }

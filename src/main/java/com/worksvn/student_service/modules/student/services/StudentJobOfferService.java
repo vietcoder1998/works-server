@@ -23,7 +23,7 @@ public class StudentJobOfferService {
 
     public PageDto<JobOfferRequestPreview> getStudentJobOfferPreviews(String studentID, RequestState state,
                                                                       List<String> sortBy, List<String> sortType,
-                                                                      int pageIndex, int pageSize) throws Exception {
+                                                                      Integer pageIndex, Integer pageSize) throws Exception {
         LatLon location = studentService.getLatLon(studentID);
         if (location == null) {
             location = new LatLon();

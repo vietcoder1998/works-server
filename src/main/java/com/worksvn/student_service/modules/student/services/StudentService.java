@@ -6,6 +6,7 @@ import com.worksvn.common.constants.StringConstants;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.auth.requests.UserFilter;
 import com.worksvn.common.modules.auth.responses.UserDto;
+import com.worksvn.common.modules.candidate.responses.CandidatePreview;
 import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
 import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
@@ -181,19 +182,36 @@ public class StudentService {
             groupByID = true;
         }
 
-        boolean or = false;
+        boolean recommendedFilter = filter.getRecommendedFilter() != null && filter.getRecommendedFilter();
+        JPAQueryBuilder<StudentPreview>.Condition recommendedCondition;
+        if (recommendedFilter) {
+            recommendedCondition = queryBuilder.newCondition();
+        } else {
+            recommendedCondition = whereCondition;
+        }
+
+        if (filter.getMajorIDs() != null && !filter.getMajorIDs().isEmpty()) {
+            recommendedCondition.and().paramCondition("s.majorID", "IN", filter.getMajorIDs());
+        }
+
         if (filter.getJobNameIDs() != null && !filter.getJobNameIDs().isEmpty()) {
             queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentExperience.class, "sexp",
                     queryBuilder.newCondition().condition("sexp.student.id", "=", "s.id"));
 
-            whereCondition.and().paramCondition("sexp.jobNameID", "IN", filter.getJobNameIDs());
-            or = true;
+            if (recommendedFilter) {
+                recommendedCondition.or();
+            } else {
+                recommendedCondition.and();
+            }
+
+            recommendedCondition.paramCondition("sexp.jobNameID", "IN", filter.getJobNameIDs());
             groupByID = true;
         }
 
-        if (filter.getMajorIDs() != null && !filter.getMajorIDs().isEmpty()) {
-            whereCondition.and().paramCondition("s.majorID", "IN", filter.getMajorIDs());
+        if (recommendedFilter) {
+            whereCondition.and().condition(recommendedCondition);
         }
+
         if (filter.getIds() != null && !filter.getIds().isEmpty()) {
             whereCondition.and().paramCondition("s.id", "IN", filter.getIds());
         }

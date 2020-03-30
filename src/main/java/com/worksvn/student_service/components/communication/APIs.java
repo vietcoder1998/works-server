@@ -23,6 +23,7 @@ import com.worksvn.common.modules.employer.enums.JobHomePriority;
 import com.worksvn.common.modules.employer.enums.JobSavedUserType;
 import com.worksvn.common.modules.employer.requests.*;
 import com.worksvn.common.modules.employer.responses.*;
+import com.worksvn.common.modules.school.requests.SchoolEventEmployerFilter;
 import com.worksvn.common.modules.school.requests.SchoolEventFilter;
 import com.worksvn.common.modules.school.responses.*;
 import org.springframework.http.HttpMethod;
@@ -349,6 +350,44 @@ public class APIs {
         api.addParam("schoolID", schoolID);
         api.addParam("ignoredNotStarted", ignoreNotStarted);
         api.addParam("ignoreFinished", ignoreFinished);
+        return api;
+    }
+
+    // SCHOOL EVENT EMPLOYER ================================================================================
+
+    public static ISApi<SchoolEventEmployerFilter, PageDto<SchoolEventEmployerDto>> SCHOOL_querySchoolEventEmployers(
+            String eventID, String schoolID,
+            SchoolEventEmployerFilter filter,
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize) {
+        ISApi<SchoolEventEmployerFilter, PageDto<SchoolEventEmployerDto>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.POST, "api/internal/schools/{sid}/events/{eid}/employers/query?" +
+                "sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                filter,
+                new TypeReference<PageDto<SchoolEventEmployerDto>>() {
+                },
+                true);
+        api.addParam("sid", schoolID);
+        api.addParam("eid", eventID);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+    public static ISApi<Object, SchoolEventEmployerDto> SCHOOL_getSchoolEventEmployer(String schoolID, String eventID,
+                                                                                      String employerID) {
+        ISApi<Object, SchoolEventEmployerDto> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.GET, "api/internal/schools/events/{evid}/employers/{emid}?" +
+                "schoolID={schoolID}",
+                null,
+                new TypeReference<SchoolEventEmployerDto>() {
+                },
+                true);
+        api.addParam("schoolID", schoolID);
+        api.addParam("evid", eventID);
+        api.addParam("emid", employerID);
         return api;
     }
 

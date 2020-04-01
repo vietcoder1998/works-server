@@ -31,6 +31,6 @@ public class StudentSchoolEventService {
 
     public SchoolEventDto getActiveStudentSchoolEvent(String studentID, String eventID) throws Exception {
         String schoolID = studentService.getStudentSchoolID(studentID);
-        return schoolEventService.getSchoolEvent(schoolID, eventID, false, false);
+        return schoolEventService.getSchoolEvent(schoolID, eventID, true);
     }
 }

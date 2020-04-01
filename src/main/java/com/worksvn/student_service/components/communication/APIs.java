@@ -338,18 +338,17 @@ public class APIs {
     }
 
     public static ISApi<Object, SchoolEventDto> SCHOOL_getSchoolEvent(String schoolID, String eventID,
-                                                                      Boolean ignoreNotStarted, Boolean ignoreFinished) {
+                                                                      Boolean activeCheck) {
         ISApi<Object, SchoolEventDto> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
                 HttpMethod.GET, "api/internal/schools/events/{id}?" +
-                "schoolID={schoolID}&ignoredNotStarted={ignoredNotStarted}&ignoreFinished={ignoreFinished}",
+                "schoolID={schoolID}&activeCheck={activeCheck}",
                 null,
                 new TypeReference<SchoolEventDto>() {
                 },
                 true);
         api.addParam("id", eventID);
         api.addParam("schoolID", schoolID);
-        api.addParam("ignoredNotStarted", ignoreNotStarted);
-        api.addParam("ignoreFinished", ignoreFinished);
+        api.addParam("activeCheck", activeCheck);;
         return api;
     }
 

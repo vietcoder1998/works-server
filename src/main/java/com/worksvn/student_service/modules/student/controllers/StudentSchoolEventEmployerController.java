@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @AuthorizationRequired
 @Api(description = "Nhà tuyển dụng tham gia sự kiện trường")
-@RequestMapping("/api/students/schools/events/{eid}")
+@RequestMapping("/api/students/schools/events/{evid}")
 public class StudentSchoolEventEmployerController extends BaseRESTController {
     @Autowired
     private StudentSchoolEventEmployerService studentSchoolEventEmployerService;
@@ -41,7 +41,7 @@ public class StudentSchoolEventEmployerController extends BaseRESTController {
     @ApiOperation(value = "Xem chi tiết")
     @Responses(value = {
     })
-    @GetMapping("/events/{evid}/employers/{emid}")
+    @GetMapping("/employers/{emid}")
     public SchoolEventEmployerDto getSchoolEventEmployer(@PathVariable("evid") String eventID,
                                                          @PathVariable("emid") String employerID) throws Exception {
         String studentID = getAuthorizedUser().getId();

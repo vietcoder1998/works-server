@@ -27,7 +27,7 @@ public class StudentSchoolEventEmployerController extends BaseRESTController {
     })
     @PostMapping("/employers/query")
     public PageDto<SchoolEventEmployerDto> getStudentSchoolEventPreviews(
-            @PathVariable("eid") String eventID,
+            @PathVariable("evid") String eventID,
             @RequestParam(name = "sortBy", defaultValue = "see.priority") List<String> sortBy,
             @RequestParam(name = "sortType", defaultValue = "desc") List<String> sortType,
             @RequestParam(name = "pageIndex", defaultValue = "0") int pageIndex,

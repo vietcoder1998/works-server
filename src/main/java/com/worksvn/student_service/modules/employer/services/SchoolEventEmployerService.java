@@ -15,11 +15,11 @@ public class SchoolEventEmployerService {
     @Autowired
     private ISRestCommunicator restCommunicator;
 
-    public PageDto<SchoolEventEmployerDto> querySchoolEventEmployers(String eventID, String schoolID,
+    public PageDto<SchoolEventEmployerDto> querySchoolEventEmployers(String schoolID, String eventID,
                                                                      SchoolEventEmployerFilter filter,
                                                                      List<String> sortBy, List<String> sortType,
                                                                      Integer pageIndex, Integer pageSize) throws Exception {
-        return restCommunicator.exchangeForSuccess(APIs.SCHOOL_querySchoolEventEmployers(eventID, schoolID, filter,
+        return restCommunicator.exchangeForSuccess(APIs.SCHOOL_querySchoolEventEmployers(schoolID, eventID, filter,
                 sortBy, sortType, pageIndex, pageSize));
     }
 

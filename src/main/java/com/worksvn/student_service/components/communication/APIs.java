@@ -355,7 +355,7 @@ public class APIs {
     // SCHOOL EVENT EMPLOYER ================================================================================
 
     public static ISApi<SchoolEventEmployerFilter, PageDto<SchoolEventEmployerDto>> SCHOOL_querySchoolEventEmployers(
-            String eventID, String schoolID,
+            String schoolID, String eventID,
             SchoolEventEmployerFilter filter,
             List<String> sortBy, List<String> sortType,
             Integer pageIndex, Integer pageSize) {

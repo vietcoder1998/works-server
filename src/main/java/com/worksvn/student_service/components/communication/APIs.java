@@ -348,7 +348,8 @@ public class APIs {
                 true);
         api.addParam("id", eventID);
         api.addParam("schoolID", schoolID);
-        api.addParam("activeCheck", activeCheck);;
+        api.addParam("activeCheck", activeCheck);
+        ;
         return api;
     }
 
@@ -391,6 +392,43 @@ public class APIs {
     }
 
     // ACTIVE EMPLOYER SCHOOL EVENT JOB ================================================================================
+
+    public static ISApi<HomeActiveSchoolEventJobFilter, PageDto<JobPreview>> EMPLOYER_getHomeActiveSchoolEventJobs(
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize,
+            HomeActiveSchoolEventJobFilter filter, JobHomePriority priority) {
+        ISApi<HomeActiveSchoolEventJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.POST, "api/internal/employers/schools/events/jobs/active/home" +
+                "?priority={priority}&sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                filter,
+                new TypeReference<PageDto<JobPreview>>() {
+                },
+                true);
+        api.addParam("priority", priority);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+    public static ISApi<SearchActiveSchoolEventJobFilter, PageDto<JobPreview>> EMPLOYER_searchActiveSchoolEventJobs(
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize,
+            SearchActiveSchoolEventJobFilter filter) {
+        ISApi<SearchActiveSchoolEventJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.POST, "api/internal/employers/schools/events/jobs/active/search" +
+                "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                filter,
+                new TypeReference<PageDto<JobPreview>>() {
+                },
+                true);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
 
     public static ISApi<ActiveJobFilter, PageDto<JobPreview>> SCHOOL_queryActiveEmployerSchoolEventJobs(
             String schoolID, String eventID,

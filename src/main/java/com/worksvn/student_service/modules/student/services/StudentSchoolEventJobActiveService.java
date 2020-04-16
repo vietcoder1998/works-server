@@ -21,10 +21,11 @@ public class StudentSchoolEventJobActiveService {
     @Autowired
     private StudentService studentService;
 
-    public PageDto<JobPreview> getHomeSchoolEventActiveJobs(String schoolID, String eventID,
+    public PageDto<JobPreview> getHomeSchoolEventActiveJobs(String studentID, String eventID,
                                                             List<String> sortBy, List<String> sortType,
                                                             Integer pageIndex, Integer pageSize,
                                                             ClientHomeActiveJobFilter filter, JobHomePriority priority) throws Exception {
+        String schoolID = studentService.getStudentSchoolID(studentID);
         HomeActiveSchoolEventJobFilter eventJobFilter = new HomeActiveSchoolEventJobFilter();
         if (filter != null) {
             BeanUtils.copyProperties(filter, eventJobFilter);
@@ -34,10 +35,11 @@ public class StudentSchoolEventJobActiveService {
         return schoolEventJobService.getHomeSchoolEventActiveJobs(sortBy, sortType, pageIndex, pageSize, eventJobFilter, priority);
     }
 
-    public PageDto<JobPreview> searchSchoolEventActiveJobs(String schoolID, String eventID,
+    public PageDto<JobPreview> searchSchoolEventActiveJobs(String studentID, String eventID,
                                                            List<String> sortBy, List<String> sortType,
                                                            Integer pageIndex, Integer pageSize,
                                                            ClientSearchActiveJobFilter filter) throws Exception {
+        String schoolID = studentService.getStudentSchoolID(studentID);
         SearchActiveSchoolEventJobFilter eventJobFilter = new SearchActiveSchoolEventJobFilter();
         if (filter != null) {
             BeanUtils.copyProperties(filter, eventJobFilter);

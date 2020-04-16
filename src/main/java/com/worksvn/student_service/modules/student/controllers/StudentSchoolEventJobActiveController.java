@@ -33,7 +33,6 @@ public class StudentSchoolEventJobActiveController extends BaseRESTController {
     })
     @PostMapping("/active/home")
     public PageDto<JobPreview> getHomeActiveJobs(
-            @PathVariable("sid") String schoolID,
             @PathVariable("eid") String eventID,
             @RequestParam(value = "sortBy", required = false) List<String> sortBy,
             @RequestParam(value = "sortType", required = false) List<String> sortType,
@@ -41,7 +40,8 @@ public class StudentSchoolEventJobActiveController extends BaseRESTController {
             @RequestParam(value = "pageSize", defaultValue = "0") Integer pageSize,
             @RequestParam(value = "priority", required = false) JobHomePriority priority,
             @RequestBody(required = false) ClientHomeActiveJobFilter filter) throws Exception {
-        return studentActiveSchoolEventJobService.getHomeSchoolEventActiveJobs(schoolID, eventID,
+        String studentID = getAuthorizedUser().getId();
+        return studentActiveSchoolEventJobService.getHomeSchoolEventActiveJobs(studentID, eventID,
                 sortBy, sortType, pageIndex, pageSize,
                 filter, priority);
     }
@@ -51,14 +51,15 @@ public class StudentSchoolEventJobActiveController extends BaseRESTController {
     })
     @PostMapping("/active/search")
     public PageDto<JobPreview> searchActiveJobs(
-            @PathVariable("sid") String schoolID,
             @PathVariable("eid") String eventID,
             @RequestParam(value = "sortBy", required = false) List<String> sortBy,
             @RequestParam(value = "sortType", required = false) List<String> sortType,
             @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
             @RequestParam(value = "pageSize", defaultValue = "0") Integer pageSize,
             @RequestBody(required = false) ClientSearchActiveJobFilter filter) throws Exception {
-        return studentActiveSchoolEventJobService.searchSchoolEventActiveJobs(schoolID, eventID, sortBy, sortType, pageIndex, pageSize, filter);
+        String studentID = getAuthorizedUser().getId();
+        return studentActiveSchoolEventJobService.searchSchoolEventActiveJobs(studentID, eventID,
+                sortBy, sortType, pageIndex, pageSize, filter);
     }
 
     @ApiOperation(value = "Xem danh sách")

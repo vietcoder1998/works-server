@@ -18,7 +18,7 @@ public class JobOfferService {
     private ISRestCommunicator restCommunicator;
 
     public PageDto<JobOfferRequestPreview> getJobOfferPreviews(List<String> sortBy, List<String> sortType,
-                                                               int pageIndex, int pageSize,
+                                                               Integer pageIndex, Integer pageSize,
                                                                JobOfferRequestFilter filter) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
                 .EMPLOYER_queryJobOfferRequestPreviews(sortBy, sortType, pageIndex, pageSize, filter));

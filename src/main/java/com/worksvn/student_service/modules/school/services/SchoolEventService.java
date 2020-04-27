@@ -23,9 +23,8 @@ public class SchoolEventService {
                 .SCHOOL_querySchoolEvents(filter, sortBy, sortType, pageIndex, pageSize));
     }
 
-    public SchoolEventDto getSchoolEvent(String schoolID, String eventID,
-                                         Boolean ignoreNotStarted, Boolean ignoreFinished) throws Exception {
+    public SchoolEventDto getSchoolEvent(String schoolID, String eventID, Boolean activeCheck) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
-                .SCHOOL_getSchoolEvent(schoolID, eventID, ignoreNotStarted, ignoreFinished));
+                .SCHOOL_getSchoolEvent(schoolID, eventID, activeCheck));
     }
 }

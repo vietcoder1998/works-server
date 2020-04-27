@@ -6,6 +6,7 @@ import com.worksvn.common.constants.StringConstants;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.auth.requests.UserFilter;
 import com.worksvn.common.modules.auth.responses.UserDto;
+import com.worksvn.common.modules.candidate.responses.CandidatePreview;
 import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
 import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
@@ -60,6 +61,8 @@ public class StudentService {
     @Autowired
     private StudentUnlockService studentUnlockService;
     @Autowired
+    private StudentSavedService studentSavedService;
+    @Autowired
     private LocationService locationService;
     @Autowired
     private FileStorageService fileStorageService;
@@ -94,14 +97,20 @@ public class StudentService {
 
         JPAQueryBuilder<StudentPreview>.Condition whereCondition = queryBuilder.newCondition();
 
-        String unlockedID = "0";
-        if (filter.getEmployerID() != null) {
+        String unlockedID = null;
+        String savedID = null;
+        if (filter.getEmployerID() != null && !filter.getEmployerID().isEmpty()) {
             queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentUnlocked.class, "su",
                     queryBuilder.newCondition()
                             .condition("su.student.id", "=", "s.id")
                             .and()
-                            .paramCondition("su.employerID", "=", filter.getEmployerID()));
+                            .paramCondition("su.employerID", "=", filter.getEmployerID()))
+                    .joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentSaved.class, "ss",
+                            queryBuilder.newCondition().condition("ss.student.id", "=", "s.id")
+                                    .and()
+                                    .paramCondition("ss.employerID", "=", filter.getEmployerID()));;
             unlockedID = "su.id";
+            savedID = "ss.id";
 
             if (filter.getUnlocked() != null) {
                 whereCondition.and().nullCondition("su.id", !filter.getUnlocked());
@@ -116,7 +125,8 @@ public class StudentService {
                 "s.profileVerified", "s.lookingForJob", "s.completePercent",
                 "sar.attitudeRating", "sar.skillRating",
                 "sar.jobAccomplishmentRating", "sar.ratingCount",
-                unlockedID, "s.schoolID", "s.majorID",
+                unlockedID, savedID,
+                "s.schoolID", "s.majorID",
                 "s.schoolYearStart", "s.schoolYearEnd",
                 "s.studentCode", "s.createdDate")
                 .from(Student.class, "s")
@@ -168,23 +178,40 @@ public class StudentService {
         }
         if (filter.getSkillIDs() != null && !filter.getSkillIDs().isEmpty()) {
             queryBuilder.join(JPAQueryBuilder.JoinType.LEFT_JOIN, "s.skills", "sk");
-            whereCondition.and().paramCondition("sk.SkillID", "IN", filter.getSkillIDs());
+            whereCondition.and().paramCondition("sk.skillID", "IN", filter.getSkillIDs());
             groupByID = true;
         }
 
-        boolean or = false;
-        if (filter.getJobNameIDs() != null && !filter.getJobNameIDs().isEmpty()) {
-            queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentExperience.class, "sexp",
-                    queryBuilder.newCondition().condition("sexp.candidate.id", "=", "s.id"));
-
-            whereCondition.and().paramCondition("cexp.jobNameID", "IN", filter.getJobNameIDs());
-            or = true;
-            groupByID = true;
+        boolean recommendedFilter = filter.getRecommendedFilter() != null && filter.getRecommendedFilter();
+        JPAQueryBuilder<StudentPreview>.Condition recommendedCondition;
+        if (recommendedFilter) {
+            recommendedCondition = queryBuilder.newCondition();
+        } else {
+            recommendedCondition = whereCondition;
         }
 
         if (filter.getMajorIDs() != null && !filter.getMajorIDs().isEmpty()) {
-            whereCondition.and().paramCondition("s.majorID", "IN", filter.getMajorIDs());
+            recommendedCondition.and().paramCondition("s.majorID", "IN", filter.getMajorIDs());
         }
+
+        if (filter.getJobNameIDs() != null && !filter.getJobNameIDs().isEmpty()) {
+            queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentExperience.class, "sexp",
+                    queryBuilder.newCondition().condition("sexp.student.id", "=", "s.id"));
+
+            if (recommendedFilter) {
+                recommendedCondition.or();
+            } else {
+                recommendedCondition.and();
+            }
+
+            recommendedCondition.paramCondition("sexp.jobNameID", "IN", filter.getJobNameIDs());
+            groupByID = true;
+        }
+
+        if (recommendedFilter) {
+            whereCondition.and().condition(recommendedCondition);
+        }
+
         if (filter.getIds() != null && !filter.getIds().isEmpty()) {
             whereCondition.and().paramCondition("s.id", "IN", filter.getIds());
         }
@@ -232,8 +259,10 @@ public class StudentService {
                 .getItems();
 
         Boolean unlocked = null;
+        Boolean saved = null;
         if (employerID != null) {
             unlocked = studentUnlockService.checkStudentUnlockedByEmployer(id, employerID);
+            saved = studentSavedService.checkStudentSaved(id, employerID);
         }
 
         StudentProfileDto profileDto = new StudentProfileDto(s.getId(), s.getFirstName(), s.getLastName(),
@@ -241,7 +270,8 @@ public class StudentService {
                 s.getEmail(), s.getPhone(), s.getGender(),
                 s.getRegionID(), s.getAddress(), s.getLat(), s.getLon(),
                 s.getProfileVerified(), s.getLookingForJob(), s.getCompletePercent(),
-                car, unlocked, s.getSchoolID(), s.getMajorID(), s.getSchoolYearStart(), s.getSchoolYearEnd(),
+                car, unlocked, saved,
+                s.getSchoolID(), s.getMajorID(), s.getSchoolYearStart(), s.getSchoolYearEnd(),
                 s.getStudentCode(), s.getCreatedDate(),
                 s.getCoverUrl(), s.getDescription(), s.getIdentityCard(),
                 s.getIdentityCardFrontImageUrl(), s.getIdentityCardBackImageUrl(),

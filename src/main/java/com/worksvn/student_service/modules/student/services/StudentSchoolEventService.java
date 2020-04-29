@@ -2,6 +2,7 @@ package com.worksvn.student_service.modules.student.services;
 
 import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.modules.school.requests.SchoolEventFilter;
+import com.worksvn.common.modules.school.requests.SchoolEventManagementFilter;
 import com.worksvn.common.modules.school.responses.SchoolEventDto;
 import com.worksvn.common.modules.school.responses.SchoolEventPreviewDto;
 import com.worksvn.student_service.modules.school.services.SchoolEventService;
@@ -22,7 +23,7 @@ public class StudentSchoolEventService {
                                                                        Integer pageIndex, Integer pageSize)
             throws Exception {
         String schoolID = studentService.getStudentSchoolID(studentID);
-        SchoolEventFilter filter = new SchoolEventFilter();
+        SchoolEventManagementFilter filter = new SchoolEventManagementFilter();
         filter.setSchoolID(schoolID);
         filter.setStarted(true);
         filter.setFinished(false);

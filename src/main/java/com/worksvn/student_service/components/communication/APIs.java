@@ -25,6 +25,7 @@ import com.worksvn.common.modules.employer.requests.*;
 import com.worksvn.common.modules.employer.responses.*;
 import com.worksvn.common.modules.school.requests.SchoolEventEmployerFilter;
 import com.worksvn.common.modules.school.requests.SchoolEventFilter;
+import com.worksvn.common.modules.school.requests.SchoolEventManagementFilter;
 import com.worksvn.common.modules.school.responses.*;
 import org.springframework.http.HttpMethod;
 
@@ -319,11 +320,11 @@ public class APIs {
 
     // SCHOOL EVENT ====================================================================================================
 
-    public static ISApi<SchoolEventFilter, PageDto<SchoolEventPreviewDto>> SCHOOL_querySchoolEvents(
-            SchoolEventFilter filter,
+    public static ISApi<SchoolEventManagementFilter, PageDto<SchoolEventPreviewDto>> SCHOOL_querySchoolEvents(
+            SchoolEventManagementFilter filter,
             List<String> sortBy, List<String> sortType,
             Integer pageIndex, Integer pageSize) {
-        ISApi<SchoolEventFilter, PageDto<SchoolEventPreviewDto>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+        ISApi<SchoolEventManagementFilter, PageDto<SchoolEventPreviewDto>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
                 HttpMethod.POST, "api/internal/schools/events/query?" +
                 "sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
                 filter,

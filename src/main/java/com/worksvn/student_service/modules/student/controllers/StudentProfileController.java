@@ -60,7 +60,7 @@ public class StudentProfileController extends BaseRESTController {
     @GetMapping("/profile")
     public StudentProfileDto getProfile() throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentService.getStudentProfile(studentID, null, null);
+        return studentService.getStudentProfile(studentID, null, null, null, null);
     }
 
     @ApiOperation(value = "Cập nhật thông tin cá nhân",

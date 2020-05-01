@@ -216,6 +216,11 @@ public class StudentService {
         if (filter.getIds() != null && !filter.getIds().isEmpty()) {
             whereCondition.and().paramCondition("s.id", "IN", filter.getIds());
         }
+
+        if (filter.getExcludedIDs() != null && !filter.getExcludedIDs().isEmpty()) {
+            whereCondition.and().paramCondition("s.id", "NOT IN", filter.getExcludedIDs());
+        }
+
         if (filter.getCreatedDate() != null && filter.getCreatedDate() > 0) {
             Date startDate = DateTimeUtils.extractDateOnly(filter.getCreatedDate());
             Date endDate = DateTimeUtils.addDayToDate(startDate, 1);

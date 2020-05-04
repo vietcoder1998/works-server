@@ -7,6 +7,7 @@ import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.auth.requests.UserFilter;
 import com.worksvn.common.modules.auth.responses.UserDto;
 import com.worksvn.common.modules.candidate.responses.CandidatePreview;
+import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
 import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
@@ -215,6 +216,11 @@ public class StudentService {
         if (filter.getIds() != null && !filter.getIds().isEmpty()) {
             whereCondition.and().paramCondition("s.id", "IN", filter.getIds());
         }
+
+        if (filter.getExcludedIDs() != null && !filter.getExcludedIDs().isEmpty()) {
+            whereCondition.and().paramCondition("s.id", "NOT IN", filter.getExcludedIDs());
+        }
+
         if (filter.getCreatedDate() != null && filter.getCreatedDate() > 0) {
             Date startDate = DateTimeUtils.extractDateOnly(filter.getCreatedDate());
             Date endDate = DateTimeUtils.addDayToDate(startDate, 1);
@@ -236,7 +242,8 @@ public class StudentService {
         return result;
     }
 
-    public StudentProfileDto getStudentProfile(String id, String schoolID, String employerID) throws Exception {
+    public StudentProfileDto getStudentProfile(String id, String schoolID, String employerID,
+                                               RequestState applyState, RequestState offerState) throws Exception {
         Student s;
         if (schoolID == null) {
             s = getStudent(id);
@@ -275,6 +282,7 @@ public class StudentService {
                 s.getStudentCode(), s.getCreatedDate(),
                 s.getCoverUrl(), s.getDescription(), s.getIdentityCard(),
                 s.getIdentityCardFrontImageUrl(), s.getIdentityCardBackImageUrl(),
+                applyState, offerState,
                 sks, lks, exps);
 
         distributedDataService.complete(profileDto, null);

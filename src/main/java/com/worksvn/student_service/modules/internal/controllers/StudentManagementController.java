@@ -6,6 +6,7 @@ import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
+import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.student.requests.StudentFilterDto;
 import com.worksvn.common.modules.student.responses.StudentPreview;
 import com.worksvn.common.modules.student.responses.StudentProfileDto;
@@ -51,8 +52,10 @@ public class StudentManagementController extends BaseRESTController {
     @GetMapping("/{id}/profile")
     public StudentProfileDto getProfile(@PathVariable("id") String studentID,
                                         @RequestParam(value = "schoolID", required = false) String schoolID,
-                                        @RequestParam(value = "employerID", required = false) String employerID) throws Exception {
-        return studentService.getStudentProfile(studentID, schoolID, employerID);
+                                        @RequestParam(value = "employerID", required = false) String employerID,
+                                        @RequestParam(value = "applyState", required = false) RequestState applyState,
+                                        @RequestParam(value = "offerState", required = false) RequestState offerState) throws Exception {
+        return studentService.getStudentProfile(studentID, schoolID, employerID, applyState, offerState);
     }
 
     @ApiOperation(value = "Kiểm tra tài khoản tồn tại")

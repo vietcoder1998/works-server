@@ -1,21 +1,12 @@
 package com.worksvn.student_service.modules.student.repositories;
 
-import com.worksvn.common.modules.student.responses.StudentNotificationDto;
 import com.worksvn.student_service.modules.student.models.entities.StudentNotification;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface StudentNotificationRepository extends JpaRepository<StudentNotification, String> {
-
-    @Query("select new com.worksvn.common.modules.student.responses.StudentNotificationDto" +
-            "(sn.id, sn.type, sn.title, sn.body, sn.data, sn.seen, sn.createdDate) " +
-            "from StudentNotification sn " +
-            "where sn.studentID = ?1")
-    Page<StudentNotificationDto> getStudentNotificationDtos(String studentID, Pageable pageable);
 
     @Modifying
     @Transactional

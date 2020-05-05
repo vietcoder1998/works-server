@@ -16,7 +16,7 @@ public class UserNotificationServiceImpl implements UserNotificationService {
     public void saveUserNotification(UserNotification notification) {
         switch (notification.getGroup()) {
             case STUDENT: {
-                studentNotificationService.publishNewStudentNotification(new StudentNotification(notification));
+                studentNotificationService.createNewStudentNotification(new StudentNotification(notification));
             }
             break;
 

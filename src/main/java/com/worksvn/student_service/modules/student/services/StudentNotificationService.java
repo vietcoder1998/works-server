@@ -78,7 +78,7 @@ public class StudentNotificationService {
         notificationService.publishNotification(notification);
     }
 
-    public void publishNewStudentNotification(StudentNotification notification) {
+    public void createNewStudentNotification(StudentNotification notification) {
         studentNotificationRepository.save(notification);
     }
 }

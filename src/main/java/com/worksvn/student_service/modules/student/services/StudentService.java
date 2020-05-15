@@ -73,7 +73,7 @@ public class StudentService {
     @Value("${application.firebase.file-storage.student-dir.name:students/}")
     private String studentStorageDirectory;
 
-    public PageDto<StudentPreview> getStudentPreviews(List<String> sortType, List<String> sortBy,
+    public PageDto<StudentPreview> getStudentPreviews(List<String> sortBy, List<String> sortType,
                                                       int pageIndex, int pageSize,
                                                       StudentFilterDto filter) throws Exception {
         if (filter == null) {

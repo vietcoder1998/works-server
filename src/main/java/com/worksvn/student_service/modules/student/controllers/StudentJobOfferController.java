@@ -5,6 +5,7 @@ import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.employer.responses.JobOfferRequestPreview;
+import com.worksvn.common.modules.employer.responses.SimpleJobOfferRequest;
 import com.worksvn.student_service.base.controllers.BaseRESTController;
 import com.worksvn.student_service.modules.student.services.StudentJobOfferService;
 import io.swagger.annotations.Api;
@@ -34,6 +35,15 @@ public class StudentJobOfferController extends BaseRESTController {
             @RequestParam(value = "state", required = false) RequestState state) throws Exception {
         String studentID = getAuthorizedUser().getId();
         return studentJobOfferService.getStudentJobOfferPreviews(studentID, state, sortBy, sortType, pageIndex, pageSize);
+    }
+
+    @ApiOperation(value = "Xem nội dung lời mời ứng tuyển (simple)")
+    @Responses({
+    })
+    @GetMapping("/{id}/offer")
+    public SimpleJobOfferRequest getSimpleJobOffer(@PathVariable("id") String jobID) throws Exception {
+        String studentID = getAuthorizedUser().getId();
+        return studentJobOfferService.getSimpleJobOfferRequest(studentID, jobID);
     }
 
     @ApiOperation(value = "Từ chối lời mời ứng tuyển")

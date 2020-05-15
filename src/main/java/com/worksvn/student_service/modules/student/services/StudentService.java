@@ -538,4 +538,15 @@ public class StudentService {
             studentRepository.deleteList(userIDs);
         }
     }
+
+    public List<String> getStudentIDs(String email) {
+        return studentRepository.getStudentID(email);
+    }
+
+    public void updateStudentAddress(String studentID, RegionAddress regionAddress) {
+        RegionDto region = regionAddress.getRegion();
+        studentRepository.updateStudentRegionAddress(studentID,
+                region == null? null : region.getId(), regionAddress.getAddress(),
+                regionAddress.getLat(), regionAddress.getLon());
+    }
 }

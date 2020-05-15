@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, String> {
@@ -123,4 +124,14 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     @Query("update Student s set s.profileVerified = ?2 " +
             "where s.id = ?1")
     void updateStudentProfileVerified(String studentID, boolean verified);
+
+    @Query("select s.id from Student s where s.email = ?1")
+    List<String> getStudentID(String email);
+
+    @Modifying
+    @Transactional
+    @Query("update Student s set s.regionID = ?2, s.address = ?3, s.lat = ?4, s.lon = ?5 " +
+            "where s.id = ?1")
+    void updateStudentRegionAddress(String studentID, Integer region,
+                                    String address, double lat, double lon);
 }

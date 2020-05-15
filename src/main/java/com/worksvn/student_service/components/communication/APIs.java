@@ -17,10 +17,7 @@ import com.worksvn.common.modules.auth.requests.UserFilter;
 import com.worksvn.common.modules.auth.responses.UserDto;
 import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.common.responses.*;
-import com.worksvn.common.modules.employer.enums.EmployerRatingUserType;
-import com.worksvn.common.modules.employer.enums.JobApplyUserType;
-import com.worksvn.common.modules.employer.enums.JobHomePriority;
-import com.worksvn.common.modules.employer.enums.JobSavedUserType;
+import com.worksvn.common.modules.employer.enums.*;
 import com.worksvn.common.modules.employer.requests.*;
 import com.worksvn.common.modules.employer.responses.*;
 import com.worksvn.common.modules.school.requests.SchoolEventEmployerFilter;
@@ -70,6 +67,17 @@ public class APIs {
                 true);
         api.addParam("lat", lat + "");
         api.addParam("lon", lon + "");
+        return api;
+    }
+
+    public static ISApi<Object, RegionAddress> PUBLIC_findRegionAddress(String address) {
+        ISApi<Object, RegionAddress> api = new ISApi<>(ISHost.PUBLIC_SERVICE,
+                HttpMethod.GET, "api/location/regionAddress/query?address={address}",
+                null,
+                new TypeReference<RegionAddress>() {
+                },
+                false);
+        api.addParam("address", address);
         return api;
     }
 
@@ -655,6 +663,20 @@ public class APIs {
         return api;
     }
 
+    public static ISApi<Object, SimpleJobOfferRequest> EMPLOYER_getSimpleJobOfferRequest(
+            String jobID, String userID, JobOfferUserType userType) {
+        ISApi<Object, SimpleJobOfferRequest> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.GET, "api/internal/employers/jobs/{id}/offer" +
+                "?userID={userID}&userType={userType}",
+                null,
+                new TypeReference<SimpleJobOfferRequest>() {
+                },
+                true);
+        api.addParam("id", jobID);
+        api.addParam("userID", userID);
+        api.addParam("userType", userType);
+        return api;
+    }
 
     public static ISApi<NewJobOfferRequestState, Object> EMPLOYER_updateJobOfferState(String jobID, RequestState state,
                                                                                       NewJobOfferRequestState newState) {

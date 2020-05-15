@@ -40,4 +40,12 @@ public class ImportExcelStudentRegistrationController extends BaseRESTController
             @ModelAttribute ImportExcelConfig config) throws Exception {
         return importExcelStudentRegistrationService.importExcel(schoolID, file, insertNotFoundMajor, config);
     }
+
+    @PostMapping("/schools/{id}/students/address")
+    public List<ImportErrorLog> importExcelAddress(
+            @PathVariable("id") String schoolID,
+            @RequestParam("file") MultipartFile file,
+            @ModelAttribute ImportExcelConfig config) throws Exception {
+        return importExcelStudentRegistrationService.importExcelAddress(schoolID, file, config);
+    }
 }

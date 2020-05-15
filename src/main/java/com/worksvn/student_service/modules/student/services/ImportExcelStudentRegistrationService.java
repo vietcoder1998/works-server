@@ -4,6 +4,7 @@ import com.worksvn.common.constants.RegexPattern;
 import com.worksvn.common.exceptions.ISResponseException;
 import com.worksvn.common.modules.common.enums.Gender;
 import com.worksvn.common.modules.common.responses.MajorDto;
+import com.worksvn.common.modules.common.responses.RegionAddress;
 import com.worksvn.common.modules.student.requests.NewStudentRegistrationDto;
 import com.worksvn.common.services.excel.import_excel.ImportExcelService;
 import com.worksvn.common.services.excel.import_excel.exception.InvalidCellDataException;
@@ -12,6 +13,7 @@ import com.worksvn.common.services.excel.import_excel.models.*;
 import com.worksvn.student_service.modules.common.services.MajorService;
 import com.worksvn.student_service.modules.school.services.SchoolEducationService;
 import com.worksvn.student_service.modules.school.services.SchoolService;
+import com.worksvn.student_service.modules.services.geocoding.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,13 +27,75 @@ public class ImportExcelStudentRegistrationService {
     @Autowired
     private StudentRegistrationService studentRegistrationService;
     @Autowired
+    private StudentService studentService;
+    @Autowired
     private SchoolService schoolService;
     @Autowired
     private SchoolEducationService schoolEducationService;
     @Autowired
     private MajorService majorService;
     @Autowired
+    private LocationService locationService;
+    @Autowired
     private ImportExcelService importExcelService;
+
+    public List<ImportErrorLog> importExcelAddress(String schoolID, MultipartFile excelFile,
+                                                   ImportExcelConfig config) throws Exception {
+        if (config == null) {
+            config = new ImportExcelConfig();
+        }
+        if (config.getStartColumn() == null) {
+            config.setStartColumn(1);
+        }
+        if (config.getStartRow() == null) {
+            config.setStartRow(3);
+        }
+        CellProcessorAdapters adapters = new CellProcessorAdapters();
+
+        CellProcessorAdapter adapter = new CellProcessorAdapter() {
+            String address;
+            String email;
+
+            @Override
+            public boolean nextCell(int row, int column, CellWrapper cell) throws Exception {
+                switch (column) {
+                    case 1: {
+                        address = cell.getValue(String.class);
+                        return true;
+                    }
+
+                    case 2: {
+                        email = cell.getValue(String.class);
+                        return true;
+                    }
+
+                    default: {
+                        break;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void onEndOfRow(int row) throws Exception {
+                if (email != null && !email.isEmpty()) {
+                    if (address != null && !address.isEmpty()) {
+                        RegionAddress regionAddress = locationService.findRegionAddress(address);
+                        List<String> studentIDs = studentService.getStudentIDs(email);
+                        if (studentIDs == null || studentIDs.isEmpty()) {
+                            throw new Exception("Student not found: " + email);
+                        } else {
+                            studentService.updateStudentAddress(schoolID, regionAddress);
+                        }
+                    }
+                }
+            }
+        };
+
+        adapters.newProcessorAdapter(adapter);
+
+        return importExcelService.importExcel(excelFile, config, adapters);
+    }
 
     public List<ImportErrorLog> importExcel(String schoolID, MultipartFile excelFile,
                                             Boolean insertNotFoundMajor,

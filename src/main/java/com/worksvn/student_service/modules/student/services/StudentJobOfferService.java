@@ -7,6 +7,7 @@ import com.worksvn.common.modules.employer.enums.JobOfferUserType;
 import com.worksvn.common.modules.employer.requests.JobOfferRequestFilter;
 import com.worksvn.common.modules.employer.requests.NewJobOfferRequestState;
 import com.worksvn.common.modules.employer.responses.JobOfferRequestPreview;
+import com.worksvn.common.modules.employer.responses.SimpleJobOfferRequest;
 import com.worksvn.common.modules.student.responses.StudentJobOfferInfo;
 import com.worksvn.student_service.modules.employer.services.JobOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,10 @@ public class StudentJobOfferService {
         filter.setCenterLon(location.getLon());
         filter.setState(state);
         return jobOfferService.getJobOfferPreviews(sortBy, sortType, pageIndex, pageSize, filter);
+    }
+
+    public SimpleJobOfferRequest getSimpleJobOfferRequest(String studentID, String jobID) throws Exception {
+        return jobOfferService.getSimpleJobOfferRequest(jobID, studentID, JobOfferUserType.STUDENT);
     }
 
     public void updateStudentJobOfferState(String studentID, String jobID,

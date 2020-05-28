@@ -10,6 +10,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import springfox.documentation.service.*;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -20,6 +21,7 @@ import java.util.*;
 
 @Configuration
 @EnableSwagger2
+@Profile({"default", "dev", "prod-local"})
 public class SwaggerConfig {
     @Value("${application.swagger.info.path}")
     private String swaggerInfoPath;

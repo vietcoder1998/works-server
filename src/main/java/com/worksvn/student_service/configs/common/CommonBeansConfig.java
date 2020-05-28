@@ -53,34 +53,6 @@ public class CommonBeansConfig {
         return new JSONProcessor(resourceLoader);
     }
 
-    // SWAGGER =========================================================================================================
-
-    @Value("${application.modules-package.name:modules}")
-    private String rootModulePackageName;
-
-    @Bean
-    public SwaggerApiGroupBuilder swaggerApiGroupBuilder() {
-        return new SwaggerAuthApiGroupBuilder(ApplicationConstants.BASE_PACKAGE_NAME, rootModulePackageName);
-    }
-
-    @Bean
-    @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
-    public SwaggerResponseMessageReader swaggerResponseMessageReader(TypeNameExtractor typeNameExtractor,
-                                                                     TypeResolver typeResolver) {
-        return new CustomSwaggerResponseMessageReader(typeNameExtractor, typeResolver);
-    }
-
-    @Bean
-    public OperationAuthReader operationAuthReader() {
-        return new CustomSwaggerOperationAuthReader();
-    }
-
-    @Bean
-    @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
-    public SwaggerOperationModelsProvider swaggerOperationModelsProvider(TypeResolver typeResolver) {
-        return new CustomSwaggerResponseModelProvider(typeResolver);
-    }
-
     // REST TEMPLATE ===================================================================================================
 
     @Value("${application.internal-service.communication.logging.enable:false}")

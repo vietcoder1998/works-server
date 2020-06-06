@@ -8,14 +8,12 @@ import com.worksvn.common.modules.employer.requests.*;
 import com.worksvn.common.modules.employer.responses.JobDto;
 import com.worksvn.common.modules.employer.responses.JobPreview;
 import com.worksvn.common.modules.student.responses.StudentQueryActiveJobInfo;
-import com.worksvn.student_service.modules.common.services.MajorJobNameService;
 import com.worksvn.student_service.modules.employer.services.JobService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class StudentJobService {
@@ -23,8 +21,6 @@ public class StudentJobService {
     private JobService jobService;
     @Autowired
     private StudentService studentService;
-    @Autowired
-    private MajorJobNameService majorJobNameService;
 
     public PageDto<JobPreview> getStudentHomeActiveJobs(String studentID,
                                                         ClientHomeActiveJobFilter filter, JobHomePriority priority,
@@ -72,10 +68,7 @@ public class StudentJobService {
         if (info != null) {
             targetFilter.setSchoolID(info.getSchoolID());
             if (applyMajor) {
-                if (info.getMajorID() != null) {
-                    Set<Integer> jobNameIDs = majorJobNameService.getJobNameIDsByMajorIDs(Sets.newHashSet(info.getMajorID()));
-                    targetFilter.setJobNameIDs(jobNameIDs);
-                }
+                targetFilter.setMajorIDs(Sets.newHashSet(info.getMajorID()));
             }
         }
         targetFilter.setSchoolIgnored(false);

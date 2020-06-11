@@ -20,11 +20,11 @@ public class SchoolEventService {
                                                           List<String> sortBy, List<String> sortType,
                                                           Integer pageIndex, Integer pageSize) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
-                .SCHOOL_querySchoolEvents(filter, sortBy, sortType, pageIndex, pageSize));
+                .SCHOOL_querySchoolEvents(filter, sortBy, sortType, pageIndex, pageSize, false));
     }
 
     public SchoolEventDto getSchoolEvent(String schoolID, String eventID, Boolean activeCheck) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
-                .SCHOOL_getSchoolEvent(schoolID, eventID, activeCheck));
+                .SCHOOL_getSchoolEvent(schoolID, eventID, activeCheck, false));
     }
 }

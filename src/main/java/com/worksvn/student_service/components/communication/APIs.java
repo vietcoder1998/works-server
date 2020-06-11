@@ -331,10 +331,12 @@ public class APIs {
     public static ISApi<SchoolEventManagementFilter, PageDto<SchoolEventPreviewDto>> SCHOOL_querySchoolEvents(
             SchoolEventManagementFilter filter,
             List<String> sortBy, List<String> sortType,
-            Integer pageIndex, Integer pageSize) {
+            Integer pageIndex, Integer pageSize,
+            Boolean showInviteCode) {
         ISApi<SchoolEventManagementFilter, PageDto<SchoolEventPreviewDto>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
-                HttpMethod.POST, "api/internal/schools/events/query?" +
-                "sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                HttpMethod.POST, "api/internal/schools/events/query" +
+                "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}" +
+                "&showInviteCode={showInviteCode}",
                 filter,
                 new TypeReference<PageDto<SchoolEventPreviewDto>>() {
                 },
@@ -343,14 +345,15 @@ public class APIs {
         api.addParam("sortType", sortType);
         api.addParam("pageIndex", pageIndex);
         api.addParam("pageSize", pageSize);
+        api.addParam("showInviteCode", showInviteCode);
         return api;
     }
 
     public static ISApi<Object, SchoolEventDto> SCHOOL_getSchoolEvent(String schoolID, String eventID,
-                                                                      Boolean activeCheck) {
+                                                                      Boolean activeCheck, Boolean showInviteCode) {
         ISApi<Object, SchoolEventDto> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
                 HttpMethod.GET, "api/internal/schools/events/{id}?" +
-                "schoolID={schoolID}&activeCheck={activeCheck}",
+                "schoolID={schoolID}&activeCheck={activeCheck}&showInviteCode={showInviteCode}",
                 null,
                 new TypeReference<SchoolEventDto>() {
                 },
@@ -358,7 +361,7 @@ public class APIs {
         api.addParam("id", eventID);
         api.addParam("schoolID", schoolID);
         api.addParam("activeCheck", activeCheck);
-        ;
+        api.addParam("showInviteCode", showInviteCode);
         return api;
     }
 

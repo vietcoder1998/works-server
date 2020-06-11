@@ -60,7 +60,7 @@ public class StudentJobService {
 
     private void createActiveJobFilter(String studentID, ActiveJobFilter sourceFilter,
                                        ActiveJobFilter targetFilter,
-                                       boolean applyMajor) throws Exception {
+                                       boolean applyMajor) {
         if (sourceFilter != null) {
             BeanUtils.copyProperties(sourceFilter, targetFilter);
         }

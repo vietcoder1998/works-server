@@ -485,6 +485,28 @@ public class APIs {
         return api;
     }
 
+    public static ISApi<Object, JobDto> SCHOOL_getEmployerSchoolEventJob(
+            String schoolID, String eventID, String jobID,
+            String userID, String userType,
+            Double centerLat, Double centerLon) {
+        ISApi<Object, JobDto> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+                HttpMethod.GET, "api/internal/schools/{sid}/events/{eid}/jobs/{jid}" +
+                "?userID={userID}&userType={userType}" +
+                "&centerLat={centerLat}&centerLon={centerLon}",
+                null,
+                new TypeReference<JobDto>() {
+                },
+                true);
+        api.addParam("sid", schoolID);
+        api.addParam("eid", eventID);
+        api.addParam("jid", jobID);
+        api.addParam("userID", userID);
+        api.addParam("userType", userType);
+        api.addParam("centerLat", centerLat);
+        api.addParam("centerLon", centerLon);
+        return api;
+    }
+
     // SCHOOL EVENT JOB BRANCH =========================================================================================
 
     public static ISApi<Object, PageDto<BranchDto>> EMPLOYER_getSchoolEventJobBranches(
@@ -529,7 +551,7 @@ public class APIs {
                                                                                              Integer pageIndex, Integer pageSize,
                                                                                              HomeActiveJobFilter filter, JobHomePriority priority) {
         ISApi<HomeActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.POST, "api/internal/employers/jobs/active/home" +
+                HttpMethod.POST, "api/internal/jobs/active/home" +
                 "?priority={priority}" +
                 "&sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
                 filter,
@@ -548,7 +570,7 @@ public class APIs {
                                                                                               Integer pageIndex, Integer pageSize,
                                                                                               SearchActiveJobFilter filter) {
         ISApi<SearchActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.POST, "api/internal/employers/jobs/active/search" +
+                HttpMethod.POST, "api/internal/jobs/active/search" +
                 "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
                 filter,
                 new TypeReference<PageDto<JobPreview>>() {
@@ -566,7 +588,7 @@ public class APIs {
                                                                                        Integer pageIndex, Integer pageSize,
                                                                                        ActiveJobFilter filter) {
         ISApi<ActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.POST, "api/internal/employers/jobs/active/query" +
+                HttpMethod.POST, "api/internal/jobs/active/query" +
                 "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
                 filter,
                 new TypeReference<PageDto<JobPreview>>() {
@@ -583,7 +605,7 @@ public class APIs {
                                                                     String schoolID, Boolean passSchoolIgnore,
                                                                     Double centerLat, Double centerLon) {
         ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.GET, "api/internal/employers/jobs/{id}/active" +
+                HttpMethod.GET, "api/internal/jobs/{id}/active" +
                 "?userID={userID}&userType={userType}&schoolID={schoolID}&passSchoolIgnore={passSchoolIgnore}" +
                 "&centerLat={centerLat}&centerLon={centerLon}",
                 null,
@@ -604,7 +626,7 @@ public class APIs {
                                                               String schoolID, Boolean passSchoolIgnore,
                                                               Double centerLat, Double centerLon) {
         ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.GET, "api/internal/employers/jobs/{id}" +
+                HttpMethod.GET, "api/internal/jobs/{id}" +
                 "?userID={userID}&userType={userType}&schoolID={schoolID}&passSchoolIgnore={passSchoolIgnore}" +
                 "&centerLat={centerLat}&centerLon={centerLon}",
                 null,

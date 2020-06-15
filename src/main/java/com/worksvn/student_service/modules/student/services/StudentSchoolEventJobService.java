@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class StudentSchoolEventJobActiveService {
+public class StudentSchoolEventJobService {
     @Autowired
     private SchoolEventJobService schoolEventJobService;
     @Autowired
@@ -72,6 +72,17 @@ public class StudentSchoolEventJobActiveService {
         String schoolID = studentService.getStudentSchoolID(studentID);
         return schoolEventJobService
                 .getActiveEmployerSchoolEventJobDetail(schoolID, eventID, jobID,
+                        studentID, StringConstants.STUDENT, location.getLat(), location.getLon());
+    }
+
+    public JobDto getEmployerSchoolEventJobDetail(String studentID, String eventID, String jobID) throws Exception {
+        LatLon location = studentService.getLatLon(studentID);
+        if (location == null) {
+            location = new LatLon();
+        }
+        String schoolID = studentService.getStudentSchoolID(studentID);
+        return schoolEventJobService
+                .getEmployerSchoolEventJobDetail(schoolID, eventID, jobID,
                         studentID, StringConstants.STUDENT, location.getLat(), location.getLon());
     }
 }

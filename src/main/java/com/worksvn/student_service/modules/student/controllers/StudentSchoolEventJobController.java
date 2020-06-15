@@ -12,7 +12,7 @@ import com.worksvn.common.modules.employer.requests.ClientSearchActiveJobFilter;
 import com.worksvn.common.modules.employer.responses.JobDto;
 import com.worksvn.common.modules.employer.responses.JobPreview;
 import com.worksvn.student_service.base.controllers.BaseRESTController;
-import com.worksvn.student_service.modules.student.services.StudentSchoolEventJobActiveService;
+import com.worksvn.student_service.modules.student.services.StudentSchoolEventJobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,9 @@ import java.util.List;
 @AuthorizationRequired
 @Api(description = "Bài đăng trong sự kiện trường đang hoạt động")
 @RequestMapping("/api/students/schools/events/{eid}/jobs")
-public class StudentSchoolEventJobActiveController extends BaseRESTController {
+public class StudentSchoolEventJobController extends BaseRESTController {
     @Autowired
-    private StudentSchoolEventJobActiveService studentActiveSchoolEventJobService;
+    private StudentSchoolEventJobService studentActiveSchoolEventJobService;
 
     @ApiOperation(value = "Xem danh bài đăng ở trang chủ")
     @Responses(value = {
@@ -77,16 +77,29 @@ public class StudentSchoolEventJobActiveController extends BaseRESTController {
                 sortBy, sortType, pageIndex, pageSize);
     }
 
-    @ApiOperation(value = "Xem chi tiết")
+    @ApiOperation(value = "Xem chi tiết (check active)")
     @Responses(value = {
             @Response(responseValue = ResponseValue.JOB_NOT_FOUND),
             @Response(responseValue = ResponseValue.JOB_HIDDEN),
             @Response(responseValue = ResponseValue.JOB_DISABLED)
     })
     @GetMapping("/{jid}/active")
+    public JobDto getActiveJobDetail(@PathVariable("eid") String eventID,
+                                     @PathVariable("jid") String jobID) throws Exception {
+        String studentID = getAuthorizedUser().getId();
+        return studentActiveSchoolEventJobService.getActiveEmployerSchoolEventJobDetail(studentID, eventID, jobID);
+    }
+
+    @ApiOperation(value = "Xem chi tiết")
+    @Responses(value = {
+            @Response(responseValue = ResponseValue.JOB_NOT_FOUND),
+            @Response(responseValue = ResponseValue.JOB_HIDDEN),
+            @Response(responseValue = ResponseValue.JOB_DISABLED)
+    })
+    @GetMapping("/{jid}")
     public JobDto getJobDetail(@PathVariable("eid") String eventID,
                                @PathVariable("jid") String jobID) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentActiveSchoolEventJobService.getActiveEmployerSchoolEventJobDetail(studentID, eventID, jobID);
+        return studentActiveSchoolEventJobService.getEmployerSchoolEventJobDetail(studentID, eventID, jobID);
     }
 }

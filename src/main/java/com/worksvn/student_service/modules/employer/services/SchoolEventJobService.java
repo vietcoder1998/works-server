@@ -33,9 +33,9 @@ public class SchoolEventJobService {
     }
 
     public PageDto<JobPreview> queryActiveEmployerSchoolEventJobs(String schoolID, String eventID,
-                                                                ActiveJobFilter filter,
-                                                                List<String> sortBy, List<String> sortType,
-                                                                Integer pageIndex, Integer pageSize) throws Exception {
+                                                                  ActiveJobFilter filter,
+                                                                  List<String> sortBy, List<String> sortType,
+                                                                  Integer pageIndex, Integer pageSize) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
                 .SCHOOL_queryActiveEmployerSchoolEventJobs(schoolID, eventID,
                         filter, sortBy, sortType, pageIndex, pageSize));
@@ -46,5 +46,12 @@ public class SchoolEventJobService {
                                                         Double centerLat, Double centerLon) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
                 .SCHOOL_getActiveEmployerSchoolEventJob(schoolID, eventID, jobID, userID, userType, centerLat, centerLon));
+    }
+
+    public JobDto getEmployerSchoolEventJobDetail(String schoolID, String eventID, String jobID,
+                                                  String userID, String userType,
+                                                  Double centerLat, Double centerLon) throws Exception {
+        return restCommunicator.exchangeForSuccess(APIs
+                .SCHOOL_getEmployerSchoolEventJob(schoolID, eventID, jobID, userID, userType, centerLat, centerLon));
     }
 }

@@ -443,18 +443,16 @@ public class APIs {
     }
 
     public static ISApi<ActiveJobFilter, PageDto<JobPreview>> SCHOOL_queryActiveEmployerSchoolEventJobs(
-            String schoolID, String eventID,
-            ActiveJobFilter filter,
+            String eventID, ActiveJobFilter filter,
             List<String> sortBy, List<String> sortType,
             Integer pageIndex, Integer pageSize) {
         ISApi<ActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.POST, "api/internal/schools/{sid}/events/{eid}/jobs/active/query?" +
+                HttpMethod.POST, "api/internal/schools/events/{eid}/jobs/active/query?" +
                 "sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
                 filter,
                 new TypeReference<PageDto<JobPreview>>() {
                 },
                 true);
-        api.addParam("sid", schoolID);
         api.addParam("eid", eventID);
         api.addParam("sortBy", sortBy);
         api.addParam("sortType", sortType);
@@ -468,16 +466,16 @@ public class APIs {
             String userID, String userType,
             Double centerLat, Double centerLon) {
         ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.GET, "api/internal/schools/{sid}/events/{eid}/jobs/{jid}/active" +
-                "?userID={userID}&userType={userType}" +
+                HttpMethod.GET, "api/internal/schools/events/{eid}/jobs/{jid}/active" +
+                "?schoolID={schoolID}&userID={userID}&userType={userType}" +
                 "&centerLat={centerLat}&centerLon={centerLon}",
                 null,
                 new TypeReference<JobDto>() {
                 },
                 true);
-        api.addParam("sid", schoolID);
         api.addParam("eid", eventID);
         api.addParam("jid", jobID);
+        api.addParam("schoolID", schoolID);
         api.addParam("userID", userID);
         api.addParam("userType", userType);
         api.addParam("centerLat", centerLat);
@@ -491,15 +489,15 @@ public class APIs {
             Double centerLat, Double centerLon) {
         ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.GET, "api/internal/schools/{sid}/events/{eid}/jobs/{jid}" +
-                "?userID={userID}&userType={userType}" +
+                "?schoolID={schoolID}&userID={userID}&userType={userType}" +
                 "&centerLat={centerLat}&centerLon={centerLon}",
                 null,
                 new TypeReference<JobDto>() {
                 },
                 true);
-        api.addParam("sid", schoolID);
         api.addParam("eid", eventID);
         api.addParam("jid", jobID);
+        api.addParam("schoolID", schoolID);
         api.addParam("userID", userID);
         api.addParam("userType", userType);
         api.addParam("centerLat", centerLat);

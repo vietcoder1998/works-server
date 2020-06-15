@@ -7,7 +7,6 @@ import com.worksvn.common.modules.employer.requests.*;
 import com.worksvn.common.modules.employer.responses.JobDto;
 import com.worksvn.common.modules.employer.responses.JobPreview;
 import com.worksvn.student_service.components.communication.APIs;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,12 +31,11 @@ public class SchoolEventJobService {
                 .EMPLOYER_searchActiveSchoolEventJobs(sortBy, sortType, pageIndex, pageSize, filter));
     }
 
-    public PageDto<JobPreview> queryActiveEmployerSchoolEventJobs(String schoolID, String eventID,
-                                                                  ActiveJobFilter filter,
+    public PageDto<JobPreview> queryActiveEmployerSchoolEventJobs(String eventID, ActiveJobFilter filter,
                                                                   List<String> sortBy, List<String> sortType,
                                                                   Integer pageIndex, Integer pageSize) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
-                .SCHOOL_queryActiveEmployerSchoolEventJobs(schoolID, eventID,
+                .SCHOOL_queryActiveEmployerSchoolEventJobs(eventID,
                         filter, sortBy, sortType, pageIndex, pageSize));
     }
 

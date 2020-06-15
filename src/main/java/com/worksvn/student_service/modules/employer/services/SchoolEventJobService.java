@@ -31,12 +31,11 @@ public class SchoolEventJobService {
                 .EMPLOYER_searchActiveSchoolEventJobs(sortBy, sortType, pageIndex, pageSize, filter));
     }
 
-    public PageDto<JobPreview> queryActiveEmployerSchoolEventJobs(String eventID, ActiveJobFilter filter,
+    public PageDto<JobPreview> queryActiveEmployerSchoolEventJobs(ActiveSchoolEventJobFilter filter,
                                                                   List<String> sortBy, List<String> sortType,
                                                                   Integer pageIndex, Integer pageSize) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
-                .SCHOOL_queryActiveEmployerSchoolEventJobs(eventID,
-                        filter, sortBy, sortType, pageIndex, pageSize));
+                .SCHOOL_queryActiveEmployerSchoolEventJobs(filter, sortBy, sortType, pageIndex, pageSize));
     }
 
     public JobDto getActiveEmployerSchoolEventJobDetail(String schoolID, String eventID, String jobID,

@@ -54,15 +54,16 @@ public class StudentSchoolEventJobService {
                                                                   List<String> sortBy, List<String> sortType,
                                                                   Integer pageIndex, Integer pageSize) throws Exception {
         String schoolID = studentService.getStudentSchoolID(studentID);
-        ActiveJobFilter activeJobFilter = new ActiveJobFilter();
+        ActiveSchoolEventJobFilter activeJobFilter = new ActiveSchoolEventJobFilter();
         if (filter != null) {
             BeanUtils.copyProperties(filter, activeJobFilter);
         }
+        activeJobFilter.setSchoolEventID(eventID);
         activeJobFilter.setSchoolID(schoolID);
         activeJobFilter.setUserID(studentID);
         activeJobFilter.setUserType(StringConstants.STUDENT);
         return schoolEventJobService
-                .queryActiveEmployerSchoolEventJobs(eventID, activeJobFilter, sortBy, sortType, pageIndex, pageSize);
+                .queryActiveEmployerSchoolEventJobs(activeJobFilter, sortBy, sortType, pageIndex, pageSize);
     }
 
     public JobDto getActiveEmployerSchoolEventJobDetail(String studentID, String eventID, String jobID) throws Exception {

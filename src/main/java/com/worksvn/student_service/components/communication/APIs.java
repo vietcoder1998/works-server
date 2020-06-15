@@ -447,7 +447,7 @@ public class APIs {
             ActiveJobFilter filter,
             List<String> sortBy, List<String> sortType,
             Integer pageIndex, Integer pageSize) {
-        ISApi<ActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+        ISApi<ActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.POST, "api/internal/schools/{sid}/events/{eid}/jobs/active/query?" +
                 "sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
                 filter,
@@ -467,7 +467,7 @@ public class APIs {
             String schoolID, String eventID, String jobID,
             String userID, String userType,
             Double centerLat, Double centerLon) {
-        ISApi<Object, JobDto> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+        ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.GET, "api/internal/schools/{sid}/events/{eid}/jobs/{jid}/active" +
                 "?userID={userID}&userType={userType}" +
                 "&centerLat={centerLat}&centerLon={centerLon}",
@@ -489,7 +489,7 @@ public class APIs {
             String schoolID, String eventID, String jobID,
             String userID, String userType,
             Double centerLat, Double centerLon) {
-        ISApi<Object, JobDto> api = new ISApi<>(ISHost.SCHOOL_SERVICE,
+        ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.GET, "api/internal/schools/{sid}/events/{eid}/jobs/{jid}" +
                 "?userID={userID}&userType={userType}" +
                 "&centerLat={centerLat}&centerLon={centerLon}",

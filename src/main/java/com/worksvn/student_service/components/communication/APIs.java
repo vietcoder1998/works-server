@@ -488,7 +488,7 @@ public class APIs {
             String userID, String userType,
             Double centerLat, Double centerLon) {
         ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.GET, "api/internal/schools/{sid}/events/{eid}/jobs/{jid}" +
+                HttpMethod.GET, "api/internal/schools/events/{eid}/jobs/{jid}" +
                 "?schoolID={schoolID}&userID={userID}&userType={userType}" +
                 "&centerLat={centerLat}&centerLon={centerLon}",
                 null,

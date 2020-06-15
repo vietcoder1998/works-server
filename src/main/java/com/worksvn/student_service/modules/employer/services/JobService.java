@@ -46,4 +46,11 @@ public class JobService {
         return restCommunicator.exchangeForSuccess(APIs
                 .EMPLOYER_getActiveJobDetail(id, userID, userType, schoolID, passSchoolIgnore, lat, lon));
     }
+
+    public JobDto getJobDetail(String id, String userID, String userType,
+                               String schoolID, Boolean passSchoolIgnore,
+                               Double lat, Double lon) throws Exception {
+        return restCommunicator.exchangeForSuccess(APIs
+                .EMPLOYER_getJobDetail(id, userID, userType, schoolID, passSchoolIgnore, lat, lon));
+    }
 }

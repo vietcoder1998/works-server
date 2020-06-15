@@ -82,4 +82,11 @@ public class StudentJobService {
                 info.getSchoolID(), false,
                 info.getLat(), info.getLon());
     }
+
+    public JobDto getStudentJobDetail(String studentID, String jobID) throws Exception {
+        StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
+        return jobService.getJobDetail(jobID, studentID, StringConstants.STUDENT,
+                info.getSchoolID(), false,
+                info.getLat(), info.getLon());
+    }
 }

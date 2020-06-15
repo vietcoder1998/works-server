@@ -600,6 +600,27 @@ public class APIs {
         return api;
     }
 
+    public static ISApi<Object, JobDto> EMPLOYER_getJobDetail(String jobID, String userID, String userType,
+                                                              String schoolID, Boolean passSchoolIgnore,
+                                                              Double centerLat, Double centerLon) {
+        ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.GET, "api/internal/employers/jobs/{id}" +
+                "?userID={userID}&userType={userType}&schoolID={schoolID}&passSchoolIgnore={passSchoolIgnore}" +
+                "&centerLat={centerLat}&centerLon={centerLon}",
+                null,
+                new TypeReference<JobDto>() {
+                },
+                true);
+        api.addParam("id", jobID);
+        api.addParam("userID", userID);
+        api.addParam("userType", userType);
+        api.addParam("schoolID", schoolID);
+        api.addParam("passSchoolIgnore", passSchoolIgnore);
+        api.addParam("centerLat", centerLat);
+        api.addParam("centerLon", centerLon);
+        return api;
+    }
+
     // JOB APPLY REQUEST ===============================================================================================
 
     public static ISApi<JobApplyRequestFilter, PageDto<JobApplyRequestPreview>> EMPLOYER_queryJobApplyRequestPreviews(List<String> sortBy, List<String> sortType,

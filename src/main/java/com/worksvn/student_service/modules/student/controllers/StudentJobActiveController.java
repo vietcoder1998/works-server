@@ -70,15 +70,27 @@ public class StudentJobActiveController extends BaseRESTController {
                 sortBy, sortType, pageIndex, pageSize);
     }
 
-    @ApiOperation(value = "Xem chi tiết")
+    @ApiOperation(value = "Xem chi tiết (check active)")
     @Responses(value = {
             @Response(responseValue = ResponseValue.JOB_NOT_FOUND),
             @Response(responseValue = ResponseValue.JOB_HIDDEN),
             @Response(responseValue = ResponseValue.JOB_DISABLED)
     })
     @GetMapping("/{id}/active")
-    public JobDto getJobDetail(@PathVariable("id") String jobID) throws Exception {
+    public JobDto getActiveJobDetail(@PathVariable("id") String jobID) throws Exception {
         String studentID = getAuthorizedUser().getId();
         return studentJobService.getStudentActiveJobDetail(studentID, jobID);
+    }
+
+    @ApiOperation(value = "Xem chi tiết")
+    @Responses(value = {
+            @Response(responseValue = ResponseValue.JOB_NOT_FOUND),
+            @Response(responseValue = ResponseValue.JOB_HIDDEN),
+            @Response(responseValue = ResponseValue.JOB_DISABLED)
+    })
+    @GetMapping("/{id}")
+    public JobDto getJobDetail(@PathVariable("id") String jobID) throws Exception {
+        String studentID = getAuthorizedUser().getId();
+        return studentJobService.getStudentJobDetail(studentID, jobID);
     }
 }

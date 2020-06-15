@@ -25,7 +25,7 @@ import java.util.List;
 @AuthorizationRequired
 @Api(description = "Bài đăng đang hoạt động")
 @RequestMapping("/api/students/jobs")
-public class StudentJobActiveController extends BaseRESTController {
+public class StudentJobController extends BaseRESTController {
     @Autowired
     private StudentJobService studentJobService;
 

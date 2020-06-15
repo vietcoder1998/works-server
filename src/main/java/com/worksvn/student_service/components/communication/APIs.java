@@ -410,7 +410,7 @@ public class APIs {
             Integer pageIndex, Integer pageSize,
             HomeActiveSchoolEventJobFilter filter, JobHomePriority priority) {
         ISApi<HomeActiveSchoolEventJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.POST, "api/internal/employers/schools/events/jobs/active/home" +
+                HttpMethod.POST, "api/internal/schools/events/jobs/active/home" +
                 "?priority={priority}&sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
                 filter,
                 new TypeReference<PageDto<JobPreview>>() {
@@ -429,7 +429,7 @@ public class APIs {
             Integer pageIndex, Integer pageSize,
             SearchActiveSchoolEventJobFilter filter) {
         ISApi<SearchActiveSchoolEventJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.POST, "api/internal/employers/schools/events/jobs/active/search" +
+                HttpMethod.POST, "api/internal/schools/events/jobs/active/search" +
                 "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
                 filter,
                 new TypeReference<PageDto<JobPreview>>() {

@@ -8,6 +8,7 @@ import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.student.requests.StudentFilterDto;
+import com.worksvn.common.modules.student.responses.StudentContactInfo;
 import com.worksvn.common.modules.student.responses.StudentPreview;
 import com.worksvn.common.modules.student.responses.StudentProfileDto;
 import com.worksvn.student_service.base.controllers.BaseRESTController;
@@ -56,6 +57,15 @@ public class StudentManagementController extends BaseRESTController {
                                         @RequestParam(value = "applyState", required = false) RequestState applyState,
                                         @RequestParam(value = "offerState", required = false) RequestState offerState) throws Exception {
         return studentService.getStudentProfile(studentID, schoolID, employerID, applyState, offerState);
+    }
+
+    @ApiOperation(value = "Xem thông tin liên hệ")
+    @Responses({
+            @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND),
+    })
+    @GetMapping("/{id}/contact")
+    public StudentContactInfo getContactInfo(@PathVariable("id") String studentID) throws Exception {
+        return studentService.getStudentContact(studentID);
     }
 
     @ApiOperation(value = "Kiểm tra tài khoản tồn tại")

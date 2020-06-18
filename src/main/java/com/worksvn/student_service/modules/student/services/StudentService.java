@@ -6,7 +6,6 @@ import com.worksvn.common.constants.StringConstants;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.auth.requests.UserFilter;
 import com.worksvn.common.modules.auth.responses.UserDto;
-import com.worksvn.common.modules.candidate.responses.CandidatePreview;
 import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
@@ -548,5 +547,13 @@ public class StudentService {
         studentRepository.updateStudentRegionAddress(studentID,
                 region == null? null : region.getId(), regionAddress.getAddress(),
                 regionAddress.getLat(), regionAddress.getLon());
+    }
+    
+    public StudentContactInfo getStudentContact(String studentID) throws ResponseException {
+        StudentContactInfo contactInfo = studentRepository.getStudentContactInfo(studentID);
+        if (contactInfo == null) {
+            throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
+        }
+        return contactInfo;
     }
 }

@@ -134,4 +134,10 @@ public interface StudentRepository extends JpaRepository<Student, String> {
             "where s.id = ?1")
     void updateStudentRegionAddress(String studentID, Integer region,
                                     String address, double lat, double lon);
+
+    @Query("select new com.worksvn.common.modules.student.responses.StudentContactInfo" +
+            "(s.email, s.phone) " +
+            "from Student s " +
+            "where s.id = ?1")
+    StudentContactInfo getStudentContactInfo(String studentID);
 }

@@ -9,6 +9,7 @@ import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.student.requests.StudentFilterDto;
 import com.worksvn.common.modules.student.responses.StudentContactInfo;
+import com.worksvn.common.modules.student.responses.StudentNavigationDto;
 import com.worksvn.common.modules.student.responses.StudentPreview;
 import com.worksvn.common.modules.student.responses.StudentProfileDto;
 import com.worksvn.student_service.base.controllers.BaseRESTController;
@@ -59,13 +60,22 @@ public class StudentManagementController extends BaseRESTController {
         return studentService.getStudentProfile(studentID, schoolID, employerID, applyState, offerState);
     }
 
+    @ApiOperation(value = "Xem thông tin rút gọn")
+    @Responses({
+            @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND)
+    })
+    @GetMapping("/{id}/headerProfile")
+    public StudentNavigationDto getHeaderProfile(@PathVariable("id") String studentID) throws Exception {
+        return studentService.getStudentNavigation(studentID);
+    }
+
     @ApiOperation(value = "Xem thông tin liên hệ")
     @Responses({
             @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND),
     })
     @GetMapping("/{id}/contact")
     public StudentContactInfo getContactInfo(@PathVariable("id") String studentID) throws Exception {
-        return studentService.getStudentContact(studentID);
+        return studentService.getContactInfo(studentID);
     }
 
     @ApiOperation(value = "Kiểm tra tài khoản tồn tại")

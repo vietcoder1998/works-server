@@ -549,7 +549,7 @@ public class StudentService {
                 regionAddress.getLat(), regionAddress.getLon());
     }
     
-    public StudentContactInfo getStudentContact(String studentID) throws ResponseException {
+    public StudentContactInfo getContactInfo(String studentID) throws ResponseException {
         StudentContactInfo contactInfo = studentRepository.getStudentContactInfo(studentID);
         if (contactInfo == null) {
             throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);

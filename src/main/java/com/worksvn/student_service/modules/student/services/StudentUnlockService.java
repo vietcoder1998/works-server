@@ -26,7 +26,8 @@ public class StudentUnlockService {
 
     public StudentContactInfo unlockStudentByEmployer(String studentID, String employerID) throws Exception {
         if (studentUnlockedRepository.existsByStudent_IdAndEmployerID(studentID, employerID)) {
-            throw new ResponseException(ResponseValue.STUDENT_UNLOCKED);
+            throw new ResponseException(ResponseValue.STUDENT_UNLOCKED,
+                    studentService.getContactInfo(studentID));
         }
         employerService.checkEmployerExist(employerID);
         Student student = studentService.getStudent(studentID);

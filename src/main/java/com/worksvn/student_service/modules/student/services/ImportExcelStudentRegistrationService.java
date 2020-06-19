@@ -239,7 +239,7 @@ public class ImportExcelStudentRegistrationService {
                                 schoolEducationService.addSchoolMajor(schoolID,
                                         Stream.of(major.getId()).collect(Collectors.toSet()));
                             } else {
-                                throw new Exception("Trường không đào tạo chuyên nghành '" + majorName + "'");
+                                throw new Exception("Trường không đào tạo chuyên nghành '" + major.getName() + "'");
                             }
                         }
                         majorID = major.getId();

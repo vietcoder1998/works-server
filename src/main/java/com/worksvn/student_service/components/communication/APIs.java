@@ -14,6 +14,7 @@ import com.worksvn.common.modules.admin.responses.AnnouncementDto;
 import com.worksvn.common.modules.admin.responses.AnnouncementPreview;
 import com.worksvn.common.modules.admin.responses.AnnouncementTypeDto;
 import com.worksvn.common.modules.auth.requests.UserFilter;
+import com.worksvn.common.modules.auth.responses.FBUserInfoDto;
 import com.worksvn.common.modules.auth.responses.UserDto;
 import com.worksvn.common.modules.common.enums.RequestState;
 import com.worksvn.common.modules.common.responses.*;
@@ -21,7 +22,6 @@ import com.worksvn.common.modules.employer.enums.*;
 import com.worksvn.common.modules.employer.requests.*;
 import com.worksvn.common.modules.employer.responses.*;
 import com.worksvn.common.modules.school.requests.SchoolEventEmployerFilter;
-import com.worksvn.common.modules.school.requests.SchoolEventFilter;
 import com.worksvn.common.modules.school.requests.SchoolEventManagementFilter;
 import com.worksvn.common.modules.school.responses.*;
 import org.springframework.http.HttpMethod;
@@ -30,6 +30,21 @@ import java.util.List;
 import java.util.Set;
 
 public class APIs {
+    //##################################################################################################################
+    // FACEBOOK
+    //##################################################################################################################
+
+    public static ISApi<Object, FBUserInfoDto> FACEBOOK_getFBUserInfo(String fbAccessToken) {
+        ISApi<Object, FBUserInfoDto> api = new ISApi<>(ISHost.PUBLIC_SERVICE,
+                HttpMethod.GET, "api/internal/facebook/user-info" +
+                "?fbAccessToken={fbAccessToken}",
+                null,
+                new TypeReference<FBUserInfoDto>() {
+                },
+                true);
+        api.addParam("fbAccessToken", fbAccessToken);
+        return api;
+    }
 
     //##################################################################################################################
     // AUTH SERVICE

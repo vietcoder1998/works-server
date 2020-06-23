@@ -367,14 +367,18 @@ public class StudentService {
 
     private String uploadStudentAvatar(String studentID, MultipartFile imageFile,
                                        String oldAvatarUrl) throws IOException, ResponseException {
-        String newAvatarUrl = uploadImageFile(imageFile, studentStorageDirectory + studentID,
-                StringConstants.AVATAR_IMAGE_NAME + "_" + new Date().getTime());
+        String newAvatarUrl = uploadStudentAvatar(studentID, imageFile.getBytes(), imageFile.getContentType());
         try {
             fileStorageService.deleteFileByUrl(oldAvatarUrl);
         } catch (Exception e) {
             logger.error("[File Storage Service] Delete file(s) failed: " + oldAvatarUrl, e);
         }
         return newAvatarUrl;
+    }
+
+    public String uploadStudentAvatar(String studentID, byte[] data, String contentType) throws ResponseException {
+        return fileStorageService.uploadImageFile(data, contentType, studentStorageDirectory + studentID,
+                StringConstants.AVATAR_IMAGE_NAME + "_" + new Date().getTime());
     }
 
     public CoverUrlDto updateStudentCover(String studentID, MultipartFile imageFile)
@@ -388,7 +392,7 @@ public class StudentService {
 
     private String uploadStudentCover(String studentID, MultipartFile imageFile,
                                       String oldCoverUrl) throws IOException, ResponseException {
-        String coverUrl = uploadImageFile(imageFile, studentStorageDirectory + studentID,
+        String coverUrl = fileStorageService.uploadImageFile(imageFile, studentStorageDirectory + studentID,
                 StringConstants.COVER_IMAGE_NAME + "_" + new Date().getTime());
         try {
             fileStorageService.deleteFileByUrl(oldCoverUrl);
@@ -405,7 +409,7 @@ public class StudentService {
         IdentityCardImageDto cardImageDto = studentRepository.getStudentIdentityCardUrls(studentID);
 
         boolean newFront = true;
-        String newFrontUrl = uploadImageFile(frontImage, studentStorageDirectory + studentID,
+        String newFrontUrl = fileStorageService.uploadImageFile(frontImage, studentStorageDirectory + studentID,
                 StringConstants.ID_CARD_FRONT_IMAGE_NAME + "_" + new Date().getTime());
         if (newFrontUrl == null) {
             newFront = false;
@@ -413,7 +417,7 @@ public class StudentService {
         }
 
         boolean newBack = true;
-        String newBackUrl = uploadImageFile(backImage, studentStorageDirectory + studentID,
+        String newBackUrl = fileStorageService.uploadImageFile(backImage, studentStorageDirectory + studentID,
                 StringConstants.ID_CARD_BACK_IMAGE_NAME + "_" + new Date().getTime());
         if (newBackUrl == null) {
             newBack = false;
@@ -443,19 +447,6 @@ public class StudentService {
         return cardImageDto;
     }
 
-    private String uploadImageFile(MultipartFile imageFile, String dir, String fileName) throws IOException, ResponseException {
-        String url = null;
-        if (imageFile != null) {
-            String contentType = imageFile.getContentType();
-            if (!FileChecker.checkType(imageFile, FileChecker.IMAGE_TYPE, null)) {
-                throw new ResponseException(ResponseValue.CONTENT_TYPE_NOT_ALLOWED);
-            }
-            url = fileStorageService.uploadFile(dir, fileName,
-                    imageFile.getBytes(), contentType);
-        }
-        return url;
-    }
-
     public void updateStudentLookingForJob(String studentID, boolean lookingForJob) throws ResponseException {
         checkStudentExist(studentID);
         studentRepository.updateStudentLookingForJob(studentID, lookingForJob);
@@ -482,6 +473,9 @@ public class StudentService {
         return offerInfo;
     }
 
+    public boolean isStudentExist(String studentID) {
+        return studentRepository.existsById(studentID);
+    }
 
     public void checkStudentExist(String studentID) throws ResponseException {
         if (!studentRepository.existsById(studentID)) {
@@ -555,5 +549,9 @@ public class StudentService {
             throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
         }
         return contactInfo;
+    }
+
+    public void saveStudent(Student student) {
+        studentRepository.save(student);
     }
 }

@@ -90,8 +90,6 @@ public class Student {
         this.email = registrationDto.getEmail();
         this.phone = registrationDto.getPhone();
         this.majorID = registrationDto.getMajorID();
-        this.schoolYearStart = registrationDto.getSchoolYearStart();
-        this.schoolYearEnd = registrationDto.getSchoolYearEnd();
         calculateCompletePercent();
     }
 

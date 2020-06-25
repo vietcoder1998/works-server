@@ -120,8 +120,8 @@ public class ImportExcelStudentRegistrationService {
             String lastName;
             String firstName;
             Gender gender;
-            Integer schoolYearStart;
-            Integer schoolYearEnd;
+//            Integer schoolYearStart;
+//            Integer schoolYearEnd;
             Integer majorID;
             String phone;
             String email;
@@ -201,27 +201,27 @@ public class ImportExcelStudentRegistrationService {
                         return true;
                     }
 
-                    case 6: {
-                        schoolYearStart = cell.getValue(Integer.class);
-                        if (schoolYearStart == null) {
-                            throw new MissingCellDataException("Năm nhập học");
-                        }
-                        if (schoolYearStart < 1970) {
-                            throw new InvalidCellDataException("Năm nhập học", schoolYearStart, "year >= 1970");
-                        }
-                        return true;
-                    }
-
-                    case 7: {
-                        schoolYearEnd = cell.getValue(Integer.class);
-                        if (schoolYearEnd == null) {
-                            throw new MissingCellDataException("Năm tốt nghiệp");
-                        }
-                        if (schoolYearEnd < schoolYearStart) {
-                            throw new Exception("Năm tốt nghiệp phải lớn hơn năm nhập học");
-                        }
-                        return true;
-                    }
+//                    case 6: {
+//                        schoolYearStart = cell.getValue(Integer.class);
+//                        if (schoolYearStart == null) {
+//                            throw new MissingCellDataException("Năm nhập học");
+//                        }
+//                        if (schoolYearStart < 1970) {
+//                            throw new InvalidCellDataException("Năm nhập học", schoolYearStart, "year >= 1970");
+//                        }
+//                        return true;
+//                    }
+//
+//                    case 7: {
+//                        schoolYearEnd = cell.getValue(Integer.class);
+//                        if (schoolYearEnd == null) {
+//                            throw new MissingCellDataException("Năm tốt nghiệp");
+//                        }
+//                        if (schoolYearEnd < schoolYearStart) {
+//                            throw new Exception("Năm tốt nghiệp phải lớn hơn năm nhập học");
+//                        }
+//                        return true;
+//                    }
 
                     case 8: {
                         String majorName = cell.getValue(String.class);
@@ -260,8 +260,6 @@ public class ImportExcelStudentRegistrationService {
                 registration.setFirstName(firstName);
                 registration.setLastName(lastName);
                 registration.setGender(gender.name());
-                registration.setSchoolYearStart(schoolYearStart);
-                registration.setSchoolYearEnd(schoolYearEnd);
                 registration.setMajorID(majorID);
                 registration.setPhone(phone);
                 registration.setEmail(email);

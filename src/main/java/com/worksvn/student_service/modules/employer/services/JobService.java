@@ -42,15 +42,17 @@ public class JobService {
 
     public JobDto getActiveJobDetail(String id, String userID, String userType,
                                      String schoolID, Boolean passSchoolIgnore,
-                                     Double lat, Double lon) throws Exception {
+                                     Double lat, Double lon,
+                                     String schoolEventID) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
-                .EMPLOYER_getActiveJobDetail(id, userID, userType, schoolID, passSchoolIgnore, lat, lon));
+                .EMPLOYER_getActiveJobDetail(id, userID, userType, schoolID, passSchoolIgnore, lat, lon, schoolEventID));
     }
 
     public JobDto getJobDetail(String id, String userID, String userType,
                                String schoolID, Boolean passSchoolIgnore,
-                               Double lat, Double lon) throws Exception {
+                               Double lat, Double lon,
+                               String schoolEventID) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
-                .EMPLOYER_getJobDetail(id, userID, userType, schoolID, passSchoolIgnore, lat, lon));
+                .EMPLOYER_getJobDetail(id, userID, userType, schoolID, passSchoolIgnore, lat, lon, schoolEventID));
     }
 }

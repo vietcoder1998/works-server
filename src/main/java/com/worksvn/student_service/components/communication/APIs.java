@@ -418,109 +418,6 @@ public class APIs {
         return api;
     }
 
-    // ACTIVE EMPLOYER SCHOOL EVENT JOB ================================================================================
-
-    public static ISApi<HomeActiveSchoolEventJobFilter, PageDto<JobPreview>> EMPLOYER_getHomeActiveSchoolEventJobs(
-            List<String> sortBy, List<String> sortType,
-            Integer pageIndex, Integer pageSize,
-            HomeActiveSchoolEventJobFilter filter, JobHomePriority priority) {
-        ISApi<HomeActiveSchoolEventJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.POST, "api/internal/schools/events/jobs/active/home" +
-                "?priority={priority}&sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
-                filter,
-                new TypeReference<PageDto<JobPreview>>() {
-                },
-                true);
-        api.addParam("priority", priority);
-        api.addParam("sortBy", sortBy);
-        api.addParam("sortType", sortType);
-        api.addParam("pageIndex", pageIndex);
-        api.addParam("pageSize", pageSize);
-        return api;
-    }
-
-    public static ISApi<SearchActiveSchoolEventJobFilter, PageDto<JobPreview>> EMPLOYER_searchActiveSchoolEventJobs(
-            List<String> sortBy, List<String> sortType,
-            Integer pageIndex, Integer pageSize,
-            SearchActiveSchoolEventJobFilter filter) {
-        ISApi<SearchActiveSchoolEventJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.POST, "api/internal/schools/events/jobs/active/search" +
-                "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
-                filter,
-                new TypeReference<PageDto<JobPreview>>() {
-                },
-                true);
-        api.addParam("sortBy", sortBy);
-        api.addParam("sortType", sortType);
-        api.addParam("pageIndex", pageIndex);
-        api.addParam("pageSize", pageSize);
-        return api;
-    }
-
-    public static ISApi<ActiveJobFilter, PageDto<JobPreview>> SCHOOL_queryActiveEmployerSchoolEventJobs(
-            ActiveSchoolEventJobFilter filter,
-            List<String> sortBy, List<String> sortType,
-            Integer pageIndex, Integer pageSize) {
-        ISApi<ActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.POST, "api/internal/schools/events/jobs/active/query?" +
-                "sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
-                filter,
-                new TypeReference<PageDto<JobPreview>>() {
-                },
-                true);
-        api.addParam("sortBy", sortBy);
-        api.addParam("sortType", sortType);
-        api.addParam("pageIndex", pageIndex);
-        api.addParam("pageSize", pageSize);
-        return api;
-    }
-
-    public static ISApi<Object, JobDto> SCHOOL_getActiveEmployerSchoolEventJob(
-            String schoolID, String eventID, String jobID,
-            String userID, String userType,
-            Double centerLat, Double centerLon) {
-        ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.GET, "api/internal/schools/events/jobs/{jid}/active" +
-                "?schoolID={schoolID}&schoolEventID={schoolEventID}" +
-                "&userID={userID}&userType={userType}" +
-                "&centerLat={centerLat}&centerLon={centerLon}",
-                null,
-                new TypeReference<JobDto>() {
-                },
-                true);
-        api.addParam("jid", jobID);
-        api.addParam("schoolID", schoolID);
-        api.addParam("schoolEventID", eventID);
-        api.addParam("userID", userID);
-        api.addParam("userType", userType);
-        api.addParam("centerLat", centerLat);
-        api.addParam("centerLon", centerLon);
-        return api;
-    }
-
-    public static ISApi<Object, JobDto> SCHOOL_getEmployerSchoolEventJob(
-            String schoolID, String eventID, String jobID,
-            String userID, String userType,
-            Double centerLat, Double centerLon) {
-        ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
-                HttpMethod.GET, "api/internal/schools/events/jobs/{jid}" +
-                "?schoolID={schoolID}&schoolEventID={schoolEventID}" +
-                "&userID={userID}&userType={userType}" +
-                "&centerLat={centerLat}&centerLon={centerLon}",
-                null,
-                new TypeReference<JobDto>() {
-                },
-                true);
-        api.addParam("jid", jobID);
-        api.addParam("schoolID", schoolID);
-        api.addParam("schoolEventID", eventID);
-        api.addParam("userID", userID);
-        api.addParam("userType", userType);
-        api.addParam("centerLat", centerLat);
-        api.addParam("centerLon", centerLon);
-        return api;
-    }
-
     // SCHOOL EVENT JOB BRANCH =========================================================================================
 
     public static ISApi<Object, PageDto<BranchDto>> EMPLOYER_getSchoolEventJobBranches(
@@ -561,9 +458,10 @@ public class APIs {
 
     // JOB =============================================================================================================
 
-    public static ISApi<HomeActiveJobFilter, PageDto<JobPreview>> EMPLOYER_getHomeActiveJobs(List<String> sortBy, List<String> sortType,
-                                                                                             Integer pageIndex, Integer pageSize,
-                                                                                             HomeActiveJobFilter filter, JobHomePriority priority) {
+    public static ISApi<HomeActiveJobFilter, PageDto<JobPreview>> EMPLOYER_getHomeActiveJobs(
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize,
+            HomeActiveJobFilter filter, JobHomePriority priority) {
         ISApi<HomeActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.POST, "api/internal/jobs/active/home" +
                 "?priority={priority}" +
@@ -580,9 +478,10 @@ public class APIs {
         return api;
     }
 
-    public static ISApi<SearchActiveJobFilter, PageDto<JobPreview>> EMPLOYER_searchActiveJobs(List<String> sortBy, List<String> sortType,
-                                                                                              Integer pageIndex, Integer pageSize,
-                                                                                              SearchActiveJobFilter filter) {
+    public static ISApi<SearchActiveJobFilter, PageDto<JobPreview>> EMPLOYER_searchActiveJobs(
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize,
+            SearchActiveJobFilter filter) {
         ISApi<SearchActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.POST, "api/internal/jobs/active/search" +
                 "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
@@ -597,10 +496,10 @@ public class APIs {
         return api;
     }
 
-    public static ISApi<ActiveJobFilter, PageDto<JobPreview>> EMPLOYER_queryActiveJobs(List<String> sortBy,
-                                                                                       List<String> sortType,
-                                                                                       Integer pageIndex, Integer pageSize,
-                                                                                       ActiveJobFilter filter) {
+    public static ISApi<ActiveJobFilter, PageDto<JobPreview>> EMPLOYER_queryActiveJobs(
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize,
+            ActiveJobFilter filter) {
         ISApi<ActiveJobFilter, PageDto<JobPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.POST, "api/internal/jobs/active/query" +
                 "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
@@ -617,11 +516,13 @@ public class APIs {
 
     public static ISApi<Object, JobDto> EMPLOYER_getActiveJobDetail(String jobID, String userID, String userType,
                                                                     String schoolID, Boolean passSchoolIgnore,
-                                                                    Double centerLat, Double centerLon) {
+                                                                    Double centerLat, Double centerLon,
+                                                                    String schoolEventID) {
         ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.GET, "api/internal/jobs/{id}/active" +
                 "?userID={userID}&userType={userType}&schoolID={schoolID}&passSchoolIgnore={passSchoolIgnore}" +
-                "&centerLat={centerLat}&centerLon={centerLon}",
+                "&centerLat={centerLat}&centerLon={centerLon}" +
+                "&schoolEventID={schoolEventID}",
                 null,
                 new TypeReference<JobDto>() {
                 },
@@ -633,16 +534,19 @@ public class APIs {
         api.addParam("passSchoolIgnore", passSchoolIgnore);
         api.addParam("centerLat", centerLat);
         api.addParam("centerLon", centerLon);
+        api.addParam("schoolEventID", schoolEventID);
         return api;
     }
 
     public static ISApi<Object, JobDto> EMPLOYER_getJobDetail(String jobID, String userID, String userType,
                                                               String schoolID, Boolean passSchoolIgnore,
-                                                              Double centerLat, Double centerLon) {
+                                                              Double centerLat, Double centerLon,
+                                                              String schoolEventID) {
         ISApi<Object, JobDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.GET, "api/internal/jobs/{id}" +
                 "?userID={userID}&userType={userType}&schoolID={schoolID}&passSchoolIgnore={passSchoolIgnore}" +
-                "&centerLat={centerLat}&centerLon={centerLon}",
+                "&centerLat={centerLat}&centerLon={centerLon}" +
+                "&schoolEventID={schoolEventID}",
                 null,
                 new TypeReference<JobDto>() {
                 },
@@ -654,14 +558,16 @@ public class APIs {
         api.addParam("passSchoolIgnore", passSchoolIgnore);
         api.addParam("centerLat", centerLat);
         api.addParam("centerLon", centerLon);
+        api.addParam("schoolEventID", schoolEventID);
         return api;
     }
 
     // JOB APPLY REQUEST ===============================================================================================
 
-    public static ISApi<JobApplyRequestFilter, PageDto<JobApplyRequestPreview>> EMPLOYER_queryJobApplyRequestPreviews(List<String> sortBy, List<String> sortType,
-                                                                                                                      Integer pageIndex, Integer pageSize,
-                                                                                                                      JobApplyRequestFilter filter) {
+    public static ISApi<JobApplyRequestFilter, PageDto<JobApplyRequestPreview>> EMPLOYER_queryJobApplyRequestPreviews(
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize,
+            JobApplyRequestFilter filter) {
         ISApi<JobApplyRequestFilter, PageDto<JobApplyRequestPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.POST, "api/internal/employers/jobs/apply/query" +
                 "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
@@ -706,9 +612,10 @@ public class APIs {
 
     // JOB OFFER REQUEST ===============================================================================================
 
-    public static ISApi<JobOfferRequestFilter, PageDto<JobOfferRequestPreview>> EMPLOYER_queryJobOfferRequestPreviews(List<String> sortBy, List<String> sortType,
-                                                                                                                      Integer pageIndex, Integer pageSize,
-                                                                                                                      JobOfferRequestFilter filter) {
+    public static ISApi<JobOfferRequestFilter, PageDto<JobOfferRequestPreview>> EMPLOYER_queryJobOfferRequestPreviews(
+            List<String> sortBy, List<String> sortType,
+            Integer pageIndex, Integer pageSize,
+            JobOfferRequestFilter filter) {
         ISApi<JobOfferRequestFilter, PageDto<JobOfferRequestPreview>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
                 HttpMethod.POST, "api/internal/employers/jobs/offer/query" +
                 "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",

@@ -77,9 +77,11 @@ public class StudentJobController extends BaseRESTController {
             @Response(responseValue = ResponseValue.JOB_DISABLED)
     })
     @GetMapping("/{id}/active")
-    public JobDto getActiveJobDetail(@PathVariable("id") String jobID) throws Exception {
+    public JobDto getActiveJobDetail(@PathVariable("id") String jobID,
+                                     @RequestParam(value = "schoolEventID", required = false) String schoolEventID)
+            throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentJobService.getStudentActiveJobDetail(studentID, jobID);
+        return studentJobService.getStudentActiveJobDetail(studentID, jobID, schoolEventID);
     }
 
     @ApiOperation(value = "Xem chi tiết")
@@ -89,8 +91,10 @@ public class StudentJobController extends BaseRESTController {
             @Response(responseValue = ResponseValue.JOB_DISABLED)
     })
     @GetMapping("/{id}")
-    public JobDto getJobDetail(@PathVariable("id") String jobID) throws Exception {
+    public JobDto getJobDetail(@PathVariable("id") String jobID,
+                               @RequestParam(value = "schoolEventID", required = false) String schoolEventID)
+            throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentJobService.getStudentJobDetail(studentID, jobID);
+        return studentJobService.getStudentJobDetail(studentID, jobID, schoolEventID);
     }
 }

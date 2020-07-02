@@ -76,17 +76,21 @@ public class StudentJobService {
         targetFilter.setUserType(StringConstants.STUDENT);
     }
 
-    public JobDto getStudentActiveJobDetail(String studentID, String jobID) throws Exception {
+    public JobDto getStudentActiveJobDetail(String studentID, String jobID,
+                                            String schoolEventID) throws Exception {
         StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
         return jobService.getActiveJobDetail(jobID, studentID, StringConstants.STUDENT,
                 info.getSchoolID(), false,
-                info.getLat(), info.getLon());
+                info.getLat(), info.getLon(),
+                schoolEventID);
     }
 
-    public JobDto getStudentJobDetail(String studentID, String jobID) throws Exception {
+    public JobDto getStudentJobDetail(String studentID, String jobID,
+                                      String schoolEventID) throws Exception {
         StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
         return jobService.getJobDetail(jobID, studentID, StringConstants.STUDENT,
                 info.getSchoolID(), false,
-                info.getLat(), info.getLon());
+                info.getLat(), info.getLon(),
+                schoolEventID);
     }
 }

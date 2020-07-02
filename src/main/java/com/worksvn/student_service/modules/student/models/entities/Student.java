@@ -1,9 +1,11 @@
 package com.worksvn.student_service.modules.student.models.entities;
 
+import com.worksvn.common.annotations.common.ProfileRequired;
 import com.worksvn.common.modules.common.enums.Gender;
 import com.worksvn.common.modules.common.responses.RegionAddress;
 import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
 import com.worksvn.common.modules.student.requests.NewStudentRegistrationDto;
+import com.worksvn.common.utils.core.ProfileUtils;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,37 +29,49 @@ public class Student {
     private String id;
     @Column(name = "school_id")
     private String schoolID;
+    @ProfileRequired
     @Column(name = "major_id")
-    private int majorID;
+    private Integer majorID;
+    @ProfileRequired
     @Column(name = "school_year_start")
-    private int schoolYearStart;
+    private Integer schoolYearStart;
+    @ProfileRequired
     @Column(name = "school_year_end")
-    private int schoolYearEnd;
+    private Integer schoolYearEnd;
     @Column(name = "region_id")
     private Integer regionID;
     @Column(name = "student_code")
     private String studentCode;
+    @ProfileRequired
     @Column(name = "first_name")
     private String firstName;
+    @ProfileRequired
     @Column(name = "last_name")
     private String lastName;
+    @ProfileRequired
     @Column(name = "email")
     private String email;
+    @ProfileRequired
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @ProfileRequired
     @Column(name = "identity_card")
     private String identityCard;
+    @ProfileRequired
     @Column(name = "phone")
     private String phone;
     @Column(name = "address")
     private String address;
+    @ProfileRequired
     @Column(name = "birthday")
     private Date birthday;
+    @ProfileRequired
     @Column(name = "avatar_url")
     private String avatarUrl;
     @Column(name = "cover_url")
     private String coverUrl;
+    @ProfileRequired
     @Column(name = "description")
     private String description;
     @Column(name = "identity_card_front_image_url")
@@ -68,8 +82,10 @@ public class Student {
     private Boolean profileVerified = false;
     @Column(name = "is_looking_for_job")
     private Boolean lookingForJob = true;
+    @ProfileRequired(score = 0.5)
     @Column(name = "lat")
     private Double lat;
+    @ProfileRequired(score = 0.5)
     @Column(name = "lon")
     private Double lon;
     @Column(name = "complete_percent")
@@ -117,19 +133,6 @@ public class Student {
     }
 
     public void calculateCompletePercent() {
-        int totalCompletedField = (firstName == null ? 0 : 1) +
-                (lastName == null ? 0 : 1) +
-                (email == null ? 0 : 1) +
-                (gender == null ? 0 : 1) +
-                (identityCard == null ? 0 : 1) +
-                (phone == null ? 0 : 1) +
-                ((lat == null || lon == null) ? 0 : 1) +
-                (birthday == null ? 0 : 1) +
-                (avatarUrl == null ? 0 : 1) +
-                (description == null ? 0 : 1) +
-                (majorID > 0 ? 0 : 1) +
-                (schoolYearStart > 0 ? 0 : 1) +
-                (schoolYearEnd > 0 ? 0 : 1);
-        this.completePercent = (int) Math.round(totalCompletedField / 13.0 * 100.0);
+        this.completePercent = ProfileUtils.calculateCompletePercent(this);
     }
 }

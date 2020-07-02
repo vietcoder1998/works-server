@@ -1,5 +1,6 @@
 package com.worksvn.student_service.modules.student.repositories;
 
+import com.worksvn.common.modules.common.responses.CompletePercent;
 import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
 import com.worksvn.common.modules.common.responses.LatLon;
 import com.worksvn.common.modules.employer.responses.UserSimpleInfo;
@@ -140,4 +141,10 @@ public interface StudentRepository extends JpaRepository<Student, String> {
             "from Student s " +
             "where s.id = ?1")
     StudentContactInfo getStudentContactInfo(String studentID);
+
+    @Query("select new com.worksvn.common.modules.common.responses.CompletePercent" +
+            "(s.completePercent) " +
+            "from Student s " +
+            "where s.id = ?1")
+    CompletePercent getStudentCompletePercent(String studentID);
 }

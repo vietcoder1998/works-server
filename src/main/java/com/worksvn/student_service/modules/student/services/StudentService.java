@@ -18,7 +18,6 @@ import com.worksvn.common.services.notification.NotificationFactory;
 import com.worksvn.common.services.notification.NotificationService;
 import com.worksvn.common.services.notification.models.NotificationGroup;
 import com.worksvn.common.utils.core.DateTimeUtils;
-import com.worksvn.common.utils.core.FileChecker;
 import com.worksvn.common.utils.jpa.JPAQueryBuilder;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
 import com.worksvn.student_service.constants.NumberConstants;
@@ -549,6 +548,14 @@ public class StudentService {
             throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
         }
         return contactInfo;
+    }
+
+    public CompletePercent getProfileCompletePercent(String studentID) throws ResponseException {
+        CompletePercent result = studentRepository.getStudentCompletePercent(studentID);
+        if (result == null) {
+            throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
+        }
+        return result;
     }
 
     public void saveStudent(Student student) {

@@ -81,12 +81,6 @@ dependencies {
     implementation('org.apache.poi:poi-ooxml:3.17')
     implementation('org.apache.poi:poi:3.17')
 
-    // IText (.pdf generator) + Thymeleaf (.html binding)
-    implementation('com.itextpdf:itextpdf:5.5.13')
-    implementation('com.itextpdf.tool:xmlworker:5.5.13')
-    implementation('org.apache.pdfbox:pdfbox:2.0.13')
-    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
-
     // [jpa] Spring Data JPA - Connect SQL DBMS
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     runtime('mysql:mysql-connector-java')

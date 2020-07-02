@@ -6,6 +6,7 @@ import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.common.responses.AvatarUrlDto;
+import com.worksvn.common.modules.common.responses.CompletePercent;
 import com.worksvn.common.modules.common.responses.CoverUrlDto;
 import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
 import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
@@ -142,5 +143,14 @@ public class StudentProfileController extends BaseRESTController {
     public void updateStudentDescription(@RequestBody String description) throws ResponseException {
         String studentID = getAuthorizedUser().getId();
         studentService.updateStudentDescription(studentID, description);
+    }
+
+    @ApiOperation(value = "Phần trăm hoàn thiện hồ sơ")
+    @Responses({
+    })
+    @GetMapping("/profile/completePercent")
+    public CompletePercent getProfileCompletePercent() throws ResponseException {
+        String studentID = getAuthorizedUser().getId();
+        return studentService.getProfileCompletePercent(studentID);
     }
 }

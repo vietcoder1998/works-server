@@ -13,6 +13,7 @@ import com.worksvn.common.services.internal_service.DistributedDataService;
 import com.worksvn.common.services.notification.NotificationListener;
 import com.worksvn.common.services.notification.NotificationService;
 import com.worksvn.common.services.notification.UserNotificationService;
+import com.worksvn.common.services.pdf.PdfExportService;
 import com.worksvn.common.services.thymeleaf.HtmlTemplateBindingService;
 import com.worksvn.common.utils.core.JacksonObjectMapper;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
@@ -168,6 +169,12 @@ public class CommonBeansConfig {
     @Bean
     public HtmlTemplateBindingService templateBindingService(SpringTemplateEngine templateEngine) {
         return new HtmlTemplateBindingService(templateEngine);
+    }
+
+    @Bean
+    public PdfExportService pdfExportService(HtmlTemplateBindingService htmlTemplateBindingService,
+                                             ResourceLoader resourceLoader) {
+        return new PdfExportService(htmlTemplateBindingService, resourceLoader);
     }
 
     // NOTIFICATION ====================================================================================================

@@ -3,7 +3,6 @@ package com.worksvn.student_service.modules.student.services;
 import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.modules.common.responses.SkillDto;
 import com.worksvn.student_service.modules.common.services.SkillService;
-import com.worksvn.student_service.modules.student.models.entities.Student;
 import com.worksvn.student_service.modules.student.models.entities.StudentSkill;
 import com.worksvn.student_service.modules.student.repositories.StudentSkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +37,16 @@ public class StudentSkillService {
 
     @Transactional(rollbackFor = Exception.class)
     public void updateStudentSkills(String studentID, Set<Integer> skillIDs) throws Exception {
-        Student student = studentService.getStudent(studentID);
+        studentService.checkStudentExist(studentID);
         Set<Integer> existSkillIDs = skillService.getExistIDs(skillIDs);
-        Set<StudentSkill> studentSkills = studentSkillRepository.findAllByStudent_Id(studentID);
+        Set<StudentSkill> studentSkills = studentSkillRepository.findAllByStudentID(studentID);
         Map<Integer, StudentSkill> mapStudentSkills = studentSkills.stream()
                 .collect(Collectors.toMap(StudentSkill::getSkillID, item -> item));
         studentSkills.clear();
         for (Integer skillID : existSkillIDs) {
             StudentSkill studentSkill = mapStudentSkills.get(skillID);
             if (studentSkill == null) {
-                studentSkill = new StudentSkill(student, skillID);
+                studentSkill = new StudentSkill(studentID, skillID);
             } else {
                 mapStudentSkills.remove(skillID);
             }

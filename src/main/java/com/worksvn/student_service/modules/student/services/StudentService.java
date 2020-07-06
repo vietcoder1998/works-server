@@ -54,6 +54,8 @@ public class StudentService {
     @Autowired
     private StudentSkillService studentSkillService;
     @Autowired
+    private StudentWorkingToolService studentWorkingToolService;
+    @Autowired
     private StudentExperienceService studentExperienceService;
     @Autowired
     private StudentLanguageSkillService studentLanguageSkillService;
@@ -253,6 +255,8 @@ public class StudentService {
 
         List<SkillDto> sks = studentSkillService.getStudentSkillDtos(id, null, null)
                 .getItems();
+        List<WorkingToolDto> swt = studentWorkingToolService.getStudentWorkingToolDtos(id, null, null)
+                .getItems();
 
         List<StudentLanguageSkillDto> lks = studentLanguageSkillService
                 .getStudentLanguageSkillDtos(id).getItems();
@@ -281,7 +285,7 @@ public class StudentService {
                 s.getCoverUrl(), s.getDescription(), s.getIdentityCard(),
                 s.getIdentityCardFrontImageUrl(), s.getIdentityCardBackImageUrl(),
                 applyState, offerState,
-                sks, lks, exps);
+                sks, swt, lks, exps);
 
         distributedDataService.complete(profileDto, null);
 

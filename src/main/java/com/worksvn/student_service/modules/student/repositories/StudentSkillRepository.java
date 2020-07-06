@@ -10,14 +10,14 @@ import java.util.Set;
 
 public interface StudentSkillRepository extends JpaRepository<StudentSkill, Integer> {
 
-    Set<StudentSkill> findAllByStudent_Id(String studentID);
+    Set<StudentSkill> findAllByStudentID(String studentID);
 
     @Query("select sk.skillID from StudentSkill sk " +
-            "where sk.student.id = ?1")
+            "where sk.studentID = ?1")
     Set<Integer> getStudentSkillIDs(String studentID);
 
     @Modifying
     @Transactional
-    @Query("delete from StudentSkill sk where sk.student.id = ?1 and sk.skillID in ?2")
-    void deleteAllStudentSkills(String candidateID, Set<Integer> skillIDs);
+    @Query("delete from StudentSkill sk where sk.studentID = ?1 and sk.skillID in ?2")
+    void deleteAllStudentSkills(String studentID, Set<Integer> skillIDs);
 }

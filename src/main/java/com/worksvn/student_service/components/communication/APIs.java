@@ -188,6 +188,35 @@ public class APIs {
         return api;
     }
 
+    // WORKING TOOL ===========================================================================================================
+
+    public static ISApi<Object, PageDto<WorkingToolDto>> PUBLIC_queryWorkingTools(Set<Integer> ids,
+                                                                                  List<String> sortBy, List<String> sortType,
+                                                                                  Integer pageIndex, Integer pageSize) {
+        ISApi<Object, PageDto<WorkingToolDto>> api = new ISApi<>(ISHost.PUBLIC_SERVICE,
+                HttpMethod.POST, "api/internal/workingTools/query" +
+                "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                ids,
+                new TypeReference<PageDto<WorkingToolDto>>() {
+                },
+                true);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
+    public static ISApi<Set<Integer>, Set<Integer>> PUBLIC_getExistWorkingToolIDs(Set<Integer> ids) {
+        ISApi<Set<Integer>, Set<Integer>> api = new ISApi<>(ISHost.PUBLIC_SERVICE,
+                HttpMethod.POST, "api/internal/workingTools/exists",
+                ids,
+                new TypeReference<Set<Integer>>() {
+                },
+                true);
+        return api;
+    }
+
     // MAJOR JOB NAMES =================================================================================================
 
     public static ISApi<Set<Integer>, Set<Integer>> PUBLIC_getJobNameIDsByMajorIDs(Set<Integer> majorIDs) {

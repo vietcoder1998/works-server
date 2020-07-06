@@ -18,7 +18,7 @@ import java.util.Set;
 @AuthorizationRequired
 @Api(description = "Kỹ năng của ứng viên")
 @RequestMapping("/api/students/skills")
-public class StudentSkillsController extends BaseRESTController {
+public class StudentSkillController extends BaseRESTController {
     @Autowired
     private StudentSkillService studentSkillService;
 

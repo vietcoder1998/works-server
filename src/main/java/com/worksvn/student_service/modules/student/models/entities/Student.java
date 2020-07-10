@@ -32,10 +32,8 @@ public class Student {
     @ProfileRequired
     @Column(name = "major_id")
     private Integer majorID;
-    @ProfileRequired
     @Column(name = "school_year_start")
     private Integer schoolYearStart;
-    @ProfileRequired
     @Column(name = "school_year_end")
     private Integer schoolYearEnd;
     @Column(name = "region_id")
@@ -55,7 +53,6 @@ public class Student {
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    @ProfileRequired
     @Column(name = "identity_card")
     private String identityCard;
     @ProfileRequired

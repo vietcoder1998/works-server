@@ -225,7 +225,7 @@ public class StudentService {
 
         if (filter.getWorkingToolIDs() != null && !filter.getWorkingToolIDs().isEmpty()) {
             queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentWorkingTool.class, "swt",
-                    queryBuilder.newCondition().condition("swt.student.id", "=", "s.id"));
+                    queryBuilder.newCondition().condition("swt.studentID", "=", "s.id"));
 
             if (recommendedFilter) {
                 recommendedCondition.or();

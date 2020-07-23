@@ -60,11 +60,11 @@ public class StudentJobService {
 
     private void createActiveJobFilter(String studentID, ActiveJobFilter sourceFilter,
                                        ActiveJobFilter targetFilter,
-                                       boolean applyMajor) {
+                                       boolean matchingMajor) {
         if (sourceFilter != null) {
             BeanUtils.copyProperties(sourceFilter, targetFilter);
         }
-        if (applyMajor) {
+        if (matchingMajor) {
             StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
             if (info != null) {
                 targetFilter.setSchoolID(info.getSchoolID());

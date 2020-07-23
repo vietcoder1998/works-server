@@ -28,9 +28,6 @@ public class StudentJobService {
                                                         Integer pageIndex, Integer pageSize) throws Exception {
         HomeActiveJobFilter homeFilter = new HomeActiveJobFilter();
         createActiveJobFilter(studentID, filter, homeFilter, majorMatching);
-        if (homeFilter.getSchoolID() == null) {
-            return new PageDto<>();
-        }
         return jobService.getHomeActiveJobs(sortBy, sortType, pageIndex, pageSize, homeFilter, priority);
     }
 
@@ -40,9 +37,6 @@ public class StudentJobService {
                                                        int pageIndex, int pageSize) throws Exception {
         SearchActiveJobFilter searchFilter = new SearchActiveJobFilter();
         createActiveJobFilter(studentID, filter, searchFilter, majorMatching);
-        if (searchFilter.getSchoolID() == null) {
-            return new PageDto<>();
-        }
         return jobService.searchActiveJobs(sortBy, sortType, pageIndex, pageSize, searchFilter);
     }
 
@@ -52,9 +46,6 @@ public class StudentJobService {
                                                     int pageIndex, int pageSize) throws Exception {
         ActiveJobFilter activeJobFilter = new ActiveJobFilter();
         createActiveJobFilter(studentID, filter, activeJobFilter, majorMatching);
-        if (activeJobFilter.getSchoolID() == null) {
-            return new PageDto<>();
-        }
         return jobService.getActiveJobs(sortBy, sortType, pageIndex, pageSize, activeJobFilter);
     }
 

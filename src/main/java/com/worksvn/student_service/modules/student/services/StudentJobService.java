@@ -27,11 +27,9 @@ public class StudentJobService {
                                                         List<String> sortBy, List<String> sortType,
                                                         Integer pageIndex, Integer pageSize) throws Exception {
         HomeActiveJobFilter homeFilter = new HomeActiveJobFilter();
-        if (majorMatching) {
-            createActiveJobFilter(studentID, filter, homeFilter, true);
-            if (homeFilter.getSchoolID() == null) {
-                return new PageDto<>();
-            }
+        createActiveJobFilter(studentID, filter, homeFilter, majorMatching);
+        if (homeFilter.getSchoolID() == null) {
+            return new PageDto<>();
         }
         return jobService.getHomeActiveJobs(sortBy, sortType, pageIndex, pageSize, homeFilter, priority);
     }
@@ -41,11 +39,9 @@ public class StudentJobService {
                                                        List<String> sortBy, List<String> sortType,
                                                        int pageIndex, int pageSize) throws Exception {
         SearchActiveJobFilter searchFilter = new SearchActiveJobFilter();
-        if (majorMatching) {
-            createActiveJobFilter(studentID, filter, searchFilter, false);
-            if (searchFilter.getSchoolID() == null) {
-                return new PageDto<>();
-            }
+        createActiveJobFilter(studentID, filter, searchFilter, majorMatching);
+        if (searchFilter.getSchoolID() == null) {
+            return new PageDto<>();
         }
         return jobService.searchActiveJobs(sortBy, sortType, pageIndex, pageSize, searchFilter);
     }
@@ -55,11 +51,9 @@ public class StudentJobService {
                                                     List<String> sortBy, List<String> sortType,
                                                     int pageIndex, int pageSize) throws Exception {
         ActiveJobFilter activeJobFilter = new ActiveJobFilter();
-        if (majorMatching) {
-            createActiveJobFilter(studentID, filter, activeJobFilter, true);
-            if (activeJobFilter.getSchoolID() == null) {
-                return new PageDto<>();
-            }
+        createActiveJobFilter(studentID, filter, activeJobFilter, majorMatching);
+        if (activeJobFilter.getSchoolID() == null) {
+            return new PageDto<>();
         }
         return jobService.getActiveJobs(sortBy, sortType, pageIndex, pageSize, activeJobFilter);
     }
@@ -70,10 +64,10 @@ public class StudentJobService {
         if (sourceFilter != null) {
             BeanUtils.copyProperties(sourceFilter, targetFilter);
         }
-        StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
-        if (info != null) {
-            targetFilter.setSchoolID(info.getSchoolID());
-            if (applyMajor) {
+        if (applyMajor) {
+            StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
+            if (info != null) {
+                targetFilter.setSchoolID(info.getSchoolID());
                 targetFilter.setMajorIDs(Sets.newHashSet(info.getMajorID()));
             }
         }

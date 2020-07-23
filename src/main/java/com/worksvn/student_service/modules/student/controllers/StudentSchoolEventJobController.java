@@ -38,13 +38,15 @@ public class StudentSchoolEventJobController extends BaseRESTController {
                                                  @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                                  @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                  @RequestParam(value = "priority", required = false) JobHomePriority priority,
+                                                 @RequestParam(value = "majorMatching", defaultValue = "false") boolean majorMatching,
                                                  @RequestBody(required = false) ClientHomeActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
         if (filter == null) {
             filter = new ClientHomeActiveJobFilter();
         }
         filter.setSchoolEventID(schoolEventID);
-        return studentJobService.getStudentHomeActiveJobs(studentID, filter, priority, sortBy, sortType, pageIndex, pageSize);
+        return studentJobService.getStudentHomeActiveJobs(studentID, majorMatching,
+                filter, priority, sortBy, sortType, pageIndex, pageSize);
     }
 
     @ApiOperation(value = "Tìm kiếm bài đăng ở trang chủ")
@@ -56,13 +58,15 @@ public class StudentSchoolEventJobController extends BaseRESTController {
                                                 @RequestParam(value = "sortType", required = false) List<String> sortType,
                                                 @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
                                                 @RequestParam(value = "pageSize", defaultValue = "0") Integer pageSize,
+                                                @RequestParam(value = "majorMatching", defaultValue = "false") boolean majorMatching,
                                                 @RequestBody(required = false) ClientSearchActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
         if (filter == null) {
             filter = new ClientSearchActiveJobFilter();
         }
         filter.setSchoolEventID(schoolEventID);
-        return studentJobService.searchStudentActiveJobs(studentID, filter, sortBy, sortType, pageIndex, pageSize);
+        return studentJobService.searchStudentActiveJobs(studentID, majorMatching,
+                filter, sortBy, sortType, pageIndex, pageSize);
     }
 
     @ApiOperation(value = "Xem danh sách việc đang khả dụng")
@@ -74,14 +78,15 @@ public class StudentSchoolEventJobController extends BaseRESTController {
                                              @RequestParam(value = "sortType", required = false) List<String> sortType,
                                              @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
                                              @RequestParam(value = "pageSize", defaultValue = "0") Integer pageSize,
+                                             @RequestParam(value = "majorMatching", defaultValue = "false") boolean majorMatching,
                                              @RequestBody(required = false) ClientActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
         if (filter == null) {
             filter = new ClientActiveJobFilter();
         }
         filter.setSchoolEventID(schoolEventID);
-        return studentJobService.getStudentActiveJobs(studentID, filter,
-                sortBy, sortType, pageIndex, pageSize);
+        return studentJobService.getStudentActiveJobs(studentID, majorMatching,
+                filter, sortBy, sortType, pageIndex, pageSize);
     }
 
     @ApiOperation(value = "Xem chi tiết (check active)")

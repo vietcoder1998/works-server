@@ -22,38 +22,44 @@ public class StudentJobService {
     @Autowired
     private StudentService studentService;
 
-    public PageDto<JobPreview> getStudentHomeActiveJobs(String studentID,
+    public PageDto<JobPreview> getStudentHomeActiveJobs(String studentID, boolean majorMatching,
                                                         ClientHomeActiveJobFilter filter, JobHomePriority priority,
                                                         List<String> sortBy, List<String> sortType,
                                                         Integer pageIndex, Integer pageSize) throws Exception {
         HomeActiveJobFilter homeFilter = new HomeActiveJobFilter();
-        createActiveJobFilter(studentID, filter, homeFilter, true);
-        if (homeFilter.getSchoolID() == null) {
-            return new PageDto<>();
+        if (majorMatching) {
+            createActiveJobFilter(studentID, filter, homeFilter, true);
+            if (homeFilter.getSchoolID() == null) {
+                return new PageDto<>();
+            }
         }
         return jobService.getHomeActiveJobs(sortBy, sortType, pageIndex, pageSize, homeFilter, priority);
     }
 
-    public PageDto<JobPreview> searchStudentActiveJobs(String studentID,
+    public PageDto<JobPreview> searchStudentActiveJobs(String studentID, boolean majorMatching,
                                                        ClientSearchActiveJobFilter filter,
                                                        List<String> sortBy, List<String> sortType,
                                                        int pageIndex, int pageSize) throws Exception {
         SearchActiveJobFilter searchFilter = new SearchActiveJobFilter();
-        createActiveJobFilter(studentID, filter, searchFilter, false);
-        if (searchFilter.getSchoolID() == null) {
-            return new PageDto<>();
+        if (majorMatching) {
+            createActiveJobFilter(studentID, filter, searchFilter, false);
+            if (searchFilter.getSchoolID() == null) {
+                return new PageDto<>();
+            }
         }
         return jobService.searchActiveJobs(sortBy, sortType, pageIndex, pageSize, searchFilter);
     }
 
-    public PageDto<JobPreview> getStudentActiveJobs(String studentID,
+    public PageDto<JobPreview> getStudentActiveJobs(String studentID, boolean majorMatching,
                                                     ClientActiveJobFilter filter,
                                                     List<String> sortBy, List<String> sortType,
                                                     int pageIndex, int pageSize) throws Exception {
         ActiveJobFilter activeJobFilter = new ActiveJobFilter();
-        createActiveJobFilter(studentID, filter, activeJobFilter, true);
-        if (activeJobFilter.getSchoolID() == null) {
-            return new PageDto<>();
+        if (majorMatching) {
+            createActiveJobFilter(studentID, filter, activeJobFilter, true);
+            if (activeJobFilter.getSchoolID() == null) {
+                return new PageDto<>();
+            }
         }
         return jobService.getActiveJobs(sortBy, sortType, pageIndex, pageSize, activeJobFilter);
     }

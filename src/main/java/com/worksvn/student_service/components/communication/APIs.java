@@ -570,6 +570,26 @@ public class APIs {
         return api;
     }
 
+    // EVENT JOB BRANCHES ==============================================================================================
+
+    public static ISApi<Object, PageDto<BranchDto>> EMPLOYER_getSchoolEventJobBranches(String schoolEventID,
+                                                                                       List<String> sortBy, List<String> sortType,
+                                                                                       Integer pageIndex, Integer pageSize) {
+        ISApi<Object, PageDto<BranchDto>> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.GET, "api/internal/employers/schools/events/{eid}/jobs/branches" +
+                "?sortBy={sortBy}&sortType={sortType}&pageIndex={pageIndex}&pageSize={pageSize}",
+                null,
+                new TypeReference<PageDto<BranchDto>>() {
+                },
+                true);
+        api.addParam("eid", schoolEventID);
+        api.addParam("sortBy", sortBy);
+        api.addParam("sortType", sortType);
+        api.addParam("pageIndex", pageIndex);
+        api.addParam("pageSize", pageSize);
+        return api;
+    }
+
     // JOB APPLY REQUEST ===============================================================================================
 
     public static ISApi<JobApplyRequestFilter, PageDto<JobApplyRequestPreview>> EMPLOYER_queryJobApplyRequestPreviews(

@@ -39,13 +39,15 @@ public class StudentSchoolEventJobController extends BaseRESTController {
                                                  @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                  @RequestParam(value = "priority", required = false) JobHomePriority priority,
                                                  @RequestParam(value = "majorMatching", defaultValue = "false") boolean majorMatching,
+                                                 @RequestParam(value = "schoolConnected", defaultValue = "true") boolean schoolConnected,
                                                  @RequestBody(required = false) ClientHomeActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
         if (filter == null) {
             filter = new ClientHomeActiveJobFilter();
         }
         filter.setSchoolEventID(schoolEventID);
-        return studentJobService.getStudentHomeActiveJobs(studentID, majorMatching,
+        return studentJobService.getStudentHomeActiveJobs(studentID,
+                schoolConnected, majorMatching,
                 filter, priority, sortBy, sortType, pageIndex, pageSize);
     }
 
@@ -59,13 +61,15 @@ public class StudentSchoolEventJobController extends BaseRESTController {
                                                 @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
                                                 @RequestParam(value = "pageSize", defaultValue = "0") Integer pageSize,
                                                 @RequestParam(value = "majorMatching", defaultValue = "false") boolean majorMatching,
+                                                @RequestParam(value = "schoolConnected", defaultValue = "true") boolean schoolConnected,
                                                 @RequestBody(required = false) ClientSearchActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
         if (filter == null) {
             filter = new ClientSearchActiveJobFilter();
         }
         filter.setSchoolEventID(schoolEventID);
-        return studentJobService.searchStudentActiveJobs(studentID, majorMatching,
+        return studentJobService.searchStudentActiveJobs(studentID,
+                schoolConnected, majorMatching,
                 filter, sortBy, sortType, pageIndex, pageSize);
     }
 
@@ -79,13 +83,15 @@ public class StudentSchoolEventJobController extends BaseRESTController {
                                              @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
                                              @RequestParam(value = "pageSize", defaultValue = "0") Integer pageSize,
                                              @RequestParam(value = "majorMatching", defaultValue = "false") boolean majorMatching,
+                                             @RequestParam(value = "schoolConnected", defaultValue = "true") boolean schoolConnected,
                                              @RequestBody(required = false) ClientActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
         if (filter == null) {
             filter = new ClientActiveJobFilter();
         }
         filter.setSchoolEventID(schoolEventID);
-        return studentJobService.getStudentActiveJobs(studentID, majorMatching,
+        return studentJobService.getStudentActiveJobs(studentID,
+                schoolConnected, majorMatching,
                 filter, sortBy, sortType, pageIndex, pageSize);
     }
 

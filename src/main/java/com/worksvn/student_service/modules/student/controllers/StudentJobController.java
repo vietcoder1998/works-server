@@ -39,9 +39,11 @@ public class StudentJobController extends BaseRESTController {
                                                  @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                  @RequestParam(value = "priority", required = false) JobHomePriority priority,
                                                  @RequestParam(value = "majorMatching", defaultValue = "false") boolean majorMatching,
+                                                 @RequestParam(value = "schoolConnected", defaultValue = "false") boolean schoolConnected,
                                                  @RequestBody(required = false) ClientHomeActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentJobService.getStudentHomeActiveJobs(studentID, majorMatching,
+        return studentJobService.getStudentHomeActiveJobs(studentID,
+                schoolConnected, majorMatching,
                 filter, priority, sortBy, sortType, pageIndex, pageSize);
     }
 
@@ -54,9 +56,11 @@ public class StudentJobController extends BaseRESTController {
                                                 @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
                                                 @RequestParam(value = "pageSize", defaultValue = "0") Integer pageSize,
                                                 @RequestParam(value = "majorMatching", defaultValue = "false") boolean majorMatching,
+                                                @RequestParam(value = "schoolConnected", defaultValue = "false") boolean schoolConnected,
                                                 @RequestBody(required = false) ClientSearchActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentJobService.searchStudentActiveJobs(studentID, majorMatching,
+        return studentJobService.searchStudentActiveJobs(studentID,
+                schoolConnected, majorMatching,
                 filter, sortBy, sortType, pageIndex, pageSize);
     }
 
@@ -69,10 +73,12 @@ public class StudentJobController extends BaseRESTController {
                                              @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
                                              @RequestParam(value = "pageSize", defaultValue = "0") Integer pageSize,
                                              @RequestParam(value = "majorMatching", defaultValue = "false") boolean majorMatching,
+                                             @RequestParam(value = "schoolConnected", defaultValue = "false") boolean schoolConnected,
                                              @RequestBody(required = false) ClientActiveJobFilter filter) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentJobService.getStudentActiveJobs(studentID, majorMatching, filter,
-                sortBy, sortType, pageIndex, pageSize);
+        return studentJobService.getStudentActiveJobs(studentID,
+                schoolConnected, majorMatching,
+                filter, sortBy, sortType, pageIndex, pageSize);
     }
 
     @ApiOperation(value = "Xem chi tiết (check active)")

@@ -75,6 +75,8 @@ public class Student {
     private String identityCardFrontImageUrl;
     @Column(name = "identity_card_back_image_url")
     private String identityCardBackImageUrl;
+    @Column(name = "cv_url")
+    private String cvUrl;
     @Column(name = "is_profile_verified")
     private Boolean profileVerified = false;
     @Column(name = "is_looking_for_job")

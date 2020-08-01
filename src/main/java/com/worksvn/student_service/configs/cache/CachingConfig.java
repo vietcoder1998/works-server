@@ -30,7 +30,7 @@ public class CachingConfig {
     @Bean
     public CacheManager cacheManager() {
         ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager(cacheNames().toArray(new String[0]));
-        cacheManager.setAllowNullValues(false);
+        cacheManager.setAllowNullValues(true);
         cacheManager.setStoreByValue(false);
         return cacheManager;
     }

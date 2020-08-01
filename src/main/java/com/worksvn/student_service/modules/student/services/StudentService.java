@@ -18,6 +18,7 @@ import com.worksvn.common.services.notification.NotificationFactory;
 import com.worksvn.common.services.notification.NotificationService;
 import com.worksvn.common.services.notification.models.NotificationGroup;
 import com.worksvn.common.utils.core.DateTimeUtils;
+import com.worksvn.common.utils.core.FileChecker;
 import com.worksvn.common.utils.jpa.JPAQueryBuilder;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
 import com.worksvn.student_service.constants.NumberConstants;
@@ -72,6 +73,8 @@ public class StudentService {
 
     @Value("${application.firebase.file-storage.student-dir.name:students/}")
     private String studentStorageDirectory;
+    @Value("${application.firebase.file-storage.student-cv-dir.name:curriculum_vitae/students/}")
+    private String studentCVStorageDirectory;
 
     public PageDto<StudentPreview> getStudentPreviews(List<String> sortBy, List<String> sortType,
                                                       int pageIndex, int pageSize,
@@ -109,7 +112,8 @@ public class StudentService {
                     .joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentSaved.class, "ss",
                             queryBuilder.newCondition().condition("ss.student.id", "=", "s.id")
                                     .and()
-                                    .paramCondition("ss.employerID", "=", filter.getEmployerID()));;
+                                    .paramCondition("ss.employerID", "=", filter.getEmployerID()));
+            ;
             unlockedID = "su.id";
             savedID = "ss.id";
 
@@ -129,7 +133,8 @@ public class StudentService {
                 unlockedID, savedID,
                 "s.schoolID", "s.majorID",
                 "s.schoolYearStart", "s.schoolYearEnd",
-                "s.studentCode", "s.createdDate")
+                "s.studentCode", "s.cvUrl",
+                "s.createdDate")
                 .from(Student.class, "s")
                 .joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentAverageRating.class, "sar",
                         queryBuilder.newCondition().condition("sar.studentID", "=", "s.id"));
@@ -249,6 +254,10 @@ public class StudentService {
             whereCondition.and().paramCondition("s.id", "NOT IN", filter.getExcludedIDs());
         }
 
+        if (filter.getHasCV() != null) {
+            whereCondition.and().nullCondition("s.cvUrl", !filter.getHasCV());
+        }
+
         if (filter.getCreatedDate() != null && filter.getCreatedDate() > 0) {
             Date startDate = DateTimeUtils.extractDateOnly(filter.getCreatedDate());
             Date endDate = DateTimeUtils.addDayToDate(startDate, 1);
@@ -309,7 +318,7 @@ public class StudentService {
                 s.getProfileVerified(), s.getLookingForJob(), s.getCompletePercent(),
                 car, unlocked, saved,
                 s.getSchoolID(), s.getMajorID(), s.getSchoolYearStart(), s.getSchoolYearEnd(),
-                s.getStudentCode(), s.getCreatedDate(),
+                s.getStudentCode(), s.getCvUrl(), s.getCreatedDate(),
                 s.getCoverUrl(), s.getDescription(), s.getIdentityCard(),
                 s.getIdentityCardFrontImageUrl(), s.getIdentityCardBackImageUrl(),
                 applyState, offerState,
@@ -478,6 +487,28 @@ public class StudentService {
         return cardImageDto;
     }
 
+    public DownloadUrlDto uploadStudentCV(String studentID, MultipartFile imageFile) throws ResponseException, IOException {
+        checkStudentExist(studentID);
+        String oldCvUrl = studentRepository.getStudentCVUrl(studentID);
+        String cvUrl = uploadStudentCV(studentID, imageFile, oldCvUrl);
+        studentRepository.updateStudentCVUrl(studentID, cvUrl);
+        return new DownloadUrlDto(cvUrl);
+    }
+
+    private String uploadStudentCV(String studentID, MultipartFile imageFile,
+                                   String oldCvUrl) throws IOException, ResponseException {
+        String cvUrl = fileStorageService.uploadFile(imageFile,
+                FileChecker.APPLICATION_TYPE, FileChecker.PDF_SUB_TYPE,
+                studentCVStorageDirectory + studentID,
+                StringConstants.CV_IMAGE_NAME + "_" + new Date().getTime());
+        try {
+            fileStorageService.deleteFileByUrl(oldCvUrl);
+        } catch (Exception e) {
+            logger.error("[File Storage Service] Delete file(s) failed: " + oldCvUrl, e);
+        }
+        return cvUrl;
+    }
+
     public void updateStudentLookingForJob(String studentID, boolean lookingForJob) throws ResponseException {
         checkStudentExist(studentID);
         studentRepository.updateStudentLookingForJob(studentID, lookingForJob);
@@ -570,10 +601,10 @@ public class StudentService {
     public void updateStudentAddress(String studentID, RegionAddress regionAddress) {
         RegionDto region = regionAddress.getRegion();
         studentRepository.updateStudentRegionAddress(studentID,
-                region == null? null : region.getId(), regionAddress.getAddress(),
+                region == null ? null : region.getId(), regionAddress.getAddress(),
                 regionAddress.getLat(), regionAddress.getLon());
     }
-    
+
     public StudentContactInfo getContactInfo(String studentID) throws ResponseException {
         StudentContactInfo contactInfo = studentRepository.getStudentContactInfo(studentID);
         if (contactInfo == null) {

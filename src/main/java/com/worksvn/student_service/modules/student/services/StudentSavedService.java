@@ -47,7 +47,8 @@ public class StudentSavedService {
                 "s.profileVerified", "s.lookingForJob", "s.completePercent",
                 "sar.attitudeRating", "sar.skillRating", "sar.jobAccomplishmentRating", "sar.ratingCount",
                 "su.id", "s.schoolID", "s.majorID",
-                "s.schoolYearStart", "s.schoolYearEnd", "s.studentCode",
+                "s.schoolYearStart", "s.schoolYearEnd",
+                "s.studentCode", "s.cvUrl",
                 "s.createdDate")
                 .from(StudentSaved.class, "ss")
                 .join(JPAQueryBuilder.JoinType.INNER_JOIN, "ss.student", "s")

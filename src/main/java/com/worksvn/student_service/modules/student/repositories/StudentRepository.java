@@ -80,6 +80,14 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     @Query("update Student s set s.coverUrl = ?2 where s.id = ?1")
     void updateStudentCover(String studentID, String coverUrl);
 
+    @Query("select s.cvUrl from Student s where s.id = ?1")
+    String getStudentCVUrl(String studentID);
+
+    @Modifying
+    @Transactional
+    @Query("update Student s set s.cvUrl = ?2 where s.id = ?1")
+    void updateStudentCVUrl(String studentID, String cvUrl);
+
     @Query("select new  com.worksvn.common.modules.common.responses.IdentityCardImageDto" +
             "(s.identityCardFrontImageUrl, s.identityCardBackImageUrl) " +
             "from Student s " +

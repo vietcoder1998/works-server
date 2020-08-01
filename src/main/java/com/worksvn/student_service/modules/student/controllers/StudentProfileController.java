@@ -5,10 +5,7 @@ import com.worksvn.common.annotations.swagger.Response;
 import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
-import com.worksvn.common.modules.common.responses.AvatarUrlDto;
-import com.worksvn.common.modules.common.responses.CompletePercent;
-import com.worksvn.common.modules.common.responses.CoverUrlDto;
-import com.worksvn.common.modules.common.responses.IdentityCardImageDto;
+import com.worksvn.common.modules.common.responses.*;
 import com.worksvn.common.modules.student.requests.UpdateStudentInfoDto;
 import com.worksvn.common.modules.student.responses.SimpleStudentInfoDto;
 import com.worksvn.common.modules.student.responses.StudentInfoDto;
@@ -143,6 +140,17 @@ public class StudentProfileController extends BaseRESTController {
     public void updateStudentDescription(@RequestBody String description) throws ResponseException {
         String studentID = getAuthorizedUser().getId();
         studentService.updateStudentDescription(studentID, description);
+    }
+
+    @ApiOperation(value = "Upload cv")
+    @Responses({
+            @Response(responseValue = ResponseValue.STUDENT_NOT_FOUND)
+    })
+    @PutMapping("/curriculumVitae")
+    public DownloadUrlDto uploadStudentCV(@RequestParam(value = "file", required = false) MultipartFile cvFile)
+            throws IOException, ResponseException {
+        String studentID = getAuthorizedUser().getId();
+        return studentService.uploadStudentCV(studentID, cvFile);
     }
 
     @ApiOperation(value = "Phần trăm hoàn thiện hồ sơ")

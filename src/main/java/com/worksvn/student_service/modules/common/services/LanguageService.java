@@ -14,7 +14,7 @@ public class LanguageService extends BaseLanguageService {
     @Autowired
     private ISRestCommunicator restCommunicator;
 
-    @Cacheable(cacheNames = CacheValue.LANGUAGES, key = "#id")
+    @Cacheable(cacheNames = CacheValue.LANGUAGES, key = "#id", unless = "#result == null")
     @Override
     public LanguageDto getLanguageDto(int id) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs.PUBLIC_getLanguage(id));

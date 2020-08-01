@@ -34,7 +34,7 @@ public class SchoolEducationService {
                         sortBy, sortType, pageIndex, pageSize));
     }
 
-    @Cacheable(cacheNames = CacheValue.SCHOOL_MAJORS_BY_FTS, key = "{#schoolID, #name}")
+    @Cacheable(cacheNames = CacheValue.SCHOOL_MAJORS_BY_FTS, key = "{#schoolID, #name}", unless = "#result == null")
     public MajorDto findSchoolMajor(String schoolID, String name) throws Exception {
         PageDto<MajorDto> pageMajors = getSchoolMajors(schoolID, null, name, true,
                 null, null, null, null);

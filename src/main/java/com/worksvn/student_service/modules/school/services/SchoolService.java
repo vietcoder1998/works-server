@@ -14,12 +14,12 @@ public class SchoolService extends BaseSchoolService {
     @Autowired
     private ISRestCommunicator restCommunicator;
 
-    @Cacheable(cacheNames = CacheValue.SCHOOL_SHORT_NAMES, key = "#schoolID")
+    @Cacheable(cacheNames = CacheValue.SCHOOL_SHORT_NAMES, key = "#schoolID", unless = "#result == null")
     public String getSchoolShortName(String schoolID) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs.SCHOOL_getSchoolShortName(schoolID)).getShortName();
     }
 
-    @Cacheable(cacheNames = CacheValue.SIMPLE_SCHOOL_PREVIEWS, key = "#schoolID")
+    @Cacheable(cacheNames = CacheValue.SIMPLE_SCHOOL_PREVIEWS, key = "#schoolID", unless = "#result == null")
     @Override
     public SimpleSchoolPreview getSimpleSchoolPreview(String schoolID) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs.SCHOOL_getSchoolSimpleInfo(schoolID));

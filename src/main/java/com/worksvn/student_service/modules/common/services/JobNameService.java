@@ -27,7 +27,7 @@ public class JobNameService extends BaseJobNameService {
                 .PUBLIC_getJobNames(name, matchingName, sortBy, sortType, pageIndex, pageSize, ids));
     }
 
-    @Cacheable(cacheNames = CacheValue.JOB_NAMES_BY_FTS, key = "#name")
+    @Cacheable(cacheNames = CacheValue.JOB_NAMES_BY_FTS, key = "#name", unless="#result == null")
     public JobNameDto findJobNameByName(String name) throws Exception {
         PageDto<JobNameDto> pageJobNames = queryJobNameDtos(name, true,
                 null, null, null, 1, null);

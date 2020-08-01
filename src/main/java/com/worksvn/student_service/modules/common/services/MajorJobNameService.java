@@ -14,7 +14,7 @@ public class MajorJobNameService {
     @Autowired
     private ISRestCommunicator restCommunicator;
 
-    @Cacheable(cacheNames = CacheValue.MAJORS_JOB_NAMES, key = "#majorIDs.toString()")
+    @Cacheable(cacheNames = CacheValue.MAJORS_JOB_NAMES, key = "#majorIDs.toString()", unless = "#result == null")
     public Set<Integer> getJobNameIDsByMajorIDs(Set<Integer> majorIDs) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs.PUBLIC_getJobNameIDsByMajorIDs(majorIDs));
     }

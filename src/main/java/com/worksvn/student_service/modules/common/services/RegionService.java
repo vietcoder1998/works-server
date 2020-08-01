@@ -14,7 +14,7 @@ public class RegionService extends BaseRegionService {
     @Autowired
     private ISRestCommunicator restCommunicator;
 
-    @Cacheable(cacheNames = CacheValue.REGIONS, key = "#id")
+    @Cacheable(cacheNames = CacheValue.REGIONS, key = "#id", unless = "#result == null")
     @Override
     public RegionDto getRegionDto(int id) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs.PUBLIC_getRegion(id));

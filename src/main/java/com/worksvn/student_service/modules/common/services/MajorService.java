@@ -33,7 +33,7 @@ public class MajorService extends BaseMajorService {
         return restCommunicator.exchangeForSuccess(APIs.PUBLIC_getMajor(id));
     }
 
-    @Cacheable(cacheNames = CacheValue.MAJORS_BY_FTS, key = "#name")
+    @Cacheable(cacheNames = CacheValue.MAJORS_BY_FTS, key = "#name", unless = "#result == null")
     public MajorDto findMajor(String name) throws Exception {
         PageDto<MajorDto> pageMajors = queryMajors(null, name, true,
                 null, null, null, null, null);

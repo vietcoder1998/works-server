@@ -5,6 +5,7 @@ import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.constants.StringConstants;
 import com.worksvn.common.modules.employer.enums.JobHomePriority;
 import com.worksvn.common.modules.employer.requests.*;
+import com.worksvn.common.modules.employer.responses.JobCountDto;
 import com.worksvn.common.modules.employer.responses.JobDto;
 import com.worksvn.common.modules.employer.responses.JobPreview;
 import com.worksvn.common.modules.student.responses.StudentQueryActiveJobInfo;
@@ -52,22 +53,27 @@ public class StudentJobService {
         return jobService.getActiveJobs(sortBy, sortType, pageIndex, pageSize, activeJobFilter);
     }
 
+    public JobCountDto getStudentActiveJobsCount(ActiveJobCountFilter filter) throws Exception {
+        return jobService.getActiveJobCount(filter);
+    }
+
     private void createActiveJobFilter(String studentID, ActiveJobFilter sourceFilter,
                                        ActiveJobFilter targetFilter,
                                        boolean schoolConnected, boolean matchingMajor) {
         if (sourceFilter != null) {
             BeanUtils.copyProperties(sourceFilter, targetFilter);
         }
-        if (schoolConnected || matchingMajor) {
-            StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
-            if (info != null) {
-                if (schoolConnected) {
-                    targetFilter.setSchoolID(info.getSchoolID());
-                }
-                if (matchingMajor) {
-                    targetFilter.setMajorIDs(Sets.newHashSet(info.getMajorID()));
-                }
+        StudentQueryActiveJobInfo info = studentService.getQueryActiveJobInfo(studentID);
+        if (info != null) {
+            if (schoolConnected) {
+                targetFilter.setSchoolID(info.getSchoolID());
             }
+            if (matchingMajor) {
+                targetFilter.setMajorIDs(Sets.newHashSet(info.getMajorID()));
+            }
+            JobLocationFilter locationFilter = new JobLocationFilter();
+            locationFilter.setRegionID(info.getRegionID());
+            targetFilter.setJobLocationFilter(locationFilter);
         }
         targetFilter.setSchoolIgnored(false);
         targetFilter.setUserID(studentID);

@@ -17,8 +17,7 @@ public class ExportPdfStudentProfileService {
     private PdfExportService pdfExportService;
 
     public DownloadUrlDto exportPdfStudentProfile(String studentID, String templateName) throws IOException, DocumentException {
-        byte[] data = pdfExportService.exportPdf(templateName, new HashMap<>(),
-                new PdfExportConfig());
+        byte[] data = pdfExportService.exportPdf(templateName, new HashMap<>(), new PdfExportConfig());
         FileOutputStream fileOutputStream = new FileOutputStream("src/main/resources/dev/data.pdf");
         fileOutputStream.write(data);
         fileOutputStream.close();

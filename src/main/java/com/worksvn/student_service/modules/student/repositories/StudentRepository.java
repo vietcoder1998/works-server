@@ -60,7 +60,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     LatLon getLatLon(String id);
 
     @Query("select new com.worksvn.common.modules.student.responses.StudentQueryActiveJobInfo" +
-            "(s.schoolID, s.majorID, s.lat, s.lon) " +
+            "(s.schoolID, s.majorID, s.regionID, s.lat, s.lon) " +
             "from Student s where s.id = ?1")
     StudentQueryActiveJobInfo getQueryActiveJobInfo(String id);
 
@@ -155,4 +155,14 @@ public interface StudentRepository extends JpaRepository<Student, String> {
             "from Student s " +
             "where s.id = ?1")
     CompletePercent getStudentCompletePercent(String studentID);
+
+    @Query("select new com.worksvn.common.modules.student.responses.StudentRegionMajorCountDto" +
+            "(s.majorID, s.regionID, count(s.id)) " +
+            "from Student s " +
+            "group by s.majorID, s.regionID")
+    List<StudentRegionMajorCountDto> getStudentRegionMajorCount();
+
+    @Query("select s.id from Student s " +
+            "where s.majorID = ?1 and s.regionID = ?2")
+    Set<String> getStudentIDs(Integer regionID, Integer majorID);
 }

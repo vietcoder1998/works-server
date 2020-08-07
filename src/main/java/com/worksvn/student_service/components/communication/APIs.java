@@ -522,6 +522,16 @@ public class APIs {
         return api;
     }
 
+    public static ISApi<ActiveJobCountFilter, JobCountDto> EMPLOYER_getActiveJobCount(ActiveJobCountFilter filter) {
+        ISApi<ActiveJobCountFilter, JobCountDto> api = new ISApi<>(ISHost.EMPLOYER_SERVICE,
+                HttpMethod.POST, "api/internal/jobs/active/count",
+                filter,
+                new TypeReference<JobCountDto>() {
+                },
+                true);
+        return api;
+    }
+
     public static ISApi<Object, JobDto> EMPLOYER_getActiveJobDetail(String jobID, String userID, String userType,
                                                                     String schoolID, Boolean passSchoolIgnore,
                                                                     Double centerLat, Double centerLon,

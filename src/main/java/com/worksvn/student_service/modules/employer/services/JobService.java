@@ -3,9 +3,11 @@ package com.worksvn.student_service.modules.employer.services;
 import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.components.communication.ISRestCommunicator;
 import com.worksvn.common.modules.employer.enums.JobHomePriority;
+import com.worksvn.common.modules.employer.requests.ActiveJobCountFilter;
 import com.worksvn.common.modules.employer.requests.ActiveJobFilter;
 import com.worksvn.common.modules.employer.requests.HomeActiveJobFilter;
 import com.worksvn.common.modules.employer.requests.SearchActiveJobFilter;
+import com.worksvn.common.modules.employer.responses.JobCountDto;
 import com.worksvn.common.modules.employer.responses.JobDto;
 import com.worksvn.common.modules.employer.responses.JobPreview;
 import com.worksvn.student_service.components.communication.APIs;
@@ -38,6 +40,10 @@ public class JobService {
                                              ActiveJobFilter filter) throws Exception {
         return restCommunicator.exchangeForSuccess(APIs
                 .EMPLOYER_queryActiveJobs(sortBy, sortType, pageIndex, pageSize, filter));
+    }
+
+    public JobCountDto getActiveJobCount(ActiveJobCountFilter filter) throws Exception {
+        return restCommunicator.exchangeForSuccess(APIs.EMPLOYER_getActiveJobCount(filter));
     }
 
     public JobDto getActiveJobDetail(String id, String userID, String userType,

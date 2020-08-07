@@ -238,7 +238,7 @@ public class StudentService {
                 recommendedCondition.and();
             }
 
-            recommendedCondition.paramCondition("swt.workingToolID", "IN", filter.getLanguageIDs());
+            recommendedCondition.paramCondition("swt.workingToolID", "IN", filter.getWorkingToolIDs());
             groupByID = true;
         }
 
@@ -619,6 +619,14 @@ public class StudentService {
             throw new ResponseException(ResponseValue.STUDENT_NOT_FOUND);
         }
         return result;
+    }
+
+    public List<StudentRegionMajorCountDto> getStudentRegionMajorCount() {
+        return studentRepository.getStudentRegionMajorCount();
+    }
+
+    public Set<String> getStudentIDsByRegionAndMajor(Integer regionID, Integer majorID) {
+        return studentRepository.getStudentIDs(regionID, majorID);
     }
 
     public void saveStudent(Student student) {

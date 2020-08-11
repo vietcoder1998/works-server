@@ -21,10 +21,10 @@ public class PublishStudentSuitableJobNotificationTask {
     @Value("${application.schedule-task.publish-student-suitable-job-notification.created-date.day.previous}")
     private int timeDelay;
 
-    @Scheduled(cron = "0 0 7 * * ?")
+    @Scheduled(cron = "${application.schedule-task.publish-student-suitable-job-notification.cron.expression}")
     public void scheduleFixedRateTaskAsync() throws Exception {
         logger.info("[SCHEDULE TASK] Start publishing student suitable notification");
-        Date endDate = DateTimeUtils.extractDateOnly(new Date());
+        Date endDate = DateTimeUtils.addDayToDate(DateTimeUtils.extractDateOnly(new Date()), -1);
         Date startDate = DateTimeUtils.addDayToDate(endDate, -timeDelay);
         notificationService.publishStudentSuitableJobNotification(startDate, endDate);
         logger.info("[SCHEDULE TASK] Stop publishing student suitable notification");

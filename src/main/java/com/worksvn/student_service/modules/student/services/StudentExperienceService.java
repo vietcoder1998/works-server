@@ -5,6 +5,7 @@ import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
 import com.worksvn.common.modules.common.responses.JobNameDto;
 import com.worksvn.common.modules.student.requests.NewStudentExperienceDto;
+import com.worksvn.common.modules.student.requests.NewItemPosition;
 import com.worksvn.common.modules.student.responses.StudentExperienceDto;
 import com.worksvn.common.utils.jpa.JPAQueryBuilder;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
@@ -14,6 +15,7 @@ import com.worksvn.student_service.modules.student.models.entities.StudentExperi
 import com.worksvn.student_service.modules.student.repositories.StudentExperienceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -66,6 +68,16 @@ public class StudentExperienceService {
         Integer jobNameID = findMatchingJobNameIDByName(updateExperience.getJobName());
         experience.update(updateExperience, jobNameID);
         experienceRepository.save(experience);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateStudentExperiencePosition(String studentID, List<NewItemPosition> newPositions) {
+        if (newPositions == null || newPositions.isEmpty()) {
+            return;
+        }
+        for (NewItemPosition newPosition : newPositions) {
+            experienceRepository.updateStudentExperiencePosition(studentID, newPosition.getId(), newPosition.getPosition());
+        }
     }
 
     public void deleteStudentEducation(String studentID, String experienceID) {

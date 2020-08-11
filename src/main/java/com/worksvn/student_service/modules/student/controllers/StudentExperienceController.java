@@ -6,6 +6,7 @@ import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.constants.ResponseValue;
 import com.worksvn.common.exceptions.ResponseException;
+import com.worksvn.common.modules.student.requests.NewItemPosition;
 import com.worksvn.common.modules.student.requests.NewStudentExperienceDto;
 import com.worksvn.common.modules.student.responses.StudentExperienceDto;
 import com.worksvn.student_service.base.controllers.BaseRESTController;
@@ -59,6 +60,15 @@ public class StudentExperienceController extends BaseRESTController {
             throws Exception {
         String studentID = getAuthorizedUser().getId();
         studentExperienceService.updateStudentExperience(studentID, experienceID, newExperience);
+    }
+
+    @ApiOperation(value = "Cập nhật vị trí")
+    @Responses({
+    })
+    @PutMapping("/position")
+    public void updateStudentExperiencePosition(@RequestBody @Valid List<NewItemPosition> newPositions) {
+        String studentID = getAuthorizedUser().getId();
+        studentExperienceService.updateStudentExperiencePosition(studentID, newPositions);
     }
 
     @ApiOperation(value = "Xóa")

@@ -40,6 +40,8 @@ public class StudentLanguageSkill {
     private Double score;
     @Column(name = "created_date")
     private Date createdDate = new Date();
+    @Column(name = "position")
+    private Integer position;
 
     public StudentLanguageSkill(Student student,
                                 NewStudentLanguageSkillDto newLanguageSkillDto) {

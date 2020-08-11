@@ -45,6 +45,8 @@ public class StudentExperience {
     private String description;
     @Column(name = "created_date")
     private Date createdDate = new Date();
+    @Column(name = "position")
+    private Integer position;
 
     public StudentExperience(Student student, NewStudentExperienceDto newEducation,
                              Integer jobNameID) {

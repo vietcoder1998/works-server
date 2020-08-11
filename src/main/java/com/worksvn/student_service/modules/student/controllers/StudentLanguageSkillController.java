@@ -5,6 +5,7 @@ import com.worksvn.common.annotations.swagger.Response;
 import com.worksvn.common.annotations.swagger.Responses;
 import com.worksvn.common.base.models.PageDto;
 import com.worksvn.common.constants.ResponseValue;
+import com.worksvn.common.modules.student.requests.NewItemPosition;
 import com.worksvn.common.modules.student.requests.NewStudentLanguageSkillDto;
 import com.worksvn.common.modules.student.responses.StudentLanguageSkillDto;
 import com.worksvn.student_service.base.controllers.BaseRESTController;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -53,6 +55,15 @@ public class StudentLanguageSkillController extends BaseRESTController {
                                              @RequestBody @Valid NewStudentLanguageSkillDto updateLanguageSkill) throws Exception {
         String studentID = getAuthorizedUser().getId();
         studentLanguageSkillService.updateStudentLanguageSkill(studentID, languageSkillID, updateLanguageSkill);
+    }
+
+    @ApiOperation(value = "Cập nhật vị trí")
+    @Responses({
+    })
+    @PutMapping("/position")
+    public void updateStudentLanguageSkillPosition(@RequestBody @Valid List<NewItemPosition> newPositions) {
+        String studentID = getAuthorizedUser().getId();
+        studentLanguageSkillService.updateStudentLanguageSkillPosition(studentID, newPositions);
     }
 
     @ApiOperation(value = "Xóa danh sách")

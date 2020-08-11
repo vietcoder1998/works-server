@@ -21,7 +21,7 @@ public class PublishStudentSuitableJobNotificationTask {
     @Value("${application.schedule-task.publish-student-suitable-job-notification.created-date.day.previous}")
     private int timeDelay;
 
-    @Scheduled(cron = "0 37 15 * * ?")
+    @Scheduled(cron = "0 0 7 * * ?")
     public void scheduleFixedRateTaskAsync() throws Exception {
         logger.info("[SCHEDULE TASK] Start publishing student suitable notification");
         Date endDate = DateTimeUtils.extractDateOnly(new Date());

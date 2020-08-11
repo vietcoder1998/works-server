@@ -159,10 +159,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     @Query("select new com.worksvn.common.modules.student.responses.StudentRegionMajorCountDto" +
             "(s.majorID, s.regionID, count(s.id)) " +
             "from Student s " +
+            "where s.majorID is not null and s.regionID is not null " +
             "group by s.majorID, s.regionID")
     List<StudentRegionMajorCountDto> getStudentRegionMajorCount();
-
-    @Query("select s.id from Student s " +
-            "where s.majorID = ?1 and s.regionID = ?2")
-    Set<String> getStudentIDs(Integer regionID, Integer majorID);
 }

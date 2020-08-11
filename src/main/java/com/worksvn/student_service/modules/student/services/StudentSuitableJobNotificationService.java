@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class StudentSuitableJobNotificationService {
@@ -43,7 +42,7 @@ public class StudentSuitableJobNotificationService {
                     studentCount.getStudentCount(), jobCountResult.getJobCount(),
                     skipped? "SKIP PUSH" : "PUSH");
             if (!skipped) {
-                Set<String> studentIDs = studentService
+                List<String> studentIDs = studentService
                         .getStudentIDsByRegionAndMajor(studentCount.getRegionID(), studentCount.getMajorID());
                 if (!studentIDs.isEmpty()) {
                     for (String studentID : studentIDs) {

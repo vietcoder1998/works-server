@@ -19,6 +19,7 @@ import com.worksvn.common.services.notification.NotificationService;
 import com.worksvn.common.services.notification.models.NotificationGroup;
 import com.worksvn.common.utils.core.DateTimeUtils;
 import com.worksvn.common.utils.core.FileChecker;
+import com.worksvn.common.utils.core.TextUtils;
 import com.worksvn.common.utils.jpa.JPAQueryBuilder;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
 import com.worksvn.student_service.constants.NumberConstants;
@@ -625,8 +626,27 @@ public class StudentService {
         return studentRepository.getStudentRegionMajorCount();
     }
 
-    public Set<String> getStudentIDsByRegionAndMajor(Integer regionID, Integer majorID) {
-        return studentRepository.getStudentIDs(regionID, majorID);
+    public List<String> getStudentIDsByRegionAndMajor(Integer regionID, Integer majorID) {
+        JPAQueryBuilder<String> queryBuilder = new JPAQueryBuilder<>();
+        queryBuilder.select(String.class, "s.id")
+                .from(Student.class, "s");
+
+        JPAQueryBuilder<String>.Condition whereCondition = queryBuilder.newCondition();
+
+        if (regionID != null && regionID > 0) {
+            whereCondition.and().paramCondition("s.regionID", "=", regionID);
+        } else {
+            whereCondition.and().nullCondition("s.regionID", true);
+        }
+
+        if (majorID != null && majorID > 0) {
+            whereCondition.and().paramCondition("s.majorID", "=", majorID);
+        } else {
+            whereCondition.and().nullCondition("s.majorID", true);
+        }
+        queryBuilder.where(whereCondition);
+
+        return queryExecutor.executeQuery(queryBuilder).getResultList();
     }
 
     public void saveStudent(Student student) {

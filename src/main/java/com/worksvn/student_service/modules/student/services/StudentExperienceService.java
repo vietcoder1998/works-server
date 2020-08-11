@@ -37,7 +37,8 @@ public class StudentExperienceService {
         JPAQueryBuilder<StudentExperienceDto> queryBuilder = new JPAQueryBuilder<>();
         queryBuilder.selectAsObject(StudentExperienceDto.class,
                 "se.id", "se.jobName", "se.companyName",
-                "se.startedDate", "se.finishedDate", "se.description")
+                "se.startedDate", "se.finishedDate", "se.description",
+                "se.position")
                 .from(StudentExperience.class, "se");
 
         JPAQueryBuilder<StudentExperienceDto>.Condition whereCondition = queryBuilder.newCondition();

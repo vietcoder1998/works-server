@@ -18,6 +18,7 @@ import java.util.Date;
 @Setter
 public class StudentLanguageSkill {
     public static final String CREATED_DATE = "createdDate";
+    public static final String POSITION = "position";
 
     @Id
     @GenericGenerator(name = "uuid", strategy = "uuid2")

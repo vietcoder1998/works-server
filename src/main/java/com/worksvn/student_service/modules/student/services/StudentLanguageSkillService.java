@@ -34,18 +34,20 @@ public class StudentLanguageSkillService {
     @Autowired
     private DistributedDataService distributedDataService;
 
-
-    public PageDto<StudentLanguageSkillDto> getStudentLanguageSkillDtos(String studentID) throws Exception {
+    public PageDto<StudentLanguageSkillDto> getStudentLanguageSkillDtos(String studentID,
+                                                                        List<String> sortBy, List<String> sortType)
+            throws Exception {
         JPAQueryBuilder<StudentLanguageSkillDto> queryBuilder = new JPAQueryBuilder<>();
         queryBuilder.selectAsObject(StudentLanguageSkillDto.class,
                 "slk.id", "slk.level", "slk.languageID",
-                "slk.certificate", "slk.score")
+                "slk.certificate", "slk.score", "slk.position")
                 .from(StudentLanguageSkill.class, "slk");
 
         JPAQueryBuilder<StudentLanguageSkillDto>.Condition whereCondition = queryBuilder.newCondition();
         whereCondition.and().paramCondition("slk.student.id", "=", studentID);
 
-        queryBuilder.where(whereCondition);
+        queryBuilder.where(whereCondition)
+                .orderBy(sortBy, sortType);
 
         PageDto<StudentLanguageSkillDto> result = queryExecutor.executePaginationQuery(queryBuilder);
         distributedDataService.completeCollection(result.getItems(), null);
@@ -80,7 +82,7 @@ public class StudentLanguageSkillService {
             return;
         }
         for (NewItemPosition newPosition : newPositions) {
-            studentLanguageSkillRepository.updateStudentLanguageSkillPosition(studentID, 
+            studentLanguageSkillRepository.updateStudentLanguageSkillPosition(studentID,
                     newPosition.getId(), newPosition.getPosition());
         }
     }

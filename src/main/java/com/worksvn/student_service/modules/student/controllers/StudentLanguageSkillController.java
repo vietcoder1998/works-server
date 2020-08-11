@@ -9,6 +9,7 @@ import com.worksvn.common.modules.student.requests.NewItemPosition;
 import com.worksvn.common.modules.student.requests.NewStudentLanguageSkillDto;
 import com.worksvn.common.modules.student.responses.StudentLanguageSkillDto;
 import com.worksvn.student_service.base.controllers.BaseRESTController;
+import com.worksvn.student_service.modules.student.models.entities.StudentLanguageSkill;
 import com.worksvn.student_service.modules.student.services.StudentLanguageSkillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,9 +32,10 @@ public class StudentLanguageSkillController extends BaseRESTController {
     @Responses({
     })
     @GetMapping
-    public PageDto<StudentLanguageSkillDto> getStudentLanguageSkills() throws Exception {
+    public PageDto<StudentLanguageSkillDto> getStudentLanguageSkills(@RequestParam(value = "sortBy", defaultValue = "-" + StudentLanguageSkill.POSITION + "," + StudentLanguageSkill.CREATED_DATE) List<String> sortBy,
+                                                                     @RequestParam(value = "sortType", defaultValue = "desc, desc") List<String> sortType) throws Exception {
         String studentID = getAuthorizedUser().getId();
-        return studentLanguageSkillService.getStudentLanguageSkillDtos(studentID);
+        return studentLanguageSkillService.getStudentLanguageSkillDtos(studentID, sortBy, sortType);
     }
 
     @ApiOperation(value = "Thêm mới")

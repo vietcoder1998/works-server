@@ -33,8 +33,8 @@ public class StudentExperienceController extends BaseRESTController {
     @Responses({
     })
     @GetMapping
-    public PageDto<StudentExperienceDto> getStudentExperiences(@RequestParam(value = "sortBy", defaultValue = StudentExperience.STARTED_DATE + "," + StudentExperience.FINISHED_DATE) List<String> sortBy,
-                                                               @RequestParam(value = "sortType", defaultValue = "desc, asc") List<String> sortType) {
+    public PageDto<StudentExperienceDto> getStudentExperiences(@RequestParam(value = "sortBy", defaultValue = "-" + StudentExperience.POSITION + "," + StudentExperience.CREATED_DATE) List<String> sortBy,
+                                                               @RequestParam(value = "sortType", defaultValue = "desc, desc") List<String> sortType) {
         String studentID = getAuthorizedUser().getId();
         return studentExperienceService.getStudentExperienceDtos(studentID, sortBy, sortType);
     }

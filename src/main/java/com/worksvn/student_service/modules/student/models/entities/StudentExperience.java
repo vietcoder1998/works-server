@@ -18,8 +18,8 @@ import java.util.Date;
 @Setter
 public class StudentExperience {
     public static final String STUDENT = "student";
-    public static final String STARTED_DATE = "startedDate";
-    public static final String FINISHED_DATE = "finishedDate";
+    public static final String CREATED_DATE = "createdDate";
+    public static final String POSITION = "position";
 
     @Id
     @GenericGenerator(name = "uuid", strategy = "uuid2")

@@ -297,12 +297,15 @@ public class StudentService {
                 .getItems();
 
         List<StudentLanguageSkillDto> lks = studentLanguageSkillService
-                .getStudentLanguageSkillDtos(id).getItems();
+                .getStudentLanguageSkillDtos(id,
+                        Arrays.asList("-" + StudentLanguageSkill.POSITION, StudentLanguageSkill.CREATED_DATE),
+                        Arrays.asList("desc", "desc"))
+                .getItems();
 
         List<StudentExperienceDto> exps = studentExperienceService
                 .getStudentExperienceDtos(id,
-                        Arrays.asList("se." + StudentExperience.STARTED_DATE, "se." + StudentExperience.FINISHED_DATE),
-                        Arrays.asList("desc", "asc"))
+                        Arrays.asList("-" + StudentExperience.POSITION, StudentExperience.CREATED_DATE),
+                        Arrays.asList("desc", "desc"))
                 .getItems();
 
         Boolean unlocked = null;

@@ -49,12 +49,12 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.apache.httpcomponents:httpclient:4.5.2')
 
-    implementation  project(':common')
+    implementation project(':common')
 
     // Lombok
     implementation('org.projectlombok:lombok:1.16.18')
-    annotationProcessor ('org.projectlombok:lombok:1.16.18')
-    
+    annotationProcessor('org.projectlombok:lombok:1.16.18')
+
     // [swagger] Swagger doc api
     implementation('io.springfox:springfox-swagger2:2.7.0')
     implementation('io.springfox:springfox-swagger-ui:2.7.0')
@@ -63,10 +63,10 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-security')
     testImplementation('org.springframework.security:spring-security-test')
     implementation('org.springframework.cloud:spring-cloud-starter-oauth2')
-    
+
     // [firebase] Firebase
-    implementation ('com.google.api-client:google-api-client:1.23.0')
-    implementation ('com.google.firebase:firebase-admin:5.11.0')
+    implementation('com.google.api-client:google-api-client:1.23.0')
+    implementation('com.google.firebase:firebase-admin:5.11.0')
     implementation('com.google.guava:guava:20.0')
 
     // [consul] Consul
@@ -82,9 +82,11 @@ dependencies {
     implementation('org.apache.poi:poi:3.17')
 
     // IText (.pdf generator) + Thymeleaf (.html binding)
-    implementation('com.itextpdf:itextpdf:5.5.13')
-    implementation('com.itextpdf.tool:xmlworker:5.5.13')
-    implementation('org.apache.pdfbox:pdfbox:2.0.13')
+//    implementation('com.itextpdf:itextpdf:5.5.13')
+//    implementation('com.itextpdf.tool:xmlworker:5.5.13')
+//    implementation('org.apache.pdfbox:pdfbox:2.0.13')
+    implementation('org.xhtmlrenderer:flying-saucer-core:9.1.6')
+    implementation('org.xhtmlrenderer:flying-saucer-pdf-itext5:9.1.6')
     implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
 
     // [jpa] Spring Data JPA - Connect SQL DBMS

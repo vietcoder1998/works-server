@@ -215,19 +215,19 @@ public class StudentService {
             groupByID = true;
         }
 
-        if (filter.getLanguageIDs() != null && !filter.getLanguageIDs().isEmpty()) {
-            queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentLanguageSkill.class, "slk",
-                    queryBuilder.newCondition().condition("slk.student.id", "=", "s.id"));
-
-            if (recommendedFilter) {
-                recommendedCondition.or();
-            } else {
-                recommendedCondition.and();
-            }
-
-            recommendedCondition.paramCondition("slk.languageID", "IN", filter.getLanguageIDs());
-            groupByID = true;
-        }
+//        if (filter.getLanguageIDs() != null && !filter.getLanguageIDs().isEmpty()) {
+//            queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentLanguageSkill.class, "slk",
+//                    queryBuilder.newCondition().condition("slk.student.id", "=", "s.id"));
+//
+//            if (recommendedFilter) {
+//                recommendedCondition.or();
+//            } else {
+//                recommendedCondition.and();
+//            }
+//
+//            recommendedCondition.paramCondition("slk.languageID", "IN", filter.getLanguageIDs());
+//            groupByID = true;
+//        }
 
         if (filter.getWorkingToolIDs() != null && !filter.getWorkingToolIDs().isEmpty()) {
             queryBuilder.joinOn(JPAQueryBuilder.JoinType.LEFT_JOIN, StudentWorkingTool.class, "swt",

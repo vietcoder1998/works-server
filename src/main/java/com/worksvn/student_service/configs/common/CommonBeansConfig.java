@@ -1,10 +1,8 @@
 package com.worksvn.student_service.configs.common;
 
-import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worksvn.common.components.communication.*;
 import com.worksvn.common.components.core.JSONProcessor;
-import com.worksvn.common.components.swagger.*;
 import com.worksvn.common.services.excel.import_excel.ImportExcelService;
 import com.worksvn.common.services.file_storage.FileStorageService;
 import com.worksvn.common.services.firebase.firestore.FirestoreListener;
@@ -17,24 +15,17 @@ import com.worksvn.common.services.pdf.PdfExportService;
 import com.worksvn.common.services.thymeleaf.HtmlTemplateBindingService;
 import com.worksvn.common.utils.core.JacksonObjectMapper;
 import com.worksvn.common.utils.jpa.JPAQueryExecutor;
-import com.worksvn.student_service.constants.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import springfox.documentation.schema.TypeNameExtractor;
-import springfox.documentation.swagger.common.SwaggerPluginSupport;
-import springfox.documentation.swagger.readers.operation.OperationAuthReader;
-import springfox.documentation.swagger.readers.operation.SwaggerOperationModelsProvider;
-import springfox.documentation.swagger.readers.operation.SwaggerResponseMessageReader;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

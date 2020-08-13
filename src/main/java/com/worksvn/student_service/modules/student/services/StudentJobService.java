@@ -71,9 +71,12 @@ public class StudentJobService {
             if (matchingMajor) {
                 targetFilter.setMajorIDs(Sets.newHashSet(info.getMajorID()));
             }
-            JobLocationFilter locationFilter = new JobLocationFilter();
-            locationFilter.setRegionID(info.getRegionID());
-            targetFilter.setJobLocationFilter(locationFilter);
+
+            if (targetFilter.getJobLocationFilter() == null) {
+                JobLocationFilter locationFilter = new JobLocationFilter();
+                locationFilter.setRegionID(info.getRegionID());
+                targetFilter.setJobLocationFilter(locationFilter);
+            }
         }
         targetFilter.setSchoolIgnored(false);
         targetFilter.setUserID(studentID);
